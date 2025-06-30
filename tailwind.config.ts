@@ -27,8 +27,9 @@ export default {
 				'gradient-warm': 'linear-gradient(135deg, #f97316 0%, #ec4899 50%, #8b5cf6 100%)',
 			}),
 			fontFamily: {
-				sans: ['Inter', 'system-ui', 'sans-serif'],
-				serif: ['Playfair Display', 'serif'],
+				sans: ['Open Sans', 'sans-serif'],
+				serif: ['Raleway', 'sans-serif'],
+				mono: ['monospace'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

@@ -1,0 +1,83 @@
+/* Global Font Styles */
+@import url('https://fonts.googleapis.com/css?family=Open%20Sans%3A300%2C400%2C500%2C600%2C700%7CRaleway%7COpen%20Sans%3A300%2C300italic%2Cregular%2Citalic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%7COpen%20Sans%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CMontserrat%7COpen%20Sans%3A400%2C700&display=swap');
+
+/* Base font styles */
+html, body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6, .heading, .font-heading {
+  font-family: 'Raleway', 'Open Sans', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+/* Buttons and form elements */
+button, input, textarea, select, option, label, .btn, .button, [type='button'], [type='submit'], [type='reset'] {
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Navigation */
+.navbar, .nav, .navigation, header, footer, .header, .footer {
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Decorative elements */
+.decorative, .font-decorative, .heading-alt, .display, .hero-title {
+  font-family: 'Montserrat', 'Open Sans', sans-serif;
+  font-weight: 600;
+}
+
+/* Cards and sections */
+.card, .section, article, aside, .panel, .modal, .drawer, .popover, .tooltip {
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Tables */
+table, thead, tbody, tfoot, tr, td, th {
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Utility classes */
+.font-sans {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.font-serif {
+  font-family: 'Raleway', 'Open Sans', sans-serif;
+}
+
+.font-mono {
+  font-family: 'Montserrat', 'Open Sans', monospace;
+}
+
+/* Override any component-specific font settings */
+* {
+  font-family: inherit;
+}
+
+/* Ensure form placeholders use the correct font */
+::placeholder {
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* For WebKit browsers */
+input::-webkit-input-placeholder {
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* For Firefox */
+input::-moz-placeholder {
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* For Microsoft Edge */
+input::-ms-input-placeholder {
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* For IE 10-11 */
+input:-ms-input-placeholder {
+  font-family: 'Open Sans', sans-serif;
+}

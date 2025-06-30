@@ -37,9 +37,9 @@ programs and services for tribal communities across India.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-5 w-full sm:w-auto justify-start">
-                <NavLink to="/donate" className="w-full sm:w-auto">
+                <NavLink to="/events" className="w-full sm:w-auto">
                   <Button className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full font-normal font-serif text-base sm:text-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-wide w-full max-w-[180px]">
-                    Donate Now
+                    View Events
                   </Button>
                 </NavLink>
                 

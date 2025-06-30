@@ -350,9 +350,11 @@ const Donate = () => {
                         <p className="text-gray-600 text-sm">Our team is ready to assist you with scheduling</p>
                       </div>
                     </div>
-                    <Button className="w-auto px-8 mx-auto mt-4 bg-primary hover:bg-primary/90 text-white text-sm py-3 h-auto rounded-full font-medium">
-                      Schedule Pickup Now
-                    </Button>
+                    <a href="tel:9390730129" className="block w-full sm:w-auto px-4 sm:px-8 mx-auto mt-4">
+                      <Button className="w-full bg-primary hover:bg-primary/90 text-white text-sm py-3 sm:py-3 h-auto rounded-full font-medium px-6 sm:px-8">
+                        Schedule Pickup Now
+                      </Button>
+                    </a>
                   </div>
                 </CardContent>
               </Card>

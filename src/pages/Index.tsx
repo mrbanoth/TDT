@@ -62,18 +62,27 @@ const Index = () => {
       {/* About Section */}
       <section className="padding-responsive bg-white no-horizontal-scroll">
         <div className="container-responsive">
-          <div className="text-center mb-8 sm:mb-12 md:mb-16">
-            <h2 className="text-2xl sm:text-3xl font-bold text-charity-dark mb-6">
-              About Our Mission
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Tribal Development Trust is dedicated to improving the lives of tribal communities 
-              through comprehensive development programs that address education, healthcare, and social welfare.
-            </p>
-          </div>
-
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-center">
-            <div className="order-2 lg:order-1">
+            {/* Mobile: Heading -> Image -> Description */}
+            <div className="lg:hidden space-y-6">
+              <h2 className="text-2xl sm:text-3xl font-bold text-charity-dark text-center">
+                About Our Mission
+              </h2>
+              <div className="mb-4">
+                <img 
+                  src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3" 
+                  alt="Tribal community development" 
+                  className="rounded-2xl shadow-2xl w-full h-48 sm:h-64 object-cover"
+                />
+              </div>
+              <p className="text-xl text-gray-600 text-center">
+                Tribal Development Trust is dedicated to improving the lives of tribal communities 
+                through comprehensive development programs that address education, healthcare, and social welfare.
+              </p>
+            </div>
+
+            {/* Desktop: Left side image */}
+            <div className="hidden lg:block order-2 lg:order-1">
               <img 
                 src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3" 
                 alt="Tribal community development" 
@@ -81,6 +90,16 @@ const Index = () => {
               />
             </div>
             <div className="space-y-3 sm:space-y-4 md:space-y-6 order-1 lg:order-2">
+              {/* Desktop: Heading and description */}
+              <div className="hidden lg:block">
+                <h2 className="text-2xl sm:text-3xl font-bold text-charity-dark mb-6">
+                  About Our Mission
+                </h2>
+                <p className="text-xl text-gray-600 mb-6">
+                  Tribal Development Trust is dedicated to improving the lives of tribal communities 
+                  through comprehensive development programs that address education, healthcare, and social welfare.
+                </p>
+              </div>
               <p className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed mb-4 sm:mb-6">
                 Our organization works tirelessly to bridge the gap between tribal communities and 
                 modern development while preserving their rich cultural heritage. We believe in 
@@ -106,12 +125,14 @@ const Index = () => {
                   <span className="text-xs sm:text-sm md:text-base text-gray-700 font-medium">Cultural preservation programs</span>
                 </div>
               </div>
-              <div className="mt-4 sm:mt-6 md:mt-8">
-                <NavLink to="/about">
-                  <Button className="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-full font-normal font-serif text-sm sm:text-base w-full max-w-[180px] transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-normal">
-                    Learn More About Us
-                  </Button>
-                </NavLink>
+              <div className="mt-4 sm:mt-6 md:mt-8 sm:text-left">
+                <div className="text-center sm:text-left">
+                  <NavLink to="/about" className="inline-block w-full sm:w-auto">
+                    <Button className="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-full font-normal font-serif text-sm sm:text-base w-full sm:w-auto max-w-[180px] transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-normal">
+                      Our Story
+                    </Button>
+                  </NavLink>
+                </div>
               </div>
             </div>
           </div>
@@ -121,19 +142,35 @@ const Index = () => {
       {/* Programs Section */}
       <section className="padding-responsive bg-charity-light no-horizontal-scroll">
         <div className="container-responsive">
-          <div className="text-center mb-8 sm:mb-12 md:mb-16 w-full">
-            <h2 className="text-2xl sm:text-3xl font-bold text-charity-dark mb-6">
-              Our Key Programs
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Comprehensive development programs designed to address the core needs 
-              of tribal communities and create lasting positive impact.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-start w-full">
-            <div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 sm:gap-4 md:gap-6">
+          <div className="w-full">
+            {/* Mobile: Heading, Description, then Carousel */}
+            <div className="lg:hidden space-y-6 mb-8">
+              <h2 className="text-2xl sm:text-3xl font-bold text-charity-dark text-center">
+                Our Key Programs
+              </h2>
+              <p className="text-xl text-gray-600 text-center">
+                Comprehensive development programs designed to address the core needs 
+                of tribal communities and create lasting positive impact.
+              </p>
+              <div className="flex justify-center">
+                <ProgramsCarousel />
+              </div>
+            </div>
+
+            {/* Desktop: Normal layout */}
+            <div className="hidden lg:block text-center mb-8 sm:mb-12 md:mb-16 w-full">
+              <h2 className="text-2xl sm:text-3xl font-bold text-charity-dark mb-6">
+                Our Key Programs
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Comprehensive development programs designed to address the core needs 
+                of tribal communities and create lasting positive impact.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-start w-full">
+              <div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3 sm:gap-4 md:gap-6">
                 {programs.map((program, index) => {
                   const IconComponent = program.icon.type;
                   const iconProps = { ...program.icon.props };
@@ -162,18 +199,21 @@ const Index = () => {
                 })}
               </div>
 
-              <div className="mt-4 sm:mt-6 md:mt-8">
-                <NavLink to="/programmes">
-                  <Button className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full font-normal font-serif text-base sm:text-lg w-full max-w-[180px] transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-wide">
-                    View All Programs
-                  </Button>
-                </NavLink>
+              <div className="mt-4 sm:mt-6 md:mt-8 sm:text-left">
+                <div className="text-center sm:text-left">
+                  <NavLink to="/programmes" className="inline-block w-full sm:w-auto">
+                    <Button className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full font-normal font-serif text-base sm:text-lg w-full sm:w-auto max-w-[180px] transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-wide">
+                      All Programs
+                    </Button>
+                  </NavLink>
+                </div>
               </div>
             </div>
 
-            <div className="flex justify-center">
+            <div className="hidden lg:flex justify-center">
               <ProgramsCarousel />
             </div>
+          </div>
           </div>
         </div>
       </section>
