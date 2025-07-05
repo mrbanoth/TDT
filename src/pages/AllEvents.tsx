@@ -125,78 +125,94 @@ const AllEvents = () => {
           </div>
         </section>
 
-        {/* Events Grid */}
+        {/* Events List with Alternating Layout */}
         <section className="py-12 sm:py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {upcomingEvents.map((event) => (
-                <div 
-                  key={event.id}
-                  className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 h-full flex flex-col"
-                >
-                  <div className="relative h-56 overflow-hidden">
-                    <img 
-                      src={event.image} 
-                      alt={event.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute top-4 right-4">
-                      <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold bg-primary/90 text-white backdrop-blur-sm">
-                        {event.type}
-                      </span>
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="space-y-16 md:space-y-24">
+              {upcomingEvents.map((event, index) => {
+                const isEven = index % 2 === 0;
+                
+                return (
+                  <div 
+                    key={event.id}
+                    className={`group flex flex-col md:flex-row items-center gap-8 md:gap-12 transition-all duration-300 rounded-2xl p-6 bg-white shadow-md hover:shadow-xl hover:-translate-y-1 ${
+                      isEven ? 'md:flex-row' : 'md:flex-row-reverse'
+                    }`}
+                  >
+                    {/* Image - Circular */}
+                    <div className="w-full md:w-1/3 lg:w-2/5 flex-shrink-0">
+                      <div className="relative w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 mx-auto overflow-hidden rounded-full border-4 border-primary/20 shadow-xl">
+                        <img 
+                          src={event.image} 
+                          alt={event.title}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-full"></div>
+                      </div>
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                    <div className="absolute bottom-0 left-0 right-0 p-6">
-                      <h3 className="text-xl font-bold text-white mb-1 line-clamp-2">
+                    
+                    {/* Content */}
+                    <div className="flex-1 text-center md:text-left">
+                      <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary mb-4">
+                        {event.type}
+                      </div>
+                      
+                      <h3 className="text-2xl font-bold text-gray-900 mb-3">
                         {event.title}
                       </h3>
-                      <div className="flex items-center text-white/90 text-sm">
-                        <Calendar className="h-4 w-4 mr-1.5" />
-                        <span>{formatDate(event.date)} • {event.time}</span>
+                      
+                      <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm text-gray-600 mb-4">
+                        <div className="flex items-center">
+                          <Calendar className="h-4 w-4 mr-1.5 text-primary" />
+                          <span>{formatDate(event.date)}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <Clock className="h-4 w-4 mr-1.5 text-primary" />
+                          <span>{event.time}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <MapPin className="h-4 w-4 mr-1.5 text-primary" />
+                          <span className="line-clamp-1">{event.location}</span>
+                        </div>
+                      </div>
+                      
+                      <p className="text-gray-600 mb-5 leading-relaxed">
+                        {event.description}
+                      </p>
+                      
+                      <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-6">
+                        {event.details.slice(0, 3).map((detail, i) => (
+                          <span 
+                            key={i} 
+                            className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
+                          >
+                            {detail}
+                          </span>
+                        ))}
+                        {event.details.length > 3 && (
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
+                            +{event.details.length - 3} more
+                          </span>
+                        )}
+                      </div>
+                      
+                      <div className="flex flex-col sm:flex-row items-center gap-4">
+                        <Button 
+                          onClick={() => navigate(`/events/${event.id}`)}
+                          className="bg-charity-dark hover:bg-charity-dark/90 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 min-w-[120px]"
+                        >
+                          Register
+                        </Button>
+                        
+                        <div className="flex items-center text-sm text-gray-500">
+                          <Users className="h-4 w-4 mr-1.5 text-primary" />
+                          <span>{event.participants}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  
-                  <div className="p-6 flex-1 flex flex-col">
-                    <div className="flex items-center text-gray-600 text-sm mb-4 space-x-4">
-                      <div className="flex items-center">
-                        <MapPin className="h-4 w-4 mr-1.5 text-primary" />
-                        <span>{event.location}</span>
-                      </div>
-                      <div className="flex items-center">
-                        <Users className="h-4 w-4 mr-1.5 text-primary" />
-                        <span>{event.participants}</span>
-                      </div>
-                    </div>
-                    
-                    <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
-                      {event.description}
-                    </p>
-                    
-                    <ul className="space-y-1.5 mb-6">
-                      {event.details.slice(0, 3).map((detail, i) => (
-                        <li key={i} className="flex items-start text-sm text-gray-600">
-                          <span className="text-primary mr-2">•</span>
-                          <span className="line-clamp-1">{detail}</span>
-                        </li>
-                      ))}
-                      {event.details.length > 3 && (
-                        <li className="text-sm text-gray-500">+{event.details.length - 3} more</li>
-                      )}
-                    </ul>
-                    
-                    <div className="mt-auto">
-                      <Button 
-                        onClick={() => navigate(`/events/${event.id}`)}
-                        className="w-full bg-charity-dark hover:bg-charity-dark/90 text-white rounded-xl py-2.5 text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 group/btn"
-                      >
-                        Learn More & Register
-                        <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
@@ -224,7 +240,9 @@ const AllEvents = () => {
         </section>
       </main>
       
-      <Footer />
+      <div className="mt-16">
+        <Footer />
+      </div>
     </div>
   );
 };
