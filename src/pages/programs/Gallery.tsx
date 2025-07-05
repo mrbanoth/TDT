@@ -239,9 +239,10 @@ const Gallery = () => {
                 </h2>
                 <NavLink 
                   to={`/programs/${program.id}`}
-                  className="inline-flex items-center px-4 py-2 border border-primary rounded-full text-sm font-medium text-primary hover:bg-primary/5 transition-all duration-200"
+                  className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 border border-primary rounded-full text-xs sm:text-sm font-medium text-primary hover:bg-primary/5 transition-all duration-200 whitespace-nowrap"
                 >
-                  View Details <ArrowLeft className="ml-1 h-4 w-4 rotate-180" />
+                  <span className="hidden sm:inline">View</span> Details
+                  <ArrowLeft className="ml-0.5 sm:ml-1 h-3 w-3 sm:h-4 sm:w-4 rotate-180" />
                 </NavLink>
               </div>
               
@@ -354,14 +355,23 @@ const Gallery = () => {
               </div>
               <div className="mt-4 text-center text-white">
                 <h3 className="text-xl font-medium line-clamp-1">{selectedMedia.title}</h3>
-                {currentProgram.media.length > 10 ? (
-                  <p className="text-sm text-gray-300 mt-1">
-                    {currentIndex + 1} of {currentProgram.media.length}
-                  </p>
-                ) : (
-                  <p className="text-sm text-gray-300 mt-1">
-                    {currentIndex + 1} of {currentProgram.media.length}
-                  </p>
+                {currentProgram.media.length > 1 && (
+                  <div className="flex justify-center items-center mt-3 space-x-2">
+                    {currentProgram.media.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCurrentIndex(index);
+                          setSelectedMedia(currentProgram.media[index]);
+                        }}
+                        className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                          index === currentIndex ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/75'
+                        }`}
+                        aria-label={`Go to item ${index + 1} of ${currentProgram.media.length}`}
+                      />
+                    ))}
+                  </div>
                 )}
               </div>
             </div>
