@@ -738,7 +738,7 @@ const Donate = () => {
         </div>
       </section>
 
-      {/* Call to Action */}
+      {/* Call to Action - Commented out as per request
       <section className="py-12 sm:py-16 bg-gradient-to-r from-primary/5 to-secondary/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl sm:text-3xl font-bold text-charity-dark mb-6">
@@ -766,6 +766,7 @@ const Donate = () => {
           </div>
         </div>
       </section>
+      */}
 
       <Footer />
       
