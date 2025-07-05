@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, MapPin, Users as UsersIcon, Heart, Home, Gift, HandHeart, Video, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ImagePreviewPopup } from '@/components/ImagePreviewPopup';
@@ -198,6 +198,38 @@ const ProgramDetail = () => {
   const closeImagePreview = () => {
     setSelectedImageIndex(null);
   };
+  
+  const navigateImage = (direction: 'prev' | 'next') => {
+    if (selectedImageIndex === null) return;
+    
+    const totalImages = program.media.length;
+    if (direction === 'prev') {
+      setSelectedImageIndex((prev) => (prev === 0 ? totalImages - 1 : prev - 1));
+    } else {
+      setSelectedImageIndex((prev) => (prev === totalImages - 1 ? 0 : prev + 1));
+    }
+  };
+  
+  // Handle keyboard navigation
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (selectedImageIndex === null) return;
+    
+    if (e.key === 'Escape') {
+      closeImagePreview();
+    } else if (e.key === 'ArrowLeft') {
+      navigateImage('prev');
+    } else if (e.key === 'ArrowRight') {
+      navigateImage('next');
+    }
+  };
+  
+  // Add keyboard event listener when image is open
+  useEffect(() => {
+    if (selectedImageIndex !== null) {
+      window.addEventListener('keydown', handleKeyDown as any);
+      return () => window.removeEventListener('keydown', handleKeyDown as any);
+    }
+  }, [selectedImageIndex]);
 
   if (!program) {
     return (
@@ -278,16 +310,16 @@ const ProgramDetail = () => {
                 <p className="text-lg text-gray-700 mb-8">
                   {program.description}
                 </p>
-                <div className="flex flex-wrap gap-4">
+                <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                   <Link 
                     to="/donate" 
-                    className={`inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full text-white ${colors.button} shadow-sm hover:shadow-md transition-all duration-200`}
+                    className={`flex-1 sm:flex-none inline-flex justify-center items-center px-4 sm:px-6 py-2 sm:py-3 border border-transparent text-sm sm:text-base font-medium rounded-full text-white ${colors.button} shadow-sm hover:shadow-md transition-all duration-200`}
                   >
                     Donate Now
                   </Link>
                   <Link 
                     to="/programs/gallery" 
-                    className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50 hover:shadow-sm transition-all duration-200"
+                    className="flex-1 sm:flex-none inline-flex justify-center items-center px-4 sm:px-6 py-2 sm:py-3 border border-gray-300 text-sm sm:text-base font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50 hover:shadow-sm transition-all duration-200"
                   >
                     View Gallery
                   </Link>
@@ -477,39 +509,49 @@ const ProgramDetail = () => {
                             e.stopPropagation();
                             setSelectedImageIndex((prev) => (prev === 0 ? programMedia.length - 1 : prev - 1));
                           }}
-                          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 bg-black/50 text-white p-2 rounded-full hover:bg-black/75"
+                          className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 p-3 text-white hover:text-primary transition-colors z-10 bg-black/50 hover:bg-black/70 rounded-full backdrop-blur-sm shadow-lg"
+                          aria-label="Previous image"
                         >
-                          <ChevronLeft className="h-8 w-8" />
+                          <ChevronLeft className="h-8 w-8 md:h-10 md:w-10" />
                         </button>
                         
                         {/* Current Media */}
-                        {programMedia[selectedImageIndex]?.type === 'video' ? (
-                          <div className="aspect-video w-full bg-black">
-                            <iframe
-                              src={programMedia[selectedImageIndex].url}
-                              title={programMedia[selectedImageIndex].title}
-                              className="w-full h-full"
-                              frameBorder="0"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                            ></iframe>
+                        <div className="relative w-full h-full flex items-center justify-center">
+                          {programMedia[selectedImageIndex]?.type === 'video' ? (
+                            <div className="w-full max-w-4xl aspect-video bg-black">
+                              <iframe
+                                src={programMedia[selectedImageIndex].url}
+                                title={programMedia[selectedImageIndex].title}
+                                className="w-full h-full"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                              ></iframe>
+                            </div>
+                          ) : (
+                            <img
+                              src={programMedia[selectedImageIndex]?.url}
+                              alt={programMedia[selectedImageIndex]?.alt || 'Gallery image'}
+                              className="max-h-[80vh] max-w-full object-contain"
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                          )}
+                          
+                          {/* Image counter */}
+                          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+                            {selectedImageIndex + 1} / {programMedia.length}
                           </div>
-                        ) : (
-                          <img
-                            src={programMedia[selectedImageIndex]?.url}
-                            alt={programMedia[selectedImageIndex]?.alt || 'Gallery image'}
-                            className="max-h-[80vh] max-w-full mx-auto"
-                          />
-                        )}
+                        </div>
                         
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             setSelectedImageIndex((prev) => (prev === programMedia.length - 1 ? 0 : prev + 1));
                           }}
-                          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 bg-black/50 text-white p-2 rounded-full hover:bg-black/75"
+                          className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 p-3 text-white hover:text-primary transition-colors z-10 bg-black/50 hover:bg-black/70 rounded-full backdrop-blur-sm shadow-lg"
+                          aria-label="Next image"
                         >
-                          <ChevronRight className="h-8 w-8" />
+                          <ChevronRight className="h-8 w-8 md:h-10 md:w-10" />
                         </button>
                         
                         {/* Dot Indicators */}
