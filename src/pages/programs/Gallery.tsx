@@ -257,9 +257,12 @@ const Gallery = () => {
                       <div className="relative h-64">
                         <img
                           src={item.url}
-                          alt={item.alt || item.title}
+                          alt={item.alt || `${item.title} - Tribal Development Trust`}
                           className="w-full h-full object-cover"
                           loading="lazy"
+                          width={400}
+                          height={300}
+                          decoding="async"
                         />
                         <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                           <Maximize2 className="h-10 w-10 text-white" />
@@ -273,9 +276,12 @@ const Gallery = () => {
                         </div>
                         <img
                           src={`https://img.youtube.com/vi/${item.url.split('/').pop()}/hqdefault.jpg`}
-                          alt={item.alt || item.title}
+                          alt={`Video thumbnail: ${item.title} - Tribal Development Trust`}
                           className="w-full h-full object-cover"
                           loading="lazy"
+                          width={400}
+                          height={300}
+                          decoding="async"
                         />
                       </div>
                     )}

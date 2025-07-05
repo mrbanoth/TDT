@@ -307,8 +307,12 @@ const ProgramDetail = () => {
                   ) : (
                     <img
                       src={program.media[0].url}
-                      alt={program.media[0].alt}
+                      alt={program.media[0].alt || `${program.title} - Tribal Development Trust`}
                       className="w-full h-80 object-cover"
+                      loading="lazy"
+                      width={800}
+                      height={450}
+                      decoding="async"
                     />
                   )}
                 </div>
