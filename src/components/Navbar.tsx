@@ -14,6 +14,7 @@ const Navbar = () => {
 
   const navItemsAfterPrograms = [
     { name: 'EVENTS', path: '/events' },
+    { name: 'CONTACT', path: '/contact' },
   ];
 
   // Close mobile menu when clicking outside or on a link

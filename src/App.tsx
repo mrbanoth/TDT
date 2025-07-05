@@ -18,6 +18,7 @@ import ProgramDetail from "./pages/programs/ProgramDetail";
 import OurApproach from "./pages/OurApproach";
 import EventDetail from "./pages/EventDetail";
 import AllEvents from "./pages/AllEvents";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
           <Route path="/all-events" element={<AllEvents />} />
           <Route path="/events/:id" element={<EventDetail />} />
           <Route path="/donate" element={<Donate />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/profile/:id" element={<ProfilePage />} />
           <Route path="/stories/:id" element={<StoryDetail />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
