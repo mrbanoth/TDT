@@ -72,7 +72,7 @@ const ProgramsDropdown = () => {
               document.dispatchEvent(new Event('mobileMenuClose'));
             }}
           >
-            <span className="font-medium">All Programmes</span>
+            <span className="font-medium">Programme Overview</span>
             <ChevronRight className="ml-2 h-4 w-4" />
           </NavLink>
           

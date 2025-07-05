@@ -46,14 +46,14 @@ const Navbar = () => {
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex-shrink-0">
-              <NavLink to="/" className="flex items-center space-x-2">
+              <NavLink to="/" className="flex items-center space-x-1 sm:space-x-2">
                 <img 
                   src="/tdtlogo.jpg" 
                   alt="Tribal Development Trust Logo"
-                  className="h-10 w-auto object-contain"
+                  className="h-9 sm:h-10 w-auto object-contain"
                 />
-                <div className="hidden xs:block">
-                  <h1 className="text-sm xs:text-base sm:text-lg md:text-xl font-bold text-charity-dark leading-tight">
+                <div className="block">
+                  <h1 className="text-[10px] xs:text-xs sm:text-sm md:text-lg font-bold text-charity-dark leading-tight whitespace-nowrap">
                     Tribal Development Trust
                   </h1>
                 </div>
