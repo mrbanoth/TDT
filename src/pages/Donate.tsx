@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { DonationModal } from '@/components/DonationModal';
+import { contactInfo } from '@/data/contact/info';
 import { DollarSign, Package, Utensils, Gift, Heart, Phone, Shield, Users, Clock, Calendar, X } from 'lucide-react';
 
 const Donate = () => {
@@ -685,7 +686,10 @@ const Donate = () => {
                         <p className="text-gray-600 text-sm">Our team is ready to assist you with scheduling</p>
                       </div>
                     </div>
-                    <a href="tel:9390730129" className="block w-full sm:w-auto px-4 sm:px-8 mx-auto mt-4">
+                    <a 
+                      href={`tel:${contactInfo.find(info => info.id === 'phone')?.link?.replace('tel:', '')}`} 
+                      className="block w-full sm:w-auto px-4 sm:px-8 mx-auto mt-4"
+                    >
                       <Button className="w-full bg-primary hover:bg-primary/90 text-white text-sm py-3 sm:py-3 h-auto rounded-full font-medium px-6 sm:px-8">
                         Schedule Pickup Now
                       </Button>

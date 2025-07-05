@@ -26,8 +26,8 @@ export const contactInfo: ContactInfo[] = [
     id: 'phone',
     icon: 'Phone',
     title: 'Call Us',
-    description: '+91 98765 43210',
-    link: 'tel:+919876543210'
+    description: '+91 9390730129',
+    link: 'tel:+919390730129'
   },
   {
     id: 'location',
