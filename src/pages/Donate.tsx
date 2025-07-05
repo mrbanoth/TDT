@@ -10,6 +10,8 @@ import { DollarSign, Package, Utensils, Gift, Heart, Phone, Shield, Users, Clock
 const Donate = () => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLocating, setIsLocating] = useState(false);
+  const [locationError, setLocationError] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -20,12 +22,104 @@ const Donate = () => {
     donationType: ''
   });
 
+  // Function to render name and phone fields
+  const renderContactFields = () => (
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            className="w-full p-2 border border-gray-300 rounded-md"
+            placeholder="Your full name"
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number *</label>
+          <input
+            type="tel"
+            name="phone"
+            value={formData.phone}
+            onChange={handleInputChange}
+            className="w-full p-2 border border-gray-300 rounded-md"
+            placeholder="Your mobile number"
+            pattern="[0-9]{10}"
+            title="Please enter a 10-digit mobile number"
+            required
+          />
+        </div>
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Email (Optional)</label>
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleInputChange}
+          className="w-full p-2 border border-gray-300 rounded-md"
+          placeholder="Your email address"
+        />
+      </div>
+    </>
+  );
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleGetCurrentLocation = (fieldName: 'address' | 'message') => {
+    if (!navigator.geolocation) {
+      setLocationError('Geolocation is not supported by your browser');
+      return;
+    }
+
+    setIsLocating(true);
+    setLocationError('');
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`
+          );
+          const data = await response.json();
+          
+          if (data.display_name) {
+            const address = data.display_name;
+            setFormData(prev => ({
+              ...prev,
+              [fieldName]: prev[fieldName] ? `${prev[fieldName]}\n\nCurrent Location: ${address}` : `Current Location: ${address}`
+            }));
+          } else {
+            setLocationError('Could not retrieve address from coordinates');
+          }
+        } catch (error) {
+          console.error('Error getting address:', error);
+          setLocationError('Error getting address. Please enter manually.');
+        } finally {
+          setIsLocating(false);
+        }
+      },
+      (error) => {
+        console.error('Error getting location:', error);
+        setLocationError('Unable to retrieve your location. Please enable location services or enter manually.');
+        setIsLocating(false);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -154,6 +248,7 @@ const Donate = () => {
       case 'material':
         return (
           <div className="space-y-4">
+            {renderContactFields()}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Items to Donate</label>
               <select
@@ -183,16 +278,45 @@ const Donate = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Pickup Address</label>
+              <div className="flex justify-between items-center mb-1">
+                <label className="block text-sm font-medium text-gray-700">Pickup Address</label>
+                <button
+                  type="button"
+                  onClick={() => handleGetCurrentLocation('address')}
+                  disabled={isLocating}
+                  className="text-xs text-primary hover:text-primary/80 flex items-center disabled:opacity-50"
+                >
+                  {isLocating ? (
+                    <span className="flex items-center">
+                      <svg className="animate-spin -ml-1 mr-1 h-3 w-3 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Locating...
+                    </span>
+                  ) : (
+                    <span className="flex items-center">
+                      <svg className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      Use Current Location
+                    </span>
+                  )}
+                </button>
+              </div>
               <textarea
                 name="address"
                 value={formData.address}
                 onChange={handleInputChange}
-                rows={2}
+                rows={3}
                 className="w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Enter your address for pickup"
                 required
               />
+              {locationError && formData.address === '' && (
+                <p className="mt-1 text-xs text-red-600">{locationError}</p>
+              )}
             </div>
           </div>
         );
@@ -200,6 +324,7 @@ const Donate = () => {
       case 'food':
         return (
           <div className="space-y-4">
+            {renderContactFields()}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Type of Food</label>
               <select
@@ -237,54 +362,84 @@ const Donate = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Pickup/Delivery Details</label>
+              <div className="flex justify-between items-center mb-1">
+                <label className="block text-sm font-medium text-gray-700">Pickup/Delivery Details</label>
+                <button
+                  type="button"
+                  onClick={() => handleGetCurrentLocation('message')}
+                  disabled={isLocating}
+                  className="text-xs text-primary hover:text-primary/80 flex items-center disabled:opacity-50"
+                >
+                  {isLocating ? (
+                    <span className="flex items-center">
+                      <svg className="animate-spin -ml-1 mr-1 h-3 w-3 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Locating...
+                    </span>
+                  ) : (
+                    <span className="flex items-center">
+                      <svg className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      Use Current Location
+                    </span>
+                  )}
+                </button>
+              </div>
               <textarea
                 name="message"
                 value={formData.message}
                 onChange={handleInputChange}
-                rows={2}
+                rows={3}
                 className="w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Any special instructions"
+                placeholder="Any special instructions or your current address for pickup"
               />
+              {locationError && formData.message === '' && (
+                <p className="mt-1 text-xs text-red-600">{locationError}</p>
+              )}
             </div>
           </div>
         );
       
       case 'volunteer':
         return (
-          <div className="space-y-3">
-            <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Full Name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="w-full p-2 text-sm border border-gray-300 rounded-md"
+                  className="w-full p-2 border border-gray-300 rounded-md"
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full p-2 text-sm border border-gray-300 rounded-md"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Phone</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number *</label>
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className="w-full p-2 text-sm border border-gray-300 rounded-md"
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  pattern="[0-9]{10}"
+                  title="Please enter a 10-digit mobile number"
                   required
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email (Optional)</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-gray-300 rounded-md"
                 />
               </div>
               <div>
