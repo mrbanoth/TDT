@@ -1,5 +1,7 @@
-import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, MapPin, Users as UsersIcon, Heart, Home, Gift, HandHeart, Video } from 'lucide-react';
+import { useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Calendar, MapPin, Users as UsersIcon, Heart, Home, Gift, HandHeart, Video, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ImagePreviewPopup } from '@/components/ImagePreviewPopup';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
@@ -158,7 +160,44 @@ const programData = {
 
 const ProgramDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const program = programData[id as keyof typeof programData];
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  
+  // Get exactly 3 items for the preview: [image, video, image]
+  const programMedia = (() => {
+    const allImages = program.media.filter(item => item.type === 'image');
+    const allVideos = program.media.filter(item => item.type === 'video');
+    
+    // Get first image (or placeholder)
+    const firstImage = allImages[0] || {
+      type: 'image',
+      url: 'https://via.placeholder.com/800x600?text=No+Image+Available',
+      alt: 'No image available',
+      title: 'No image available'
+    };
+    
+    // Get first video (or placeholder)
+    const video = allVideos[0] || {
+      type: 'video',
+      url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      title: 'No video available',
+      alt: 'No video available'
+    };
+    
+    // Get second image (or duplicate first image)
+    const secondImage = allImages[1] || firstImage;
+    
+    return [firstImage, video, secondImage];
+  })();
+  
+  const openImagePreview = (index: number) => {
+    setSelectedImageIndex(index);
+  };
+  
+  const closeImagePreview = () => {
+    setSelectedImageIndex(null);
+  };
 
   if (!program) {
     return (
@@ -378,31 +417,115 @@ const ProgramDetail = () => {
 
                 <div className="mt-6 p-6 bg-white rounded-lg border border-gray-200">
                   <h3 className="text-lg font-medium text-gray-900 mb-4">Gallery Preview</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    {program.media.slice(0, 4).map((item, index) => (
-                      <div key={index} className="aspect-square overflow-hidden rounded-lg">
-                        {item.type === 'video' ? (
-                          <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-                            <Video className="h-8 w-8 text-gray-400" />
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      {program.media.slice(0, 4).map((item, index) => {
+                        const imageIndex = program.media
+                          .slice(0, index + 1)
+                          .filter(i => i.type === 'image')
+                          .length - 1;
+                          
+                        return (
+                          <div 
+                            key={index} 
+                            className={`aspect-square overflow-hidden rounded-lg border border-gray-200 ${
+                              item.type === 'image' ? 'cursor-pointer hover:opacity-90 transition-opacity' : ''
+                            }`}
+                            onClick={() => item.type === 'image' && openImagePreview(imageIndex)}
+                          >
+                            {item.type === 'video' ? (
+                              <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                                <Video className="h-8 w-8 text-gray-400" />
+                              </div>
+                            ) : (
+                              <img
+                                src={item.url}
+                                alt={item.alt || 'Gallery image'}
+                                className="w-full h-full object-cover"
+                              />
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <button
+                      onClick={() => navigate('/programs/gallery')}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-primary hover:bg-primary/90 transition-colors"
+                    >
+                      View Full Gallery
+                    </button>
+                  </div>
+                  
+                  {/* Media Preview Popup */}
+                  {selectedImageIndex !== null && programMedia.length > 0 && (
+                    <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
+                      <button
+                        onClick={closeImagePreview}
+                        className="absolute right-4 top-4 z-10 text-white hover:text-gray-300"
+                      >
+                        <X className="h-8 w-8" />
+                      </button>
+                      
+                      <div className="relative w-full max-w-4xl">
+                        {/* Navigation Arrows */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedImageIndex((prev) => (prev === 0 ? programMedia.length - 1 : prev - 1));
+                          }}
+                          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 bg-black/50 text-white p-2 rounded-full hover:bg-black/75"
+                        >
+                          <ChevronLeft className="h-8 w-8" />
+                        </button>
+                        
+                        {/* Current Media */}
+                        {programMedia[selectedImageIndex]?.type === 'video' ? (
+                          <div className="aspect-video w-full bg-black">
+                            <iframe
+                              src={programMedia[selectedImageIndex].url}
+                              title={programMedia[selectedImageIndex].title}
+                              className="w-full h-full"
+                              frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            ></iframe>
                           </div>
                         ) : (
                           <img
-                            src={item.url}
-                            alt={item.alt}
-                            className="w-full h-full object-cover"
+                            src={programMedia[selectedImageIndex]?.url}
+                            alt={programMedia[selectedImageIndex]?.alt || 'Gallery image'}
+                            className="max-h-[80vh] max-w-full mx-auto"
                           />
                         )}
+                        
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedImageIndex((prev) => (prev === programMedia.length - 1 ? 0 : prev + 1));
+                          }}
+                          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 bg-black/50 text-white p-2 rounded-full hover:bg-black/75"
+                        >
+                          <ChevronRight className="h-8 w-8" />
+                        </button>
+                        
+                        {/* Dot Indicators */}
+                        <div className="flex justify-center items-center mt-4 space-x-2">
+                          {programMedia.map((_, index) => (
+                            <button
+                              key={index}
+                              onClick={() => setSelectedImageIndex(index)}
+                              className={`w-2.5 h-2.5 rounded-full transition-all ${
+                                index === selectedImageIndex 
+                                  ? 'bg-white scale-125' 
+                                  : 'bg-white/50 hover:bg-white/75'
+                              }`}
+                              aria-label={`Go to slide ${index + 1}`}
+                            />
+                          ))}
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                  <div className="mt-4">
-                    <Link
-                      to="/programs/gallery"
-                      className="text-sm font-medium text-primary hover:text-primary/80 flex items-center"
-                    >
-                      View all media <ArrowLeft className="ml-1 h-4 w-4 rotate-180" />
-                    </Link>
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
