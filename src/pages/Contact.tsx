@@ -71,7 +71,7 @@ const Contact = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <motion.h1 
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 font-serif"
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 font-serif tracking-tight"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -79,7 +79,7 @@ const Contact = () => {
               Get in <span className="text-primary">Touch</span>
             </motion.h1>
             <motion.p 
-              className="text-lg sm:text-xl text-gray-300 mb-8 max-w-2xl mx-auto"
+              className="text-lg sm:text-xl text-gray-300 mb-8 max-w-2xl mx-auto font-serif"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
@@ -96,9 +96,9 @@ const Contact = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold mb-4 font-serif">Send Us a Message</h2>
+              <h2 className="text-3xl sm:text-4xl font-bold mb-4 font-serif tracking-tight">Send Us a Message</h2>
               <div className="w-20 h-1 bg-primary mx-auto mb-6"></div>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-gray-600 max-w-2xl mx-auto font-serif">
                 Have a question or want to collaborate? Fill out the form below and our team will get back to you as soon as possible.
               </p>
             </div>
@@ -112,7 +112,7 @@ const Contact = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1 font-serif">
                       Full Name <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -127,7 +127,7 @@ const Contact = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1 font-serif">
                       Email Address <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -143,7 +143,7 @@ const Contact = () => {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1 font-serif">
                     Subject <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -158,7 +158,7 @@ const Contact = () => {
                   />
                 </div>
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1 font-serif">
                     Your Message <span className="text-red-500">*</span>
                   </label>
                   <textarea
@@ -180,7 +180,7 @@ const Contact = () => {
                       isSubmitted 
                         ? 'bg-green-600 hover:bg-green-700' 
                         : 'bg-primary hover:bg-primary/90'
-                    } text-white px-8 py-3 rounded-full font-normal font-serif text-base sm:text-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-wide`}
+                    } text-white px-8 py-3 rounded-full font-normal font-serif text-base sm:text-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-normal`}
                   >
                     <AnimatePresence mode="wait">
                       {isSubmitted ? (
@@ -244,7 +244,7 @@ const Contact = () => {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 font-serif">Our Contact Information</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 font-serif tracking-tight">Our Contact Information</h2>
             <div className="w-20 h-1 bg-primary mx-auto mb-6"></div>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Find us at our office or get in touch using the information below.
@@ -265,18 +265,18 @@ const Contact = () => {
                   <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4 mx-auto">
                     {IconComponent && <IconComponent className="w-6 h-6 text-primary" />}
                   </div>
-                  <h3 className="text-xl font-semibold text-center mb-2">{item.title}</h3>
+                  <h3 className="text-xl font-semibold text-center mb-2 font-serif">{item.title}</h3>
                   {item.link ? (
                     <a 
                       href={item.link} 
-                      className="text-gray-600 hover:text-primary text-center block whitespace-pre-line"
+                      className="text-gray-600 hover:text-primary text-center block whitespace-pre-line font-serif"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       {item.description}
                     </a>
                   ) : (
-                    <p className="text-gray-600 text-center whitespace-pre-line">
+                    <p className="text-gray-600 text-center whitespace-pre-line font-serif">
                       {item.description}
                     </p>
                   )}
