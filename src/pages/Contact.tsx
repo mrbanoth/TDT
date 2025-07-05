@@ -1,9 +1,18 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Send, Check, Mail, Phone, MapPin, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
-import { motion } from 'framer-motion';
-import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import { contactInfo, mapLocation } from '@/data/contact/info';
+
+// Icon mapping
+const iconComponents: { [key: string]: React.ElementType } = {
+  Mail,
+  Phone,
+  MapPin,
+  Clock,
+};
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -12,12 +21,34 @@ const Contact = () => {
     subject: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
-    // Add your form submission logic here
+    setIsSubmitting(true);
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      console.log('Form submitted:', formData);
+      setIsSubmitted(true);
+      
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: ''
+        });
+        setIsSubmitted(false);
+        setIsSubmitting(false);
+      }, 3000);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -27,31 +58,6 @@ const Contact = () => {
       [name]: value
     }));
   };
-
-  const contactInfo = [
-    {
-      icon: <Mail className="w-6 h-6 text-primary" />,
-      title: "Email Us",
-      description: "info@tribaldevelopment.org",
-      link: "mailto:info@tribaldevelopment.org"
-    },
-    {
-      icon: <Phone className="w-6 h-6 text-primary" />,
-      title: "Call Us",
-      description: "+91 98765 43210",
-      link: "tel:+919876543210"
-    },
-    {
-      icon: <MapPin className="w-6 h-6 text-primary" />,
-      title: "Our Location",
-      description: "123 Tribal Welfare Road, Hyderabad, Telangana 500001"
-    },
-    {
-      icon: <Clock className="w-6 h-6 text-primary" />,
-      title: "Working Hours",
-      description: "Mon - Sat: 9:00 AM - 6:00 PM"
-    }
-  ];
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -169,10 +175,63 @@ const Contact = () => {
                 <div className="text-center">
                   <Button
                     type="submit"
-                    className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-full font-normal font-serif text-base sm:text-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-wide"
+                    disabled={isSubmitting}
+                    className={`relative overflow-hidden ${
+                      isSubmitted 
+                        ? 'bg-green-600 hover:bg-green-700' 
+                        : 'bg-primary hover:bg-primary/90'
+                    } text-white px-8 py-3 rounded-full font-normal font-serif text-base sm:text-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-wide`}
                   >
-                    <Send className="w-5 h-5 mr-2" />
-                    Send Message
+                    <AnimatePresence mode="wait">
+                      {isSubmitted ? (
+                        <motion.span 
+                          key="success"
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -20 }}
+                          className="flex items-center justify-center"
+                        >
+                          <Check className="w-5 h-5 mr-2" />
+                          Message Sent!
+                        </motion.span>
+                      ) : (
+                        <motion.span 
+                          key="submit"
+                          className="flex items-center relative"
+                        >
+                          <motion.span
+                            className="flex items-center"
+                            initial={{ x: 0 }}
+                            animate={{ 
+                              x: isSubmitting ? -100 : 0,
+                              opacity: isSubmitting ? 0 : 1,
+                            }}
+                            transition={{ duration: 0.5 }}
+                          >
+                            <Send className="w-5 h-5 mr-2" />
+                            Send Message
+                          </motion.span>
+                          
+                          {isSubmitting && (
+                            <motion.span
+                              className="absolute left-0"
+                              initial={{ x: 0, opacity: 1 }}
+                              animate={{ 
+                                x: 'calc(100% + 2rem)',
+                                opacity: 0,
+                                scale: 1.5
+                              }}
+                              transition={{ 
+                                duration: 1,
+                                ease: [0.4, 0, 0.2, 1]
+                              }}
+                            >
+                              <Send className="w-5 h-5" />
+                            </motion.span>
+                          )}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
                   </Button>
                 </div>
               </form>
@@ -193,30 +252,37 @@ const Contact = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {contactInfo.map((item, index) => (
-              <motion.div
-                key={index}
-                className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-              >
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4 mx-auto">
-                  {item.icon}
-                </div>
-                <h3 className="text-xl font-semibold text-center mb-2">{item.title}</h3>
-                {item.link ? (
-                  <a 
-                    href={item.link} 
-                    className="text-gray-600 hover:text-primary text-center block"
-                  >
-                    {item.description}
-                  </a>
-                ) : (
-                  <p className="text-gray-600 text-center">{item.description}</p>
-                )}
-              </motion.div>
-            ))}
+            {contactInfo.map((item, index) => {
+              const IconComponent = iconComponents[item.icon] || null;
+              return (
+                <motion.div
+                  key={item.id}
+                  className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4 mx-auto">
+                    {IconComponent && <IconComponent className="w-6 h-6 text-primary" />}
+                  </div>
+                  <h3 className="text-xl font-semibold text-center mb-2">{item.title}</h3>
+                  {item.link ? (
+                    <a 
+                      href={item.link} 
+                      className="text-gray-600 hover:text-primary text-center block whitespace-pre-line"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {item.description}
+                    </a>
+                  ) : (
+                    <p className="text-gray-600 text-center whitespace-pre-line">
+                      {item.description}
+                    </p>
+                  )}
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -224,13 +290,13 @@ const Contact = () => {
       {/* Map Section */}
       <section className="h-96 w-full">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.168301423964!2d78.36787441535483!3d17.44893168803623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb93dc8c5d69df%3A0x19630804d0b3a4cd!2sHyderabad%2C%20Telangana!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin"
+          src={mapLocation.url}
           width="100%"
           height="100%"
           style={{ border: 0 }}
           allowFullScreen
           loading="lazy"
-          title="Our Location"
+          title={mapLocation.title}
         ></iframe>
       </section>
 
