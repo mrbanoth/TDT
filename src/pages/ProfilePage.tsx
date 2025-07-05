@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const teamMembers = {
   'BANOTH-SRINIVAS-NAIK': {
@@ -51,28 +52,28 @@ const teamMembers = {
 const ProfilePage = () => {
   const { id } = useParams<{ id: string }>();
   const [isLoading, setIsLoading] = useState(true);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
   const member = id ? teamMembers[id as keyof typeof teamMembers] : null;
 
-  // Handle scroll and loading state
   useEffect(() => {
-    // Immediately scroll to top before anything renders
-    window.scrollTo(0, 0);
-    
-    // Set a small timeout to ensure smooth transition
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 50);
-    
-    return () => clearTimeout(timer);
-  }, [id]);
-  
-  // Show loading state briefly to prevent flash of content
+    const loadUserData = async () => {
+      try {
+        // Simulate API call or data loading
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        setIsDataLoaded(true);
+      } catch (error) {
+        console.error('Error loading profile data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadUserData();
+  }, []);
+
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-charity-light">
-        <Navbar />
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (!member) {

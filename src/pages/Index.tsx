@@ -14,14 +14,29 @@ import { Heart, Users, Home } from 'lucide-react';
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
 
+  // Simulate data loading
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+    const loadData = async () => {
+      try {
+        // Simulate API calls or data loading
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        setIsDataLoaded(true);
+      } catch (error) {
+        console.error('Error loading data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    return () => clearTimeout(timer);
+    loadData();
   }, []);
+
+  // Show loading spinner only when loading data
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   const programs = [
     {
