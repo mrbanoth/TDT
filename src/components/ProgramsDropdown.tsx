@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronRight, Image as ImageIcon } from 'lucide-react';
 
 const ProgramsDropdown = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -35,8 +35,9 @@ const ProgramsDropdown = () => {
       <div className="border-t border-gray-100 my-1" />
       <NavLink
         to="/programs/gallery"
-        className="block px-4 py-2 text-sm text-primary font-medium hover:bg-gray-100"
+        className="flex items-center px-4 py-2.5 text-sm font-medium text-primary bg-primary/5 rounded-md mx-2 my-1 transition-all duration-200 hover:bg-primary/10 hover:shadow-sm"
       >
+        <ImageIcon className="h-4 w-4 mr-2" />
         View All Gallery
       </NavLink>
     </div>
@@ -90,14 +91,16 @@ const ProgramsDropdown = () => {
               {program.name}
             </NavLink>
           ))}
+          <div className="border-t border-gray-100 my-1"></div>
           <NavLink
             to="/programs/gallery"
-            className="block px-4 py-2 text-sm text-primary font-medium hover:bg-gray-50 rounded-lg"
+            className="flex items-center px-4 py-2.5 text-sm font-medium text-primary bg-primary/5 rounded-lg mx-1 my-1 transition-all duration-200 hover:bg-primary/10 hover:shadow-sm"
             onClick={() => {
               setIsMobileMenuOpen(false);
               document.dispatchEvent(new Event('mobileMenuClose'));
             }}
           >
+            <ImageIcon className="h-4 w-4 mr-2" />
             View All Gallery
           </NavLink>
         </div>
