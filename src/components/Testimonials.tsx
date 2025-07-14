@@ -209,7 +209,7 @@ const Testimonials = () => {
                             }}
                           >
                             Read Full Story
-                            <ArrowRight className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" />
+                            {/* <ArrowRight className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" /> */}
                           </button>
                         </div>
                       </div>

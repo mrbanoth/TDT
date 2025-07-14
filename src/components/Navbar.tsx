@@ -53,7 +53,7 @@ const Navbar = () => {
                   className="h-9 sm:h-10 w-auto object-contain"
                 />
                 <div className="block">
-                  <h1 className="text-[10px] xs:text-xs sm:text-sm md:text-lg font-bold text-charity-dark leading-tight whitespace-nowrap">
+                  <h1 className="text-[10px] xs:text-xs sm:text-sm md:text-lg font-bold text-charity-dark leading-tight whitespace-nowrap font-serif">
                     Tribal Development Trust
                   </h1>
                 </div>
@@ -68,11 +68,11 @@ const Navbar = () => {
                     key={item.name}
                     to={item.path}
                     className={({ isActive }) =>
-                      `px-3 py-2 text-sm font-medium tracking-wide transition-colors duration-200 ${
+                      `px-3 py-2 text-sm font-medium tracking-wide transition-colors duration-200 font-sans ${
                         isActive 
                           ? 'text-primary font-semibold' 
-                          : 'text-gray-700 hover:text-primary hover:font-medium'
-                      }`
+                          : 'text-gray-700'
+                      } hover:text-primary hover:font-medium`
                     }
                   >
                     {item.name}
@@ -102,11 +102,11 @@ const Navbar = () => {
                     key={item.name}
                     to={item.path}
                     className={({ isActive }) =>
-                      `px-3 py-2 text-sm font-medium tracking-wide transition-colors duration-200 ${
+                      `px-3 py-2 text-sm font-medium tracking-wide transition-colors duration-200 font-sans ${
                         isActive 
                           ? 'text-primary font-semibold' 
-                          : 'text-gray-700 hover:text-primary hover:font-medium'
-                      }`
+                          : 'text-gray-700'
+                      } hover:text-primary hover:font-medium`
                     }
                   >
                     {item.name}

@@ -322,7 +322,7 @@ const StoryDetail = () => {
                     </div>
                   </div>
                   <Link to="/stories" className="text-primary hover:text-primary/80 font-medium">
-                    View all stories →
+                    View all stories 
                   </Link>
                 </div>
               </div>

@@ -280,16 +280,11 @@ const About = () => {
               </p>
             </div>
             <div className="space-y-6">
-              <Link to="/profile/BANOTH-SRINIVAS-NAIK" className="block relative w-full h-80 sm:h-[32rem] overflow-hidden rounded-2xl shadow-2xl group">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex items-end pb-6 justify-center">
-                  <span className="text-white text-base font-medium bg-primary/90 hover:bg-primary px-4 py-2 rounded-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                    View Full Profile →
-                  </span>
-                </div>
+              <Link to="/profile/BANOTH-SRINIVAS-NAIK" className="block relative w-full h-80 sm:h-[32rem] overflow-hidden rounded-2xl cursor-pointer hover:cursor-pointer">
                 <img 
                   src="/aboutuspage/FOUNDER.jpg" 
                   alt="B. Srinivas Naik - Founder" 
-                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover object-top"
                 />
               </Link>
               <div className="bg-white p-6 rounded-2xl shadow-lg">
