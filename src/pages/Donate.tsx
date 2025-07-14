@@ -626,7 +626,7 @@ const Donate = () => {
               </div>
             </div>
 
-            <div className="bg-white rounded-3xl p-8 shadow-2xl">
+            <div className="bg-white rounded-3xl p-8 shadow-md">
               <h3 className="text-2xl font-bold text-charity-dark mb-6">Make an Impact Today</h3>
               
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
