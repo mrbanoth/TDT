@@ -397,12 +397,12 @@ const About = () => {
                         </p>
                       </div>
                       <div className="mt-auto">
-                        <div className="inline-flex items-center text-sm font-medium text-primary group-hover/card:text-secondary transition-colors">
+                        <Link 
+                          to={`/profile/${memberId}`} 
+                          className="inline-flex items-center justify-center w-full px-4 py-2.5 text-xs sm:text-sm font-semibold text-black hover:text-charity-dark border-2 border-black hover:border-charity-dark transition-all duration-300 rounded-full hover:bg-charity-light/10 group-hover/card:text-charity-dark tracking-wide uppercase"
+                        >
                           View Profile
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 transition-transform group-hover/card:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                          </svg>
-                        </div>
+                        </Link>
                       </div>
                     </CardContent>
                   </Card>
