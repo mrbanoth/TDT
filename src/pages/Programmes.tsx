@@ -325,7 +325,7 @@ sustainable programs that create lasting impact across India.
                 className="flex items-center justify-center w-full max-w-[220px] sm:max-w-[240px] bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-white font-medium font-sans px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-sm sm:text-[15px] hover:shadow-md hover:scale-[1.02] transition-all duration-200 tracking-wide whitespace-nowrap"
               >
                 Our Approaches
-                <ArrowRight className="ml-1.5 sm:ml-2 h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
+                {/* <ArrowRight className="ml-1.5 sm:ml-2 h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" /> */}
               </Link>
             </div>
           </div>
