@@ -239,7 +239,7 @@ const Gallery = () => {
                 </h2>
                 <NavLink 
                   to={`/programs/${program.id}`}
-                  className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 border border-primary rounded-full text-xs sm:text-sm font-medium text-primary hover:bg-primary/5 transition-all duration-200 whitespace-nowrap"
+                  className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 border border-primary rounded-lg text-xs sm:text-sm font-medium text-primary hover:bg-primary/5 transition-all duration-200 whitespace-nowrap"
                 >
                   <span className="hidden sm:inline">View</span> Details
                   <ArrowLeft className="ml-0.5 sm:ml-1 h-3 w-3 sm:h-4 sm:w-4 rotate-180" />

@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import { Card, CardContent } from '@/components/ui/card';
 import { NavLink } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Users, Leaf, HeartHandshake, ShieldCheck } from 'lucide-react';
 
 const About = () => {
   const [animatedStats, setAnimatedStats] = useState({
@@ -113,25 +114,25 @@ const About = () => {
     {
       title: "Community First",
       description: "We prioritize the needs and voices of tribal communities in all our programs",
-      icon: "👥",
+      icon: <Users className="w-10 h-10 text-primary" />,
       color: "primary"
     },
     {
       title: "Cultural Respect",
       description: "Preserving and honoring tribal traditions while promoting development",
-      icon: "🌿",
+      icon: <Leaf className="w-10 h-10 text-secondary" />,
       color: "secondary"
     },
     {
       title: "Sustainable Impact",
       description: "Creating long-term solutions that empower communities to thrive independently",
-      icon: "♻️",
+      icon: <HeartHandshake className="w-8 h-8 text-orange-500" />,
       color: "accent"
     },
     {
       title: "Transparency",
       description: "Maintaining open communication and accountability in all our operations",
-      icon: "🔍",
+      icon: <ShieldCheck className="w-8 h-8 text-orange-500" />,
       color: "accent"
     },
   ];
@@ -280,13 +281,16 @@ const About = () => {
               </p>
             </div>
             <div className="space-y-6">
-              <Link to="/profile/BANOTH-SRINIVAS-NAIK" className="block relative w-full h-80 sm:h-[32rem] overflow-hidden rounded-2xl cursor-pointer hover:cursor-pointer">
+              <div 
+                onClick={() => window.location.href = '/profile/BANOTH-SRINIVAS-NAIK'}
+                className="block relative w-full h-80 sm:h-[32rem] overflow-hidden rounded-2xl cursor-pointer hover:opacity-90 transition-opacity"
+              >
                 <img 
                   src="/aboutuspage/FOUNDER.jpg" 
                   alt="B. Srinivas Naik - Founder" 
                   className="w-full h-full object-cover object-top"
                 />
-              </Link>
+              </div>
               <div className="bg-white p-6 rounded-2xl shadow-lg">
                 <h3 className="text-xl font-bold text-charity-dark mb-2">B. Srinivas Naik</h3>
                 <p className="text-primary font-medium mb-4 text-sm">Founder & President</p>
@@ -317,10 +321,10 @@ const About = () => {
             {values.map((value, index) => (
               <div 
                 key={index} 
-                className="group bg-white rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-primary/20 hover:-translate-y-1 flex flex-col items-center"
+                className="group bg-white rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-primary/20 hover:-translate-y-1 flex flex-col items-center"
               >
                 <div 
-                  className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl ${value.color === 'primary' ? 'bg-primary/10' : value.color === 'secondary' ? 'bg-secondary/10' : 'bg-accent/10'} flex items-center justify-center text-3xl sm:text-4xl mb-4 sm:mb-6`}
+                  className={`w-16 h-16 sm:w-20 sm:h-20 rounded-xl ${index >= 2 ? 'bg-accent/10' : ''} flex items-center justify-center text-3xl sm:text-4xl mb-4 sm:mb-6`}
                 >
                   {value.icon}
                 </div>
@@ -355,58 +359,59 @@ const About = () => {
               const memberId = trustee.name.replace(/\./g, '').replace(/\s+/g, '-').toUpperCase();
               
               return (
-                <Link 
+                <div 
                   key={index} 
-                  to={`/profile/${memberId}`}
                   className="group h-full block"
                 >
-                  <Card className="h-full flex flex-col border-2 border-charity-light/30 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group/card">
-                    <div className="relative overflow-hidden h-48 sm:h-64 flex-shrink-0">
-                      <div className="absolute inset-0 w-full h-full">
-                        <div className="absolute inset-0 w-full h-full overflow-hidden">
-                          <img 
-                            src={trustee.image} 
-                            alt={trustee.name}
-                            className="w-full h-[120%] object-cover object-top transition-transform duration-700 group-hover/card:scale-105"
-                            style={{
-                              objectPosition: 'center 20%',
-                              ...(trustee.name.includes('LALITHAMMA') || trustee.name.includes('SURESH NAIK') 
-                                ? { objectPosition: 'center 10%' }
-                                : {})
-                            }}
-                            onError={(e) => {
-                              console.error('Error loading image:', trustee.image);
-                              (e.target as HTMLImageElement).style.border = '2px solid red';
-                            }}
-                          />
+                  <Link to={`/profile/${memberId}`} className="block h-full">
+                    <Card className="h-full flex flex-col border-2 border-charity-light/30 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group/card">
+                      <div className="relative overflow-hidden h-48 sm:h-64 flex-shrink-0">
+                        <div className="absolute inset-0 w-full h-full">
+                          <div className="absolute inset-0 w-full h-full overflow-hidden">
+                            <img 
+                              src={trustee.image} 
+                              alt={trustee.name}
+                              className="w-full h-[120%] object-cover object-top transition-transform duration-700 group-hover/card:scale-105"
+                              style={{
+                                objectPosition: 'center 20%',
+                                ...(trustee.name.includes('LALITHAMMA') || trustee.name.includes('SURESH NAIK') 
+                                  ? { objectPosition: 'center 10%' }
+                                  : {})
+                              }}
+                              onError={(e) => {
+                                console.error('Error loading image:', trustee.image);
+                                (e.target as HTMLImageElement).style.border = '2px solid red';
+                              }}
+                            />
+                          </div>
                         </div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent"></div>
                       </div>
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent"></div>
-                    </div>
-                    <CardContent className="p-5 sm:p-6 text-center group-hover/card:bg-charity-light/10 transition-all duration-300 flex flex-col h-full">
-                      <div className="flex-grow">
-                        <h3 className="text-lg sm:text-xl font-bold text-charity-dark mb-2 group-hover/card:text-primary transition-colors">
-                          {trustee.name}
-                        </h3>
-                        <p className="text-primary/90 font-semibold mb-3 sm:mb-4 text-sm sm:text-base">
-                          {trustee.role}
-                        </p>
-                        <p className="text-sm sm:text-base text-gray-600 leading-relaxed line-clamp-3 mb-4">
-                          {trustee.description}
-                        </p>
-                      </div>
-                      <div className="mt-auto">
-                        <Link 
-                          to={`/profile/${memberId}`} 
-                          className="inline-flex items-center justify-center w-full px-4 py-2.5 text-xs sm:text-sm font-semibold text-black hover:text-charity-dark border-2 border-black hover:border-charity-dark transition-all duration-300 rounded-full hover:bg-charity-light/10 group-hover/card:text-charity-dark tracking-wide uppercase"
-                        >
-                          View Profile
-                        </Link>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
+                      <CardContent className="p-5 sm:p-6 text-center group-hover/card:bg-charity-light/10 transition-all duration-300 flex flex-col h-full">
+                        <div className="flex-grow">
+                          <h3 className="text-lg sm:text-xl font-bold text-charity-dark mb-2 group-hover/card:text-primary transition-colors">
+                            {trustee.name}
+                          </h3>
+                          <p className="text-primary/90 font-semibold mb-3 sm:mb-4 text-sm sm:text-base">
+                            {trustee.role}
+                          </p>
+                          <p className="text-sm sm:text-base text-gray-600 leading-relaxed line-clamp-3 mb-4">
+                            {trustee.description}
+                          </p>
+                        </div>
+                        <div className="mt-auto">
+                          <Link 
+                            to={`/profile/${memberId}`}
+                            className="inline-flex items-center justify-center w-full px-4 py-2.5 text-xs sm:text-sm font-semibold text-black hover:text-charity-dark border-2 border-black hover:border-charity-dark transition-all duration-300 rounded-lg hover:bg-charity-light/10 group-hover/card:text-charity-dark tracking-wide uppercase"
+                          >
+                            View Profile
+                          </Link>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                </div>
               );
             })}
           </div>

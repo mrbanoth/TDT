@@ -180,7 +180,7 @@ const Contact = () => {
                       isSubmitted 
                         ? 'bg-green-600 hover:bg-green-700' 
                         : 'bg-primary hover:bg-primary/90'
-                    } text-white px-8 py-3 rounded-full font-normal font-serif text-base sm:text-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-normal`}
+                    } text-white px-8 py-3 rounded-lg font-normal font-serif text-base sm:text-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-normal`}
                   >
                     <AnimatePresence mode="wait">
                       {isSubmitted ? (
@@ -262,7 +262,7 @@ const Contact = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4 mx-auto">
+                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4 mx-auto">
                     {IconComponent && <IconComponent className="w-6 h-6 text-primary" />}
                   </div>
                   <h3 className="text-xl font-semibold text-center mb-2 font-serif">{item.title}</h3>

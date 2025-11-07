@@ -2,10 +2,15 @@ import { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { ChevronDown, ChevronRight, Image as ImageIcon } from 'lucide-react';
 
-const ProgramsDropdown = () => {
+interface ProgramsDropdownProps {
+  mobile?: boolean;
+  onItemClick?: () => void;
+}
+
+const ProgramsDropdown = ({ mobile = false, onItemClick }: ProgramsDropdownProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const isMobile = window.innerWidth < 1024; // lg breakpoint
+  const isMobileView = mobile || window.innerWidth < 1024; // lg breakpoint
 
   const programs = [
     { name: "Children's Programmes", path: "/programs/children" },
@@ -27,6 +32,7 @@ const ProgramsDropdown = () => {
         <NavLink
           key={program.path}
           to={program.path}
+          onClick={onItemClick}
           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary"
         >
           {program.name}
@@ -110,7 +116,7 @@ const ProgramsDropdown = () => {
 
   return (
     <div className="w-full">
-      {isMobile ? renderMobileDropdown() : renderDesktopDropdown()}
+      {isMobileView ? renderMobileDropdown() : renderDesktopDropdown()}
     </div>
   );
 };

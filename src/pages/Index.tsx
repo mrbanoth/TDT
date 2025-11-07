@@ -143,7 +143,7 @@ const Index = () => {
               <div className="mt-4 sm:mt-6 md:mt-8 sm:text-left">
                 <div className="text-center sm:text-left">
                   <NavLink to="/about" className="inline-block w-full sm:w-auto">
-                    <Button className="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-full font-normal font-serif text-sm sm:text-base w-full sm:w-auto max-w-[180px] transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-normal">
+                    <Button className="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg font-normal font-serif text-sm sm:text-base w-full sm:w-auto max-w-[180px] transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-normal">
                       Our Story
                     </Button>
                   </NavLink>
@@ -217,7 +217,7 @@ const Index = () => {
               <div className="mt-4 sm:mt-6 md:mt-8 sm:text-left">
                 <div className="text-center sm:text-left">
                   <NavLink to="/programmes" className="inline-block w-full sm:w-auto">
-                    <Button className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full font-normal font-serif text-base sm:text-lg w-full sm:w-auto max-w-[180px] transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-wide">
+                    <Button className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-normal font-serif text-base sm:text-lg w-full sm:w-auto max-w-[180px] transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-wide">
                       All Programs
                     </Button>
                   </NavLink>
@@ -247,7 +247,7 @@ const Index = () => {
             Join us in our mission to empower and uplift.
           </p>
           <NavLink to="/donate">
-            <Button className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full font-normal font-serif text-base sm:text-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-wide w-full max-w-[180px]">
+            <Button className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-normal font-serif text-base sm:text-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-wide w-full max-w-[180px]">
               Start Donating
             </Button>
           </NavLink>

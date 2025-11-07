@@ -243,7 +243,7 @@ const Events = () => {
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute top-4 right-4">
-                    <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold bg-primary/90 text-white backdrop-blur-sm">
+                    <span className="inline-flex items-center px-4 py-1.5 rounded-lg text-xs font-semibold bg-primary/90 text-white backdrop-blur-sm">
                       {event.type}
                     </span>
                   </div>
@@ -289,7 +289,7 @@ const Events = () => {
                   
                   <Button 
                     onClick={() => handleRegisterClick(event)}
-                    className="w-full bg-charity-dark hover:bg-charity-dark/90 text-white rounded-xl py-2 text-sm font-medium transition-all duration-300 h-9"
+                    className="w-full bg-charity-dark hover:bg-charity-dark/90 text-white rounded-lg py-2 text-sm font-medium transition-all duration-300 h-9"
                   >
                     Register
                   </Button>
@@ -302,7 +302,7 @@ const Events = () => {
           <div className="text-center mt-16">
             <Link 
               to="/all-events"
-              className="inline-flex items-center justify-center px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 rounded-full shadow hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 group/btn h-10"
+              className="inline-flex items-center justify-center px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 rounded-lg shadow hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 group/btn h-10"
             >
               View All Upcoming Events
               {/* <ArrowRight className="ml-2 h-5 w-5 group-hover/btn:translate-x-1 transition-transform duration-200" /> */}
@@ -337,7 +337,7 @@ const Events = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                   <div className="absolute top-4 right-4">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-primary/90 text-white backdrop-blur-sm">
+                    <span className="inline-flex items-center px-3 py-1 rounded-lg text-xs font-semibold bg-primary/90 text-white backdrop-blur-sm">
                       {event.type}
                     </span>
                   </div>
@@ -393,13 +393,13 @@ const Events = () => {
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center items-center w-full px-4 sm:px-0">
             <Link 
               to="/donate" 
-              className="flex items-center justify-center w-full max-w-[260px] sm:w-auto bg-charity-dark hover:bg-charity-dark/95 text-white font-medium font-sans px-7 py-2.5 sm:py-2.5 rounded-full text-sm sm:text-[15px] hover:shadow-lg hover:scale-[1.02] transition-all duration-200 tracking-wide whitespace-nowrap"
+              className="flex items-center justify-center w-full max-w-[260px] sm:w-auto bg-charity-dark hover:bg-charity-dark/95 text-white font-medium font-sans px-7 py-2.5 sm:py-2.5 rounded-lg text-sm sm:text-[15px] hover:shadow-lg hover:scale-[1.02] transition-all duration-200 tracking-wide whitespace-nowrap"
             >
               Donate to Support Events
             </Link>
             <Link 
               to="/events" 
-              className="flex items-center justify-center w-full max-w-[260px] sm:w-auto bg-white border-2 border-charity-dark text-charity-dark hover:bg-charity-dark hover:text-white font-medium font-sans px-7 py-2.5 sm:py-2.5 rounded-full text-sm sm:text-[15px] hover:shadow-lg hover:scale-[1.02] transition-all duration-200 tracking-wide whitespace-nowrap"
+              className="flex items-center justify-center w-full max-w-[260px] sm:w-auto bg-white border-2 border-charity-dark text-charity-dark hover:bg-charity-dark hover:text-white font-medium font-sans px-7 py-2.5 sm:py-2.5 rounded-lg text-sm sm:text-[15px] hover:shadow-lg hover:scale-[1.02] transition-all duration-200 tracking-wide whitespace-nowrap"
             >
               View Upcoming Events
             </Link>

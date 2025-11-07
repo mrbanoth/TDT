@@ -33,7 +33,7 @@ const Donate = () => {
             name="name"
             value={formData.name}
             onChange={handleInputChange}
-            className="w-full p-2 border border-gray-300 rounded-md"
+            className="w-full p-2 border border-gray-300 rounded-lg"
             placeholder="Your full name"
             required
           />
@@ -45,7 +45,7 @@ const Donate = () => {
             name="phone"
             value={formData.phone}
             onChange={handleInputChange}
-            className="w-full p-2 border border-gray-300 rounded-md"
+            className="w-full p-2 border border-gray-300 rounded-lg"
             placeholder="Your mobile number"
             pattern="[0-9]{10}"
             title="Please enter a 10-digit mobile number"
@@ -213,7 +213,7 @@ const Donate = () => {
                   name="amount"
                   value={formData.amount}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full p-2 border border-gray-300 rounded-lg"
                   placeholder="Enter amount"
                   required
                 />
@@ -224,7 +224,7 @@ const Donate = () => {
                     key={amount}
                     type="button"
                     onClick={() => setFormData(prev => ({ ...prev, amount: amount === 'Other' ? '' : String(amount) }))}
-                    className={`p-2 border rounded-md text-sm ${formData.amount === String(amount) ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50'}`}
+                    className={`p-2 border rounded-lg text-sm ${formData.amount === String(amount) ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50'}`}
                   >
                     {amount === 'Other' ? 'Other' : `₹${amount}`}
                   </button>
@@ -235,7 +235,7 @@ const Donate = () => {
               <h4 className="font-medium">Payment Method</h4>
               <div className="space-y-2">
                 {['Credit/Debit Card', 'UPI', 'Net Banking', 'PayPal'].map(method => (
-                  <label key={method} className="flex items-center space-x-2 p-3 border rounded-md hover:bg-gray-50 cursor-pointer">
+                  <label key={method} className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
                     <input type="radio" name="paymentMethod" className="h-4 w-4 text-primary" />
                     <span className="text-sm">{method}</span>
                   </label>
@@ -255,7 +255,7 @@ const Donate = () => {
                 name="donationType"
                 value={formData.donationType}
                 onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className="w-full p-2 border border-gray-300 rounded-lg"
                 required
               >
                 <option value="">Select items</option>
@@ -272,7 +272,7 @@ const Donate = () => {
                 value={formData.message}
                 onChange={handleInputChange}
                 rows={3}
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className="w-full p-2 border border-gray-300 rounded-lg"
                 placeholder="Please describe the items you wish to donate"
                 required
               />
@@ -310,7 +310,7 @@ const Donate = () => {
                 value={formData.address}
                 onChange={handleInputChange}
                 rows={3}
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className="w-full p-2 border border-gray-300 rounded-lg"
                 placeholder="Enter your address for pickup"
                 required
               />
@@ -331,7 +331,7 @@ const Donate = () => {
                 name="donationType"
                 value={formData.donationType}
                 onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className="w-full p-2 border border-gray-300 rounded-lg"
                 required
               >
                 <option value="">Select food type</option>
@@ -348,7 +348,7 @@ const Donate = () => {
                 name="amount"
                 value={formData.amount}
                 onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className="w-full p-2 border border-gray-300 rounded-lg"
                 placeholder="e.g., 5kg rice, 10 packets, etc."
                 required
               />
@@ -358,7 +358,7 @@ const Donate = () => {
               <input
                 type="date"
                 name="expiryDate"
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className="w-full p-2 border border-gray-300 rounded-lg"
               />
             </div>
             <div>
@@ -394,7 +394,7 @@ const Donate = () => {
                 value={formData.message}
                 onChange={handleInputChange}
                 rows={3}
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className="w-full p-2 border border-gray-300 rounded-lg"
                 placeholder="Any special instructions or your current address for pickup"
               />
               {locationError && formData.message === '' && (
@@ -415,7 +415,7 @@ const Donate = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full p-2 border border-gray-300 rounded-lg"
                   required
                 />
               </div>
@@ -426,7 +426,7 @@ const Donate = () => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full p-2 border border-gray-300 rounded-lg"
                   pattern="[0-9]{10}"
                   title="Please enter a 10-digit mobile number"
                   required
@@ -439,7 +439,7 @@ const Donate = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full p-2 border border-gray-300 rounded-lg"
                 />
               </div>
               <div>
@@ -448,7 +448,7 @@ const Donate = () => {
                   name="donationType"
                   value={formData.donationType}
                   onChange={handleInputChange}
-                  className="w-full p-2 text-sm border border-gray-300 rounded-md"
+                  className="w-full p-2 text-sm border border-gray-300 rounded-lg"
                   required
                 >
                   <option value="">Select</option>
@@ -480,7 +480,7 @@ const Donate = () => {
                 value={formData.message}
                 onChange={handleInputChange}
                 rows={2}
-                className="w-full p-2 text-sm border border-gray-300 rounded-md"
+                className="w-full p-2 text-sm border border-gray-300 rounded-lg"
                 placeholder="Your skills, experience, and why you want to volunteer"
                 required
               />
@@ -626,7 +626,7 @@ const Donate = () => {
               </div>
             </div>
 
-            <div className="bg-white rounded-3xl p-8 shadow-md">
+            <div className="bg-white rounded-2xl p-8 shadow-md">
               <h3 className="text-2xl font-bold text-charity-dark mb-6">Make an Impact Today</h3>
               
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
@@ -666,11 +666,11 @@ const Donate = () => {
                     value={customAmount}
                     onChange={handleCustomAmountChange}
                     placeholder="Enter amount"
-                    className="w-full pl-10 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:border-charity-dark focus:ring-2 focus:ring-charity-dark/20 focus:outline-none text-lg font-medium"
+                    className="w-full pl-10 pr-4 py-4 border-2 border-gray-200 rounded-lg focus:border-charity-dark focus:ring-2 focus:ring-charity-dark/20 focus:outline-none text-lg font-medium"
                   />
                 </div>
                 <Button 
-                  className="w-full bg-charity-dark hover:bg-charity-dark/90 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+                  className="w-full bg-charity-dark hover:bg-charity-dark/90 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
                   size="lg"
                   onClick={() => setActiveModal('financial')}
                 >
@@ -845,7 +845,7 @@ const Donate = () => {
                       href={`tel:${contactInfo.find(info => info.id === 'phone')?.link?.replace('tel:', '')}`} 
                       className="block w-full sm:w-auto px-4 sm:px-8 mx-auto mt-4"
                     >
-                      <Button className="w-full bg-primary hover:bg-primary/90 text-white text-sm py-3 sm:py-3 h-auto rounded-full font-medium px-6 sm:px-8">
+                      <Button className="w-full bg-primary hover:bg-primary/90 text-white text-sm py-3 sm:py-3 h-auto rounded-lg font-medium px-6 sm:px-8">
                         Schedule Pickup Now
                       </Button>
                     </a>

@@ -313,13 +313,13 @@ const ProgramDetail = () => {
                 <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                   <Link 
                     to="/donate" 
-                    className={`flex-1 sm:flex-none inline-flex justify-center items-center px-4 sm:px-6 py-2 sm:py-3 border border-transparent text-sm sm:text-base font-medium rounded-full text-white ${colors.button} shadow-sm hover:shadow-md transition-all duration-200`}
+                    className={`flex-1 sm:flex-none inline-flex justify-center items-center px-4 sm:px-6 py-2 sm:py-3 border border-transparent text-sm sm:text-base font-medium rounded-lg text-white ${colors.button} shadow-sm hover:shadow-md transition-all duration-200`}
                   >
                     Donate Now
                   </Link>
                   <Link 
                     to="/programs/gallery" 
-                    className="flex-1 sm:flex-none inline-flex justify-center items-center px-4 sm:px-6 py-2 sm:py-3 border border-gray-300 text-sm sm:text-base font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50 hover:shadow-sm transition-all duration-200"
+                    className="flex-1 sm:flex-none inline-flex justify-center items-center px-4 sm:px-6 py-2 sm:py-3 border border-gray-300 text-sm sm:text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:shadow-sm transition-all duration-200"
                   >
                     View Gallery
                   </Link>
@@ -444,7 +444,7 @@ const ProgramDetail = () => {
                   <div className="mt-6">
                     <Link
                       to="/contact"
-                      className={`w-full flex items-center justify-center px-6 py-3 border border-transparent rounded-full text-base font-medium text-white ${colors.button} shadow-sm hover:shadow-md transition-all duration-200`}
+                      className={`w-full flex items-center justify-center px-6 py-3 border border-transparent rounded-lg text-base font-medium text-white ${colors.button} shadow-sm hover:shadow-md transition-all duration-200`}
                     >
                       Get Involved
                     </Link>
@@ -486,7 +486,7 @@ const ProgramDetail = () => {
                     </div>
                     <button
                       onClick={() => navigate('/programs/gallery')}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-primary hover:bg-primary/90 transition-colors"
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-primary hover:bg-primary/90 transition-colors"
                     >
                       View Full Gallery
                     </button>
