@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, useRoutes } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
+import TawkToButton from "./components/chat/TawkToButton";
 import { routes } from "./routes";
 
 // Create a single QueryClient instance
@@ -28,10 +29,14 @@ const AppRouter = () => {
       style={{
         scrollBehavior: 'auto',
         scrollSnapType: 'none',
-        overscrollBehavior: 'none'
+        overscrollBehavior: 'none',
+        position: 'relative'
       }}
     >
       {element}
+      <div className="fixed bottom-6 right-6 z-50">
+        <TawkToButton />
+      </div>
     </div>
   );
 };
