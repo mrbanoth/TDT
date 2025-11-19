@@ -71,11 +71,11 @@ const Gallery = () => {
               </p>
               <div className="mt-6">
                 <NavLink
-                  to="/programmes"
+                  to="/"
                   className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-primary/90 transition-colors"
                 >
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Programmes
+                  Back to Home
                 </NavLink>
               </div>
             </div>

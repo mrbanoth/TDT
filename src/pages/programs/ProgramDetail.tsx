@@ -236,8 +236,8 @@ const ProgramDetail = () => {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900">Program not found</h1>
-          <Link to="/programs" className="mt-4 inline-flex items-center text-primary hover:underline">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Programs
+          <Link to="/" className="mt-4 inline-flex items-center text-primary hover:underline">
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
           </Link>
         </div>
       </div>
@@ -296,12 +296,12 @@ const ProgramDetail = () => {
             <div className="lg:flex lg:items-center lg:justify-between">
               <div className="lg:w-1/2">
                 <div className="mb-6">
-                  <Link 
-                    to="/programmes" 
+                  <Link
+                    to="/" 
                     className="inline-flex items-center text-primary hover:text-primary/80 transition-colors"
                   >
                     <ArrowLeft className="h-5 w-5 mr-2" />
-                    Back to Programmes
+                    Back to Home
                   </Link>
                 </div>
                 <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-4">

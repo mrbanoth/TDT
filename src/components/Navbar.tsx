@@ -67,16 +67,15 @@ const Navbar = () => {
   const navItems: NavItem[] = [
     { name: 'HOME', path: '/' },
     { name: 'ABOUT US', path: '/about' },
-    { name: 'EVENTS', path: '/events' },
-    { name: 'CONTACT', path: '/contact' },
+    { name: 'EVENTS', path: '/events' }
   ];
 
   // Mobile view uses the same nav items
-  const mobileNavItems = [...navItems];
+  const mobileNavItems = [...navItems, { name: 'CONTACT', path: '/contact' }];
 
   return (
     <div className="relative" ref={menuRef}>
-      <nav className="bg-white shadow-lg fixed w-full top-0 left-0 z-50">
+      <nav className="bg-white shadow-md fixed w-full top-0 left-0 z-50">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
@@ -169,6 +168,20 @@ const Navbar = () => {
                   </div>
                 </div>
                 
+                {/* Contact Link */}
+                <NavLink
+                  to="/contact"
+                  className={({ isActive }) =>
+                    `px-3 py-2 text-sm font-medium tracking-wide transition-colors duration-200 ${
+                      isActive 
+                        ? 'text-primary font-semibold' 
+                        : 'text-gray-700 hover:text-primary hover:font-medium'
+                    }`
+                  }
+                >
+                  CONTACT
+                </NavLink>
+                
                 <NavLink to="/donate">
                   <Button className="ml-4 bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-lg font-medium transition-all duration-200 hover:shadow-lg">
                     Donate Now
@@ -207,98 +220,85 @@ const Navbar = () => {
           style={{
             backdropFilter: 'blur(8px)',
             WebkitBackdropFilter: 'blur(8px)',
-            paddingTop: '1rem'  // Add padding to the top of the menu
+            paddingTop: '1rem'
           }}
         >
-          <div className="h-full flex flex-col">
-            {/* Menu Header with Logo */}
-            <div className="bg-primary p-4 pb-3 flex justify-between items-center rounded-b-lg">
-              <NavLink to="/" className="flex items-center" onClick={() => setIsMenuOpen(false)}>
+          <div className="h-full flex flex-col overflow-y-auto">
+            {/* Mobile Menu Header with Logo and Close Button */}
+            <div className="p-4 flex justify-between items-center border-b border-gray-100">
+              <NavLink to="/" className="flex items-center space-x-2" onClick={() => setIsMenuOpen(false)}>
                 <img 
                   src="/tdtlogo.jpg" 
                   alt="Tribal Development Trust Logo"
-                  className="h-10 w-auto object-contain"
+                  className="h-8 w-auto object-contain"
                 />
               </NavLink>
               <button
                 onClick={() => setIsMenuOpen(false)}
-                className="p-1 text-white hover:bg-white/20 rounded-full"
-                aria-label="Close menu"
+                className="p-2 rounded-md text-gray-500 hover:bg-gray-100"
               >
-                <X className="h-6 w-6" />
+                <X className="h-5 w-5" />
+                <span className="sr-only">Close menu</span>
               </button>
             </div>
-            
-            {/* Menu Items */}
-            <div className="flex-1 overflow-y-auto bg-white pt-2">
-              <div className="divide-y divide-gray-100">
-                {mobileNavItems.map((item) => (
-                  <NavLink
-                    key={item.name}
-                    to={item.path}
-                    className={({ isActive }) => 
-                      `block px-6 py-4 text-base font-medium transition-all duration-200 ${
-                        isActive 
-                          ? 'text-primary bg-primary/5 border-l-4 border-primary' 
-                          : 'text-gray-700 hover:bg-gray-50 hover:text-primary hover:pl-7'
-                      }`
-                    }
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {item.name}
-                  </NavLink>
-                ))}
 
-                {/* Mobile Programs Dropdown */}
-                <div className="border-b border-gray-100">
-                  <div className="flex flex-col">
-                    <button
-                      className="w-full flex justify-between items-center px-6 py-4 text-base font-medium text-gray-900 hover:bg-gray-50 text-left"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setIsProgramsOpen(!isProgramsOpen);
-                      }}
-                    >
-                      <span>OUR PROGRAMMES</span>
-                      <ChevronRight
-                        className={`h-5 w-5 transition-transform duration-200 ${
-                          isProgramsOpen ? 'transform rotate-90' : ''
-                        }`}
-                      />
-                    </button>
-                    
-                    {/* Dropdown Content */}
-                    <div 
-                      className={`overflow-hidden transition-all duration-200 ease-in-out ${
-                        isProgramsOpen ? 'max-h-96' : 'max-h-0'
-                      }`}
-                    >
-                      <div className="bg-gray-50 pl-6 pr-4 py-2">
-                        <ProgramsDropdown 
-                          mobile={true} 
-                          onItemClick={() => {
-                            setIsProgramsOpen(false);
-                            setIsMenuOpen(false);
-                          }} 
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            {/* Navigation Links */}
+            <nav className="flex-1 px-4 py-2 space-y-1">
+              {navItems.map((item) => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `block px-4 py-3 rounded-lg text-base font-medium ${
+                      isActive
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-gray-700 hover:bg-gray-50 hover:text-primary'
+                    }`
+                  }
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.name}
+                </NavLink>
+              ))}
 
-                {/* Donate Now Button */}
-                <div className="p-4">
-                  <NavLink 
-                    to="/donate" 
-                    className="block w-full"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <Button className="w-full bg-primary hover:bg-primary/90 text-white py-3 text-base font-medium rounded-lg">
-                      DONATE NOW
-                    </Button>
-                  </NavLink>
-                </div>
+              {/* Programs Dropdown */}
+              <div className="mt-2">
+                <ProgramsDropdown 
+                  mobile={true} 
+                  onItemClick={() => {
+                    setIsMenuOpen(false);
+                    setIsProgramsOpen(false);
+                  }} 
+                />
               </div>
+              
+              {/* Contact Link */}
+              <NavLink
+                to="/contact"
+                className={({ isActive }) =>
+                  `block px-4 py-3 rounded-lg text-base font-medium ${
+                    isActive
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-primary'
+                  }`
+                }
+                onClick={() => setIsMenuOpen(false)}
+              >
+                CONTACT
+              </NavLink>
+            </nav>
+
+            {/* Donate Now Button */}
+            <div className="p-4 mt-auto border-t border-gray-100">
+              <NavLink 
+                to="/donate" 
+                className="block w-full"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Button className="w-full bg-primary hover:bg-primary/90 text-white py-3 text-base font-medium rounded-lg">
+                  DONATE NOW
+                </Button>
+              </NavLink>
             </div>
           </div>
         </div>

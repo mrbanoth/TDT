@@ -69,21 +69,6 @@ const ProgramsDropdown = ({ mobile = false, onItemClick }: ProgramsDropdownProps
       
       {isMobileMenuOpen && (
         <div className="pl-6 mt-1 space-y-1 border-l-2 border-gray-100 ml-4">
-          {/* All Programmes Link */}
-          <NavLink
-            to="/programmes"
-            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary rounded-lg flex items-center"
-            onClick={() => {
-              setIsMobileMenuOpen(false);
-              document.dispatchEvent(new Event('mobileMenuClose'));
-            }}
-          >
-            <span className="font-medium">Programme Overview</span>
-            <ChevronRight className="ml-2 h-4 w-4" />
-          </NavLink>
-          
-          <div className="border-t border-gray-100 my-1"></div>
-          
           {programs.map((program) => (
             <NavLink
               key={program.path}
