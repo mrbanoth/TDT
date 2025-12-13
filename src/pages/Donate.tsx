@@ -224,7 +224,7 @@ const Donate = () => {
                     key={amount}
                     type="button"
                     onClick={() => setFormData(prev => ({ ...prev, amount: amount === 'Other' ? '' : String(amount) }))}
-                    className={`p-2 border rounded-lg text-sm ${formData.amount === String(amount) ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50'}`}
+                    className={`p-2 border rounded-lg text-sm ${formData.amount === String(amount) ? 'bg-[rgb(234,88,12)] text-white' : 'bg-white hover:bg-gray-50'}`}
                   >
                     {amount === 'Other' ? 'Other' : `₹${amount}`}
                   </button>
@@ -236,7 +236,7 @@ const Donate = () => {
               <div className="space-y-2">
                 {['Credit/Debit Card', 'UPI', 'Net Banking', 'PayPal'].map(method => (
                   <label key={method} className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                    <input type="radio" name="paymentMethod" className="h-4 w-4 text-primary" />
+                    <input type="radio" name="paymentMethod" className="h-4 w-4 text-[rgb(234,88,12)]" />
                     <span className="text-sm">{method}</span>
                   </label>
                 ))}
@@ -284,11 +284,11 @@ const Donate = () => {
                   type="button"
                   onClick={() => handleGetCurrentLocation('address')}
                   disabled={isLocating}
-                  className="text-xs text-primary hover:text-primary/80 flex items-center disabled:opacity-50"
+                  className="text-xs text-[rgb(234,88,12)] hover:text-[rgba(234,88,12,0.8)] flex items-center disabled:opacity-50"
                 >
                   {isLocating ? (
                     <span className="flex items-center">
-                      <svg className="animate-spin -ml-1 mr-1 h-3 w-3 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <svg className="animate-spin -ml-1 mr-1 h-3 w-3 text-[rgb(234,88,12)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
@@ -368,11 +368,11 @@ const Donate = () => {
                   type="button"
                   onClick={() => handleGetCurrentLocation('message')}
                   disabled={isLocating}
-                  className="text-xs text-primary hover:text-primary/80 flex items-center disabled:opacity-50"
+                  className="text-xs text-[rgb(234,88,12)] hover:text-[rgba(234,88,12,0.8)] flex items-center disabled:opacity-50"
                 >
                   {isLocating ? (
                     <span className="flex items-center">
-                      <svg className="animate-spin -ml-1 mr-1 h-3 w-3 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <svg className="animate-spin -ml-1 mr-1 h-3 w-3 text-[rgb(234,88,12)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
@@ -466,7 +466,7 @@ const Donate = () => {
               <div className="grid grid-cols-3 gap-1 text-xs">
                 {['Weekdays', 'Weekends', 'Mornings', 'Afternoons', 'Evenings', 'Flexible'].map(option => (
                   <label key={option} className="flex items-center space-x-1">
-                    <input type="checkbox" className="h-3 w-3 text-primary rounded" />
+                    <input type="checkbox" className="h-3 w-3 text-[rgb(234,88,12)] rounded" />
                     <span>{option}</span>
                   </label>
                 ))}
@@ -498,7 +498,7 @@ const Donate = () => {
       title: "Financial Donations",
       icon: <DollarSign className="h-8 w-8 text-blue-600" />,
       description: "Monetary contributions that help fund our various programs and services",
-      gradient: "bg-gradient-to-br from-blue-50 to-blue-100 border-b-4 border-blue-200",
+      gradient: "bg-gradient-to-br from-[rgba(234,88,12,0.05)] to-[rgba(234,88,12,0.1)] border-b-4 border-[rgba(234,88,12,0.2)]",
       options: [
         "Monthly recurring donations",
         "One-time contributions",
@@ -515,7 +515,7 @@ const Donate = () => {
       title: "Material Donations",
       icon: <Package className="h-8 w-8 text-green-600" />,
       description: "Physical items and supplies that directly benefit tribal communities",
-      gradient: "bg-gradient-to-br from-green-50 to-green-100 border-b-4 border-green-200",
+      gradient: "bg-gradient-to-br from-[rgba(234,88,12,0.05)] to-[rgba(234,88,12,0.1)] border-b-4 border-[rgba(234,88,12,0.2)]",
       options: [
         "Blankets and warm clothing",
         "Educational materials and books",
@@ -532,7 +532,7 @@ const Donate = () => {
       title: "Food Donations",
       icon: <Utensils className="h-8 w-8 text-orange-600" />,
       description: "Nutritious food items and groceries for tribal families and children",
-      gradient: "bg-gradient-to-br from-orange-50 to-orange-100 border-b-4 border-orange-200",
+      gradient: "bg-gradient-to-br from-[rgba(234,88,12,0.05)] to-[rgba(234,88,12,0.1)] border-b-4 border-[rgba(234,88,12,0.2)]",
       options: [
         "Rice, wheat, and grains",
         "Pulses and lentils",
@@ -549,7 +549,7 @@ const Donate = () => {
       title: "Volunteer Support",
       icon: <Heart className="h-8 w-8 text-purple-600" />,
       description: "Various other ways you can contribute to our mission",
-      gradient: "bg-gradient-to-br from-purple-50 to-purple-100 border-b-4 border-purple-200",
+      gradient: "bg-gradient-to-br from-[rgba(234,88,12,0.05)] to-[rgba(234,88,12,0.1)] border-b-4 border-[rgba(234,88,12,0.2)]",
       options: [
         "Volunteer your time and skills",
         "Professional services (legal, medical)",
@@ -565,17 +565,17 @@ const Donate = () => {
 
   const features = [
     {
-      icon: <Shield className="h-8 w-8 text-primary" />,
+      icon: <Shield className="h-8 w-8 text-[rgb(234,88,12)]" />,
       title: "Secure Payments",
       description: "Bank-level security for all transactions"
     },
     {
-      icon: <Users className="h-8 w-8 text-primary" />,
+      icon: <Users className="h-8 w-8 text-[rgb(234,88,12)]" />,
       title: "Direct Impact",
       description: "100% of donations reach communities"
     },
     {
-      icon: <Clock className="h-8 w-8 text-primary" />,
+      icon: <Clock className="h-8 w-8 text-[rgb(234,88,12)]" />,
       title: "Quick Process",
       description: "Donation process takes less than 2 minutes"
     }
@@ -613,7 +613,7 @@ const Donate = () => {
             <div className="text-black">
               <h1 className="text-4xl md:text-6xl font-bold mb-6">
                 Make a
-                <span className="block text-secondary">Difference</span>
+                <span className="block text-[rgb(234,88,12)]">Difference</span>
               </h1>
               <p className="text-xl mb-8 leading-relaxed text-gray-800">
                 Your generosity can transform lives and create lasting impact in tribal communities. 
@@ -637,8 +637,8 @@ const Donate = () => {
                     onClick={() => handleAmountClick(amount)}
                     className={`h-14 text-lg font-semibold transition-all duration-200 ${
                       selectedAmount === amount 
-                        ? 'bg-charity-dark text-white hover:bg-charity-dark/90 border-charity-dark' 
-                        : 'bg-white text-charity-dark border-2 border-gray-200 hover:border-charity-dark hover:bg-gray-50 hover:text-charity-dark'
+                        ? 'bg-[rgb(234,88,12)] text-white hover:bg-[rgba(234,88,12,0.9)] border-[rgb(234,88,12)]' 
+                        : 'bg-white text-charity-dark border-2 border-gray-200 hover:border-[rgb(234,88,12)] hover:bg-gray-50 hover:text-charity-dark'
                     }`}
                   >
                     ₹{amount.toLocaleString('en-IN')}
@@ -670,7 +670,7 @@ const Donate = () => {
                   />
                 </div>
                 <Button 
-                  className="w-full bg-charity-dark hover:bg-charity-dark/90 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                  className="w-full bg-[rgb(234,88,12)] hover:bg-[rgba(234,88,12,0.9)] py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
                   size="lg"
                   onClick={() => setActiveModal('financial')}
                 >
@@ -697,9 +697,7 @@ const Donate = () => {
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl font-bold text-charity-dark mb-6">
-              Ways to Contribute
-            </h2>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-charity-dark mb-4 sm:mb-6">Ways to <span className="text-[rgb(234,88,12)]">Contribute</span></h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
               Multiple ways to support our mission and make a meaningful impact in tribal communities
             </p>
@@ -759,9 +757,7 @@ const Donate = () => {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl font-bold text-charity-dark mb-6">
-              Volunteer Pickup Service
-            </h2>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-charity-dark mb-6">Volunteer <span className="text-[rgb(234,88,12)]">Pickup Service</span></h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
               Can't deliver your donations? No problem! Our dedicated volunteers can pick up 
               your material and food donations directly from your location.
@@ -811,7 +807,7 @@ const Donate = () => {
                     ].map((step, index) => (
                       <div key={index} className="flex items-start space-x-4 p-5 rounded-3xl bg-white border border-gray-100 shadow-sm">
                         <div className="relative">
-                          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                          <div className="w-10 h-10 rounded-full bg-[rgb(234,88,12)] flex items-center justify-center flex-shrink-0">
                             {step.icon}
                           </div>
                           {index < 3 && (
@@ -833,8 +829,8 @@ const Donate = () => {
                   
                   <div className="mt-8 p-6 bg-white rounded-3xl border border-gray-100 shadow-sm">
                     <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <Phone className="h-6 w-6 text-primary" />
+                      <div className="w-12 h-12 rounded-full bg-[rgba(234,88,12,0.1)] flex items-center justify-center flex-shrink-0">
+                        <Phone className="h-6 w-6 text-[rgb(234,88,12)]" />
                       </div>
                       <div>
                         <p className="font-semibold text-gray-900">Need Help with Pickup?</p>
@@ -843,9 +839,10 @@ const Donate = () => {
                     </div>
                     <a 
                       href={`tel:${contactInfo.find(info => info.id === 'phone')?.link?.replace('tel:', '')}`} 
-                      className="block w-full sm:w-auto px-4 sm:px-8 mx-auto mt-4"
+                      className="block w-full sm:w-auto px-4 sm:px-8 mx-auto mt-4 no-underline hover:no-underline hover:bg-transparent focus:bg-transparent active:bg-transparent visited:no-underline"
+                      style={{ textDecoration: 'none !important' }}
                     >
-                      <Button className="w-full bg-primary hover:bg-primary/90 text-white text-sm py-3 sm:py-3 h-auto rounded-lg font-medium px-6 sm:px-8">
+                      <Button className="w-full bg-[rgb(234,88,12)] hover:bg-[rgba(234,88,12,0.9)] text-white text-sm py-3 sm:py-3 h-auto rounded-lg font-medium px-6 sm:px-8">
                         Schedule Pickup Now
                       </Button>
                     </a>
@@ -861,9 +858,7 @@ const Donate = () => {
       <section className="py-20 bg-charity-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl font-bold text-charity-dark mb-6">
-              Your Impact
-            </h2>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-charity-dark mb-6">Your <span className="text-[rgb(234,88,12)]">Impact</span></h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
               See how your donations create real change in tribal communities
             </p>
@@ -871,7 +866,7 @@ const Donate = () => {
 
           <div className="w-full overflow-hidden">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full">
-              {[
+                {[
                 { amount: "₹500", impact: "Medical care for 1 family for a month" },
                 { amount: "₹1,000", impact: "Supports education for 5 children" },
                 { amount: "₹2,500", impact: "Funds a health checkup camp" },
@@ -879,7 +874,7 @@ const Donate = () => {
               ].map((item, index) => (
                 <Card key={index} className="text-center p-4 sm:p-6 border-0 shadow-sm h-full">
                   <CardContent className="p-0">
-                    <div className="text-2xl sm:text-3xl font-bold text-primary mb-2 sm:mb-3">
+                    <div className="text-2xl sm:text-3xl font-bold text-[rgb(234,88,12)] mb-2 sm:mb-3">
                       {item.amount}
                     </div>
                     <p className="text-sm sm:text-base text-gray-600 leading-snug">

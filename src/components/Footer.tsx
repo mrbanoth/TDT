@@ -3,7 +3,7 @@ import { Heart } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-charity-dark text-white">
+    <footer className="bg-gray-800 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Organization Info */}
@@ -14,7 +14,9 @@ const Footer = () => {
               alt="Tribal Development Trust Logo"
               className="h-10 w-auto object-contain"
             />
-              <h3 className="text-xl font-bold">Tribal Development Trust</h3>
+              <h3 className="text-xl font-bold">
+                <span>Tribal</span> Development Trust
+              </h3>
             </div>
             <p className="text-gray-300 mb-4 leading-relaxed">
               Empowering tribal communities through comprehensive development programs, 

@@ -80,18 +80,18 @@ const Events = () => {
     <section className="relative pt-8 sm:pt-16 pb-16 sm:pb-24 bg-white overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute top-0 left-0 w-full h-full opacity-5">
-        <div className="absolute top-0 left-1/4 w-64 h-64 bg-primary rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
+        <div className="absolute top-0 left-1/4 w-64 h-64 bg-[rgb(234,88,12)] rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
         <div className="absolute top-0 right-1/4 w-64 h-64 bg-secondary rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
         <div className="absolute -bottom-8 left-1/2 w-64 h-64 bg-accent rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
       </div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 className="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-normal mb-4 sm:mb-6 leading-tight font-serif text-charity-dark">
-          Upcoming <span className="text-primary">Events</span>
+          Upcoming <span className="text-[rgb(234,88,12)]">Events</span>
         </h1>
         <div className="max-w-3xl mx-auto">
           <div className="relative text-center sm:text-left">
-            <div className="hidden sm:block absolute -left-4 top-1/2 w-1 h-16 bg-primary transform -translate-y-1/2"></div>
+            <div className="hidden sm:block absolute -left-4 top-1/2 w-1 h-16 bg-[rgb(234,88,12)] transform -translate-y-1/2"></div>
             <p className="text-base sm:text-lg md:text-xl text-gray-700 sm:pl-8">
               Join us in our mission to empower tribal communities through our upcoming events, 
               workshops, and community programs across India.
@@ -208,6 +208,73 @@ const Events = () => {
     }
   ];
 
+  // Extract the event card into a separate component for reusability
+  const renderEventCard = (event: Event, index: number) => (
+    <div 
+      className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 hover:border-[rgb(234,88,12)]/20 flex flex-col h-full"
+    >
+      <div className="relative h-56 overflow-hidden">
+        <img 
+          src={event.image} 
+          alt={event.title}
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+        />
+        <div className="absolute top-4 right-4">
+          <span className="inline-flex items-center px-4 py-1.5 rounded-lg text-xs font-semibold bg-[rgb(234,88,12)]/90 text-white backdrop-blur-sm">
+            {event.type}
+          </span>
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+        <div className="absolute bottom-0 left-0 right-0 p-6">
+          <h3 className="text-xl font-bold text-white mb-1 line-clamp-2">
+            {event.title}
+          </h3>
+          <div className="flex items-center text-white/90 text-sm">
+            <Calendar className="h-4 w-4 mr-1.5" />
+            <span>{formatDate(event.date)} • {event.time}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div className="p-6">
+        <div className="flex items-center text-gray-600 text-sm mb-4 space-x-4">
+          <div className="flex items-center">
+            <MapPin className="h-4 w-4 mr-1.5 text-[rgb(234,88,12)]" />
+            <span>{event.location}</span>
+          </div>
+          <div className="flex items-center">
+            <Users className="h-4 w-4 mr-1.5 text-[rgb(234,88,12)]" />
+            <span>{event.participants}</span>
+          </div>
+        </div>
+        
+        <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
+          {event.description}
+        </p>
+        
+        <ul className="space-y-1.5 mb-6">
+          {event.details.slice(0, 2).map((detail, i) => (
+            <li key={i} className="flex items-start text-sm text-gray-600">
+              <span className="text-[rgb(234,88,12)] mr-2">•</span>
+              <span className="line-clamp-1">{detail}</span>
+            </li>
+          ))}
+          {event.details.length > 2 && (
+            <li className="text-sm text-gray-500">+{event.details.length - 2} more</li>
+          )}
+        </ul>
+        
+        <Button 
+          onClick={() => handleRegisterClick(event)}
+          className="w-full bg-charity-dark hover:bg-charity-dark/90 text-white rounded-lg py-2 text-sm font-medium transition-all duration-300 h-9"
+        >
+          Register
+        </Button>
+      </div>
+    </div>
+  );
+
+  // Format date helper function
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -226,88 +293,45 @@ const Events = () => {
       {heroSection}
       
       {/* Upcoming Events */}
-
-      {/* Upcoming Events */}
       <section className="pt-0 pb-12 sm:pb-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          
+          {/* Mobile horizontal scroll container */}
+          <div className="md:hidden">
+            <div className="flex overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide" style={{
+              WebkitOverflowScrolling: 'touch',
+              msOverflowStyle: 'none',
+              scrollbarWidth: 'none',
+              overscrollBehaviorX: 'contain'
+            }}>
+              <div className="flex space-x-4">
+                {upcomingEvents.slice(0, 3).map((event, index) => (
+                  <div key={index} className="flex-none w-[calc(100vw-2rem)] max-w-sm">
+                    {renderEventCard(event, index)}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          
+          {/* Desktop grid layout */}
+          <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6">
             {upcomingEvents.slice(0, 3).map((event, index) => (
-              <div 
-                key={index} 
-                className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 hover:border-primary/20 flex flex-col h-full"
-              >
-                <div className="relative h-56 overflow-hidden">
-                  <img 
-                    src={event.image} 
-                    alt={event.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute top-4 right-4">
-                    <span className="inline-flex items-center px-4 py-1.5 rounded-lg text-xs font-semibold bg-primary/90 text-white backdrop-blur-sm">
-                      {event.type}
-                    </span>
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <h3 className="text-xl font-bold text-white mb-1 line-clamp-2">
-                      {event.title}
-                    </h3>
-                    <div className="flex items-center text-white/90 text-sm">
-                      <Calendar className="h-4 w-4 mr-1.5" />
-                      <span>{formatDate(event.date)} • {event.time}</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="p-6">
-                  <div className="flex items-center text-gray-600 text-sm mb-4 space-x-4">
-                    <div className="flex items-center">
-                      <MapPin className="h-4 w-4 mr-1.5 text-primary" />
-                      <span>{event.location}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Users className="h-4 w-4 mr-1.5 text-primary" />
-                      <span>{event.participants}</span>
-                    </div>
-                  </div>
-                  
-                  <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
-                    {event.description}
-                  </p>
-                  
-                  <ul className="space-y-1.5 mb-6">
-                    {event.details.slice(0, 2).map((detail, i) => (
-                      <li key={i} className="flex items-start text-sm text-gray-600">
-                        <span className="text-primary mr-2">•</span>
-                        <span className="line-clamp-1">{detail}</span>
-                      </li>
-                    ))}
-                    {event.details.length > 2 && (
-                      <li className="text-sm text-gray-500">+{event.details.length - 2} more</li>
-                    )}
-                  </ul>
-                  
-                  <Button 
-                    onClick={() => handleRegisterClick(event)}
-                    className="w-full bg-charity-dark hover:bg-charity-dark/90 text-white rounded-lg py-2 text-sm font-medium transition-all duration-300 h-9"
-                  >
-                    Register
-                  </Button>
-                </div>
+              <div key={index} className="w-full">
+                {renderEventCard(event, index)}
               </div>
             ))}
           </div>
           
-          {/* View All Events Button */}
-          <div className="text-center mt-16">
+          {/* View All Events Button - Temporarily hidden */}
+          {/* <div className="text-center mt-16">
             <Link 
               to="/all-events"
-              className="inline-flex items-center justify-center px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 rounded-lg shadow hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 group/btn h-10"
+              className="inline-flex items-center justify-center px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-[rgb(234,88,12)] to-[rgba(234,88,12,0.8)] hover:from-[rgba(234,88,12,0.9)] hover:to-[rgba(234,88,12,0.7)] rounded-lg shadow hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[rgba(234,88,12,0.5)] focus:ring-offset-2 group/btn h-10"
             >
               View All Upcoming Events
-              {/* <ArrowRight className="ml-2 h-5 w-5 group-hover/btn:translate-x-1 transition-transform duration-200" /> */}
             </Link>
-          </div>
+          </div> */}
         </div>
       </section>
 
@@ -315,8 +339,8 @@ const Events = () => {
       <section className="pt-12 sm:pt-16 pb-16 sm:pb-20 bg-gradient-to-b from-white to-charity-light/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl font-bold text-charity-dark mb-6">
-              Recent Impact Stories
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-charity-dark mb-4 sm:mb-6">
+              Recent Impact <span className="text-[rgb(234,88,12)]">Stories</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Discover how our programs are making a difference in tribal communities across India
@@ -346,11 +370,11 @@ const Events = () => {
                 <div className="p-5 sm:p-6 flex-1 flex flex-col">
                   <div className="flex items-center text-xs text-gray-500 mb-3 flex-wrap">
                     <div className="flex items-center mr-3 mb-1">
-                      <Calendar className="h-3.5 w-3.5 mr-1.5 text-primary flex-shrink-0" />
+                      <Calendar className="h-3.5 w-3.5 mr-1.5 text-[rgb(234,88,12)] flex-shrink-0" />
                       <span>{formatDate(event.date)}</span>
                     </div>
                     <div className="flex items-center mb-1">
-                      <MapPin className="h-3.5 w-3.5 mr-1.5 text-primary flex-shrink-0" />
+                      <MapPin className="h-3.5 w-3.5 mr-1.5 text-[rgb(234,88,12)] flex-shrink-0" />
                       <span className="truncate">{event.location}</span>
                     </div>
                   </div>
@@ -367,7 +391,7 @@ const Events = () => {
                     <div className="mt-auto pt-4 border-t border-gray-100">
                       <div>
                         <p className="text-xs font-medium text-gray-500 mb-1">Impact</p>
-                        <p className="text-sm font-semibold text-primary">
+                        <p className="text-sm font-semibold text-[rgb(234,88,12)]">
                           {event.impact}
                         </p>
                       </div>
@@ -381,10 +405,10 @@ const Events = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="py-12 sm:py-16 bg-gradient-to-r from-primary/5 to-secondary/5">
+      <section className="py-12 sm:py-16 bg-gradient-to-r from-[rgba(234,88,12,0.05)] to-secondary/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-charity-dark mb-6">
-            Support Our Events
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-charity-dark mb-4 sm:mb-6">
+            Support Our <span className="text-[rgb(234,88,12)]">Events</span>
           </h2>
           <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
             Your donations help us organize more events and reach more communities in need. 
@@ -441,7 +465,7 @@ const Events = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[rgba(234,88,12,0.5)] focus:border-[rgb(234,88,12)]"
                     required
                   />
                 </div>
@@ -457,7 +481,7 @@ const Events = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[rgba(234,88,12,0.5)] focus:border-[rgb(234,88,12)]"
                       required
                     />
                   </div>
@@ -472,7 +496,7 @@ const Events = () => {
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[rgba(234,88,12,0.5)] focus:border-[rgb(234,88,12)]"
                       required
                     />
                   </div>
@@ -488,7 +512,7 @@ const Events = () => {
                     value={formData.message}
                     onChange={handleInputChange}
                     rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[rgba(234,88,12,0.5)] focus:border-[rgb(234,88,12)]"
                     placeholder="Any special requirements or questions?"
                   />
                 </div>

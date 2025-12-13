@@ -126,13 +126,13 @@ const About = () => {
     {
       title: "Sustainable Impact",
       description: "Creating long-term solutions that empower communities to thrive independently",
-      icon: <HeartHandshake className="w-8 h-8 text-orange-500" />,
+      icon: <HeartHandshake className="w-8 h-8 text-[rgb(234,88,12)]" />,
       color: "accent"
     },
     {
       title: "Transparency",
       description: "Maintaining open communication and accountability in all our operations",
-      icon: <ShieldCheck className="w-8 h-8 text-orange-500" />,
+      icon: <ShieldCheck className="w-8 h-8 text-[rgb(234,88,12)]" />,
       color: "accent"
     },
   ];
@@ -166,18 +166,18 @@ const About = () => {
       <section className="relative pt-8 sm:pt-16 pb-16 sm:pb-24 bg-white overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 left-0 w-full h-full opacity-5">
-          <div className="absolute top-0 left-1/4 w-64 h-64 bg-primary rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
+          <div className="absolute top-0 left-1/4 w-64 h-64 bg-[rgb(234,88,12)] rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
           <div className="absolute top-0 right-1/4 w-64 h-64 bg-secondary rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
           <div className="absolute -bottom-8 left-1/2 w-64 h-64 bg-accent rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
         </div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 <h1 className="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-normal mb-4 sm:mb-6 leading-tight font-serif text-charity-dark">
-            About <span className="text-primary">Us</span>
+            About <span className="text-[rgb(234,88,12)]">Us</span>
           </h1>
           <div className="max-w-3xl mx-auto">
             <div className="relative">
-              <div className="absolute -left-4 top-1/2 w-1 h-16 bg-primary transform -translate-y-1/2 hidden sm:block"></div>
+              <div className="absolute -left-4 top-1/2 w-1 h-16 bg-[rgb(234,88,12)] transform -translate-y-1/2 hidden sm:block"></div>
               <p className="text-lg sm:text-xl text-gray-700 relative pl-6 sm:pl-8">
                 Dedicated to empowering tribal communities through comprehensive development programs 
                 and sustainable programs across India.
@@ -194,11 +194,11 @@ const About = () => {
             <div className="space-y-8 sm:space-y-12">
               <div>
                 <h2 className="text-2xl sm:text-3xl font-bold text-charity-dark mb-8 sm:mb-10 text-center lg:text-left">
-                  Our <span className="text-primary">Mission</span> & <span className="text-secondary">Vision</span>
+                  Our <span className="text-[rgb(234,88,12)]">Mission</span> & <span className="text-secondary">Vision</span>
                 </h2>
                 
                 <div className="space-y-8 sm:space-y-12">
-                  <div className="bg-charity-light/30 p-6 sm:p-8 rounded-xl border-l-4 border-primary">
+                  <div className="bg-charity-light/30 p-6 sm:p-8 rounded-xl border-l-4 border-[rgb(234,88,12)]">
                     <div className="flex items-center mb-4">
                       <div className="w-10 h-1 bg-charity-dark mr-3"></div>
                       <h3 className="text-xl sm:text-2xl font-bold text-charity-dark uppercase tracking-wider">Our Mission</h3>
@@ -233,7 +233,7 @@ const About = () => {
                   {/* Duplicate the stats for seamless looping */}
                   {[...stats, ...stats].map((stat, index) => (
                     <div key={`${stat.label}-${index}`} className="flex items-center space-x-4 sm:space-x-6 bg-white rounded-2xl p-4 sm:p-6 shadow-lg mb-6 sm:mb-8 min-h-[120px] sm:min-h-[150px] flex-shrink-0">
-                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden flex-shrink-0 border-4 border-primary">
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden flex-shrink-0 border-4 border-[rgb(234,88,12)]">
                         <img 
                           src={stat.image} 
                           alt={stat.label}
@@ -259,14 +259,19 @@ const About = () => {
         </div>
       </section>
 
-      {/* Our Story - moved before core values */}
-      <section className="py-12 sm:py-20 bg-charity-light">
+      {/* Our Story */}
+      <section className="py-16 sm:py-24 bg-charity-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16 sm:mb-20">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-charity-dark mb-4 sm:mb-6">
+              Our <span className="text-[rgb(234,88,12)]">Humble Beginnings</span>
+            </h2>
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto mb-12">
+              The journey that shaped our commitment to tribal development
+            </p>
+          </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-charity-dark mb-4 sm:mb-6">
-                Our Humble Beginnings
-              </h2>
               <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-4 sm:mb-6">
                 The Tribal Development Trust was born in 2015 from the vision of B. Srinivas Naik, who was deeply moved by the struggles of tribal communities. Witnessing the harsh realities of tribal life - lack of education, healthcare, and economic opportunities - he was inspired to make a difference. Srinivas noticed how many families were trapped in cycles of poverty, often falling prey to harmful habits due to limited awareness and opportunities.
               </p>
@@ -293,8 +298,8 @@ const About = () => {
               </div>
               <div className="bg-white p-6 rounded-2xl shadow-lg">
                 <h3 className="text-xl font-bold text-charity-dark mb-2">B. Srinivas Naik</h3>
-                <p className="text-primary font-medium mb-4 text-sm">Founder & President</p>
-                <div className="border-l-4 border-primary pl-4">
+                <p className="text-[rgb(234,88,12)] font-medium mb-4 text-sm">Founder & President</p>
+                <div className="border-l-4 border-[rgb(234,88,12)] pl-4">
                   <p className="text-gray-700 text-base sm:text-lg leading-relaxed italic">
                     "My vision is to see every tribal individual empowered with education, healthcare, and opportunities to build a better future while preserving their rich cultural heritage."
                   </p>
@@ -305,112 +310,157 @@ const About = () => {
         </div>
       </section>
 
-      {/* Our Values */}
-      <section className="py-12 sm:py-20 bg-white">
+      {/* Our Values - Simplified */}
+      <section className="py-16 sm:py-24 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-2xl sm:text-3xl font-bold text-charity-dark mb-6">
-                Our Core Values
-              </h2>
+          <div className="text-center mb-16 sm:mb-20">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-charity-dark mb-4 sm:mb-6">
+              Core Values That <span className="text-[rgb(234,88,12)]">Guide Us</span>
+            </h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
               The principles that guide our work and shape our approach to tribal development
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {values.map((value, index) => (
-              <div 
-                key={index} 
-                className="group bg-white rounded-xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-primary/20 hover:-translate-y-1 flex flex-col items-center"
-              >
-                <div 
-                  className={`w-16 h-16 sm:w-20 sm:h-20 rounded-xl ${index >= 2 ? 'bg-accent/10' : ''} flex items-center justify-center text-3xl sm:text-4xl mb-4 sm:mb-6`}
-                >
-                  {value.icon}
-                </div>
-                <h3 className={`text-xl sm:text-2xl font-bold text-charity-dark mb-3 sm:mb-4`}>
-                  {value.title}
-                </h3>
-                <p className="text-gray-600 leading-relaxed text-center mb-4 sm:mb-6">
-                  {value.description}
-                </p>
-                <div className={`h-1 w-12 ${value.color === 'primary' ? 'bg-primary' : value.color === 'secondary' ? 'bg-secondary' : 'bg-orange-500'} rounded-full mx-auto transition-all duration-300 group-hover:w-16`}></div>
-              </div>
-            ))}
+          <div className="relative">
+            {/* Hide scrollbar but keep functionality */}
+            <style jsx global>{`
+              .values-scroll-container {
+                -ms-overflow-style: none;  /* IE and Edge */
+                scrollbar-width: none;  /* Firefox */
+              }
+              .values-scroll-container::-webkit-scrollbar {
+                display: none;  /* Chrome, Safari and Opera */
+              }
+              @media (min-width: 768px) {
+                .values-scroll-container {
+                  overflow-x: visible !important;
+                }
+              }
+            `}</style>
+            
+            <div className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 overflow-x-auto pb-6 -mx-4 px-4 values-scroll-container">
+              {values.map((value, index) => {
+                const colors = [
+                  'from-[#fef3c7] to-[#fef3c7]/50', // Community First
+                  'from-[#d1fae5] to-[#d1fae5]/50',  // Cultural Respect
+                  'from-[#f0f9ff] to-[#f0f9ff]/50',  // Sustainable Impact
+                  'from-[#f3e8ff] to-[#f3e8ff]/50'   // Transparency
+                ];
+                
+                return (
+                  <div 
+                    key={index}
+                    className="group flex-shrink-0 w-[calc(100vw-4rem)] sm:w-96 md:w-auto md:flex-shrink"
+                    data-aos="fade-up"
+                    data-aos-delay={index * 100}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br rounded-2xl transition-all duration-500 opacity-0 group-hover:opacity-100" />
+                    <div className={`h-full bg-gradient-to-br ${colors[index]} rounded-2xl p-6 sm:p-8 transition-all duration-500 group-hover:-translate-y-2 relative z-10 border border-gray-100 hover:shadow-xl`}>
+                      <div className="w-16 h-16 rounded-xl bg-white shadow-md flex items-center justify-center text-3xl text-[rgb(234,88,12)] mb-6 mx-auto transition-transform group-hover:scale-110 group-hover:rotate-3">
+                        {value.icon}
+                      </div>
+                      <h3 className="text-xl font-bold text-charity-dark mb-4 text-center">
+                        {value.title}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed text-center mb-6">
+                        {value.description}
+                      </p>
+                      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-[rgb(234,88,12)] to-secondary rounded-full transition-all duration-300 group-hover:w-24"></div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
 
       {/* Leadership Team */}
-      <section className="py-12 sm:py-20 bg-charity-light">
+      <section className="py-16 sm:py-24 bg-charity-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 sm:mb-16">
-              <h2 className="text-2xl sm:text-3xl font-bold text-charity-dark mb-6">
-                Our Leadership Team
-              </h2>
+          <div className="text-center mb-16 sm:mb-20">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-charity-dark mb-4 sm:mb-6">
+              Our <span className="text-[rgb(234,88,12)]">Leadership Team</span>
+            </h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
               Experienced leaders committed to transforming tribal communities across India
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
             {trustees.map((trustee, index) => {
-              // Create URL-friendly ID for routing
-              const memberId = trustee.name.replace(/\./g, '').replace(/\s+/g, '-').toUpperCase();
+              const memberId = trustee.name.replace(/\./g, '').replace(/\s+/g, '-').toLowerCase();
               
               return (
-                <div 
-                  key={index} 
-                  className="group h-full block"
-                >
-                  <Link to={`/profile/${memberId}`} className="block h-full">
-                    <Card className="h-full flex flex-col border-2 border-charity-light/30 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group/card">
-                      <div className="relative overflow-hidden h-48 sm:h-64 flex-shrink-0">
-                        <div className="absolute inset-0 w-full h-full">
-                          <div className="absolute inset-0 w-full h-full overflow-hidden">
-                            <img 
-                              src={trustee.image} 
-                              alt={trustee.name}
-                              className="w-full h-[120%] object-cover object-top transition-transform duration-700 group-hover/card:scale-105"
-                              style={{
-                                objectPosition: 'center 20%',
-                                ...(trustee.name.includes('LALITHAMMA') || trustee.name.includes('SURESH NAIK') 
-                                  ? { objectPosition: 'center 10%' }
-                                  : {})
-                              }}
-                              onError={(e) => {
-                                console.error('Error loading image:', trustee.image);
-                                (e.target as HTMLImageElement).style.border = '2px solid red';
-                              }}
-                            />
-                          </div>
+                <div key={index} className="group h-full">
+                  <Card className="h-full flex flex-col bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100">
+                    {/* Image with gradient overlay */}
+                    <div className="relative h-64 overflow-hidden">
+                      <img 
+                        src={trustee.image} 
+                        alt={trustee.name}
+                        className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${
+                          trustee.name.includes('LALITHAMMA') || trustee.name.includes('SURESH NAIK') 
+                            ? 'object-top' 
+                            : 'object-center'
+                        }`}
+                        style={{
+                          objectPosition: trustee.name.includes('LALITHAMMA') || trustee.name.includes('SURESH NAIK') 
+                            ? 'center 10%' 
+                            : 'center 20%'
+                        }}
+                        onError={(e) => {
+                          console.error('Error loading image:', trustee.image);
+                          (e.target as HTMLImageElement).style.border = '2px solid #f87171';
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                      
+                      {/* Role Badge */}
+                      <div className="absolute bottom-4 left-4 right-4">
+                        <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-[rgb(234,88,12)]/90 text-white text-xs font-medium">
+                          {trustee.role}
                         </div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent"></div>
                       </div>
-                      <CardContent className="p-5 sm:p-6 text-center group-hover/card:bg-charity-light/10 transition-all duration-300 flex flex-col h-full">
-                        <div className="flex-grow">
-                          <h3 className="text-lg sm:text-xl font-bold text-charity-dark mb-2 group-hover/card:text-primary transition-colors">
-                            {trustee.name}
-                          </h3>
-                          <p className="text-primary/90 font-semibold mb-3 sm:mb-4 text-sm sm:text-base">
-                            {trustee.role}
-                          </p>
-                          <p className="text-sm sm:text-base text-gray-600 leading-relaxed line-clamp-3 mb-4">
-                            {trustee.description}
-                          </p>
-                        </div>
-                        <div className="mt-auto">
-                          <Link 
-                            to={`/profile/${memberId}`}
-                            className="inline-flex items-center justify-center w-full px-4 py-2.5 text-xs sm:text-sm font-semibold text-black hover:text-charity-dark border-2 border-black hover:border-charity-dark transition-all duration-300 rounded-lg hover:bg-charity-light/10 group-hover/card:text-charity-dark tracking-wide uppercase"
+                    </div>
+
+                    {/* Card Content */}
+                    <CardContent className="p-6 flex-1 flex flex-col">
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2 leading-tight">
+                          {trustee.name}
+                        </h3>
+                        
+                        <p className="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-4">
+                          {trustee.description}
+                        </p>
+                      </div>
+
+                      <div className="mt-auto pt-4 border-t border-gray-100">
+                        <Link 
+                          to={`/profile/${memberId}`}
+                          className="inline-flex items-center justify-center w-full px-4 py-2.5 text-sm font-medium text-[rgb(234,88,12)] hover:text-white bg-transparent hover:bg-[rgb(234,88,12)] border border-[rgb(234,88,12)] rounded-lg transition-all duration-300 group-hover:shadow-md"
+                        >
+                          View Full Profile
+                          <svg 
+                            className="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24" 
+                            xmlns="http://www.w3.org/2000/svg"
                           >
-                            View Profile
-                          </Link>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
+                            <path 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round" 
+                              strokeWidth={2} 
+                              d="M14 5l7 7m0 0l-7 7m7-7H3" 
+                            />
+                          </svg>
+                        </Link>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
               );
             })}

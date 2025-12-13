@@ -13,7 +13,7 @@ const Gallery = lazy(() => import('@/pages/programs/Gallery'));
 const ProgramDetail = lazy(() => import('@/pages/programs/ProgramDetail'));
 const OurApproach = lazy(() => import('@/pages/OurApproach'));
 const EventDetail = lazy(() => import('@/pages/EventDetail'));
-const AllEvents = lazy(() => import('@/pages/AllEvents'));
+// const AllEvents = lazy(() => import('@/pages/AllEvents'));
 const Contact = lazy(() => import('@/pages/Contact'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 
@@ -49,10 +49,10 @@ export const routes: RouteObject[] = [
     path: '/events',
     element: <LazyComponent component={Events} />
   },
-  {
-    path: '/all-events',
-    element: <LazyComponent component={AllEvents} />
-  },
+  // {
+  //   path: '/all-events',
+  //   element: <LazyComponent component={AllEvents} />
+  // },
   {
     path: '/events/:id',
     element: <LazyComponent component={EventDetail} />

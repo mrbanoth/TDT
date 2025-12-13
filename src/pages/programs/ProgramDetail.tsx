@@ -486,7 +486,7 @@ const ProgramDetail = () => {
                     </div>
                     <button
                       onClick={() => navigate('/programs/gallery')}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-primary hover:bg-primary/90 transition-colors"
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-[rgb(234,88,12)] hover:bg-[rgba(234,88,12,0.9)] transition-colors"
                     >
                       View Full Gallery
                     </button>

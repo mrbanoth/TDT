@@ -1,101 +1,136 @@
 
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { Play, Users, HeartHandshake, HandCoins, MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { HeartHandshake } from 'lucide-react';
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-[90vh] sm:min-h-screen flex items-center justify-center overflow-hidden bg-white">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
-          style={{
-            backgroundImage: 'url(https://www.kilroy.net/media/12978/asia-india-volunteering-with-kids-group-of-kids.jpg)'
-          }}
-        >
-          <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px]"></div>
-        </div>
+    <section className="relative min-h-screen flex items-center md:items-start justify-center overflow-hidden px-4 pt-12 md:pt-16 pb-16 sm:py-20">
+      {/* Mobile Background (sm only) */}
+      <div className="md:hidden absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-[url('/images/hero-bg-mobile.jpg')] bg-cover bg-center opacity-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-orange-50/80 to-white/80"></div>
+      </div>
+      
+      {/* Desktop/Tablet Background (md and up) */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden hidden md:block">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-orange-100 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob"></div>
+        <div className="absolute -bottom-40 -left-20 w-80 h-80 bg-orange-200 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-1/2 -right-20 w-60 h-60 bg-orange-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
-          {/* Left Content */}
-          <div className="text-white drop-shadow-lg w-full">
-            <div className="animate-fade-in max-w-3xl mx-auto sm:mx-0 text-center sm:text-left px-4">
-              <h1 className="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight font-serif text-white">
-                Helps People
-                <br />
-                <span className="text-[#e67e22] font-normal">Life & Their</span>
-                <br />
-                <span className="text-white font-normal">Formation</span>
-              </h1>
-              
-              <p className="text-lg sm:text-xl md:text-2xl mb-10 sm:mb-12 max-w-2xl leading-relaxed text-white/90 font-light">
-                Join us in transforming lives through education, healthcare, and sustainable development 
-programs and services for tribal communities across India.
-              </p>
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 mt-0 md:mt-6 lg:mt-0">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-6 lg:gap-10 xl:gap-12 items-center">
+          {/* Text Content */}
+          <div className="text-center md:text-left">
+        <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4 md:mb-6 leading-tight">
+          <span className="block">Helping People</span>
+          <span className="text-orange-600">Life & Their</span>
+          <span className="block text-gray-800">Formation</span>
+        </h1>
+        
+        <p className="text-base sm:text-lg md:text-lg text-gray-600 mb-6 md:mb-8 max-w-3xl mx-auto md:mx-0 leading-relaxed">
+          Join us in transforming lives through education, healthcare, and sustainable development 
+          programs for tribal communities across India.
+        </p>
 
-              <div className="flex flex-col sm:flex-row gap-5 w-full sm:w-auto justify-start">
-                <Link to="/events" className="w-full sm:w-auto block">
-                  <Button className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-normal font-serif text-base sm:text-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-wide w-full max-w-[180px]">
-                    View Events
-                  </Button>
-                </Link>
-                
-                <Link to="/about" className="w-full sm:w-auto block">
-                  <Button variant="outline" className="bg-white/5 hover:bg-white/10 hover:text-white text-white border-white/30 hover:border-white/50 px-6 py-3 rounded-lg font-normal font-serif text-base sm:text-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-wide w-full max-w-[180px]">
-                    Learn More
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Content - Action Cards */}
-          <div className="space-y-4 sm:space-y-6 mt-8 sm:mt-0">
-            <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-2xl transform hover:scale-[1.02] transition-all duration-300 hover:shadow-xl">
-              <div className="flex items-start sm:items-center space-x-3 sm:space-x-4 mb-4">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 bg-primary/10 rounded-full flex-shrink-0 flex items-center justify-center">
-                  <Users className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-lg sm:text-xl font-bold text-charity-dark leading-tight">Become a Volunteer</h3>
-                  <p className="text-sm sm:text-base text-gray-600 mt-1">Join our mission to help tribal communities</p>
-                </div>
-              </div>
-              <div className="flex justify-center">
-                <Link to="/all-events" className="w-full flex justify-center">
-                  <Button className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-normal font-serif text-base sm:text-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-wide w-full max-w-[180px]">
-                    Join Now
-                  </Button>
-                </Link>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-2xl transform hover:scale-[1.02] transition-all duration-300 hover:shadow-xl">
-              <div className="flex items-start sm:items-center space-x-3 sm:space-x-4 mb-4">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 bg-secondary/10 rounded-full flex-shrink-0 flex items-center justify-center">
-                  <HandCoins className="w-6 h-6 sm:w-7 sm:h-7 text-secondary" />
-                </div>
-                <div>
-                  <h3 className="text-lg sm:text-xl font-bold text-charity-dark leading-tight">Quick Fundraising</h3>
-                  <p className="text-sm sm:text-base text-gray-600 mt-1">Support our programs with donations</p>
-                </div>
-              </div>
-              <div className="flex justify-center">
-                <Link to="/donate" className="w-full flex justify-center">
-                  <Button className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-normal font-serif text-base sm:text-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-wide w-full max-w-[180px]">
-                    Donate Now
-                  </Button>
-                </Link>
+        <div className="flex flex-col sm:flex-row gap-3 md:gap-3 lg:gap-4 justify-center md:justify-start">
+          <Link to="/donate" className="w-full sm:w-auto">
+            <Button 
+              className="bg-orange-600 hover:bg-orange-700 text-white px-5 md:px-6 lg:px-8 py-3 md:py-4 lg:py-6 text-sm md:text-base lg:text-lg font-medium rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              size="lg"
+            >
+              Donate Now
+            </Button>
+          </Link>
+          
+          <Link to="/about" className="w-full sm:w-auto">
+            <Button 
+              variant="outline" 
+              className="border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white px-5 md:px-6 lg:px-8 py-3 md:py-4 lg:py-6 text-sm md:text-base lg:text-lg font-medium rounded-lg transition-all duration-300 transform hover:scale-105"
+              size="lg"
+            >
+              Learn More
+            </Button>
+          </Link>
+          
+          {/* Mobile hero image */}
+          <div className="md:hidden w-full mt-8">
+            <div className="relative w-full h-72 overflow-hidden rounded-lg">
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/40 z-10"></div>
+              <img 
+                src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" 
+                alt="Community support and development"
+                className="w-full h-full object-cover"
+                loading="eager"
+              />
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-white z-20">
+                <h3 className="text-2xl font-bold mb-2">Transforming Lives</h3>
+                <p className="text-sm opacity-90">Join our mission to create lasting impact in tribal communities</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
+
+      {/* Image Container - Hidden on mobile, visible on md and up */}
+      <div className="hidden md:block relative w-full max-w-xs mx-auto lg:max-w-2xl lg:ml-auto mt-4 md:mt-8 lg:mt-4">
+        {/* Larger Image - Main Fundraising Focus */}
+        <div className="relative z-10 w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl transform rotate-2 scale-90 md:scale-100">
+          <img 
+            src="https://images.unsplash.com/photo-1527525443983-6e60c75fff46?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+            alt="Community support and fundraising"
+            className="w-full h-full object-cover"
+          />
+          {/* Decorative element */}
+          <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-orange-500 rounded-full mix-blend-multiply opacity-20"></div>
+        </div>
+        
+        {/* Smaller Overlapping Image */}
+        <div className="absolute -bottom-8 -left-8 z-20 w-2/3 sm:w-1/2 aspect-square rounded-2xl overflow-hidden shadow-2xl transform -rotate-6 border-4 border-white">
+          <img 
+            src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+            alt="Education and community development"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        
+        {/* Decorative shape */}
+        <div className="absolute -top-6 -right-6 z-0 w-32 h-32 bg-orange-100 rounded-full"></div>
+      </div>
+    </div>
+  </div>
+</section>
   );
 };
 
 export default HeroSection;
+
+// Add custom animation for the blob effect
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes blob {
+    0% {
+      transform: translate(0px, 0px) scale(1);
+    }
+    33% {
+      transform: translate(30px, -50px) scale(1.1);
+    }
+    66% {
+      transform: translate(-20px, 20px) scale(0.9);
+    }
+    100% {
+      transform: translate(0px, 0px) scale(1);
+    }
+  }
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+`;
+document.head.appendChild(style);

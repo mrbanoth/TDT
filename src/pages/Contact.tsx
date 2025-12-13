@@ -76,7 +76,7 @@ const Contact = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              Get in <span className="text-primary">Touch</span>
+              Get in <span className="text-[rgb(234,88,12)]">Touch</span>
             </motion.h1>
             <motion.p 
               className="text-lg sm:text-xl text-gray-300 mb-8 max-w-2xl mx-auto font-serif"
@@ -96,8 +96,7 @@ const Contact = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold mb-4 font-serif tracking-tight">Send Us a Message</h2>
-              <div className="w-20 h-1 bg-primary mx-auto mb-6"></div>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-charity-dark mb-6">Send Us a <span className="text-[rgb(234,88,12)]">Message</span></h2>
               <p className="text-gray-600 max-w-2xl mx-auto font-serif">
                 Have a question or want to collaborate? Fill out the form below and our team will get back to you as soon as possible.
               </p>
@@ -168,7 +167,7 @@ const Contact = () => {
                     required
                     value={formData.message}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[rgb(234,88,12)] focus:border-transparent transition-all"
                     placeholder="Type your message here..."
                   ></textarea>
                 </div>
@@ -179,7 +178,7 @@ const Contact = () => {
                     className={`relative overflow-hidden ${
                       isSubmitted 
                         ? 'bg-green-600 hover:bg-green-700' 
-                        : 'bg-primary hover:bg-primary/90'
+                        : 'bg-[rgb(234,88,12)] hover:bg-[rgba(234,88,12,0.9)]'
                     } text-white px-8 py-3 rounded-lg font-normal font-serif text-base sm:text-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02] tracking-normal`}
                   >
                     <AnimatePresence mode="wait">
@@ -241,45 +240,51 @@ const Contact = () => {
       </section>
 
       {/* Contact Information */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 font-serif tracking-tight">Our Contact Information</h2>
-            <div className="w-20 h-1 bg-primary mx-auto mb-6"></div>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-charity-dark mb-6">Our Contact <span className="text-[rgb(234,88,12)]">Information</span></h2>
+            <p className="text-gray-600 max-w-2xl mx-auto font-serif">
               Find us at our office or get in touch using the information below.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {contactInfo.map((item, index) => {
               const IconComponent = iconComponents[item.icon] || null;
               return (
                 <motion.div
                   key={item.id}
-                  className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100"
+                  className="group bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-[rgb(234,88,12)]/30"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                    {IconComponent && <IconComponent className="w-6 h-6 text-primary" />}
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0">
+                      <div className="w-12 h-12 rounded-lg bg-[rgba(234,88,12,0.05)] flex items-center justify-center group-hover:bg-[rgba(234,88,12,0.1)] transition-colors duration-300">
+                        {IconComponent && <IconComponent className="w-5 h-5 text-[rgb(234,88,12)]" />}
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-1">{item.title}</h3>
+                      {item.link ? (
+                        <a 
+                          href={item.link} 
+                          className="text-gray-600 hover:text-[rgb(234,88,12)] whitespace-pre-line transition-colors duration-200"
+                          style={{ textDecoration: 'none' }}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {item.description}
+                        </a>
+                      ) : (
+                        <p className="text-gray-600 whitespace-pre-line">
+                          {item.description}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <h3 className="text-xl font-semibold text-center mb-2 font-serif">{item.title}</h3>
-                  {item.link ? (
-                    <a 
-                      href={item.link} 
-                      className="text-gray-600 hover:text-primary text-center block whitespace-pre-line font-serif"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {item.description}
-                    </a>
-                  ) : (
-                    <p className="text-gray-600 text-center whitespace-pre-line font-serif">
-                      {item.description}
-                    </p>
-                  )}
                 </motion.div>
               );
             })}
