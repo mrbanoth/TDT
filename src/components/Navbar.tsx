@@ -179,7 +179,7 @@ const Navbar = () => {
                 CONTACT
               </NavLink>
               
-              <NavLink to="/donate" className="ml-2">
+              <NavLink to="/donate" className="ml-6">
                 <Button className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 hover:shadow-lg hover:scale-[1.02]">
                   Donate Now
                 </Button>
