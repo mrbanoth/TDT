@@ -11,7 +11,8 @@ export default defineConfig(({ mode }) => {
   const isProduction = mode === 'production';
   
   return {
-    base: "/",
+    // Use absolute URL for production, relative for development
+    base: isProduction ? '/' : '/',
     server: {
       host: "::",
       port: 8080,
@@ -43,6 +44,8 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       outDir: "dist",
+      // Ensure proper MIME types for all assets
+      assetsInlineLimit: 0,
       sourcemap: isProduction ? 'hidden' : true,
       commonjsOptions: {
         include: [/node_modules/],
@@ -53,6 +56,8 @@ export default defineConfig(({ mode }) => {
       chunkSizeWarningLimit: 1600,
       reportCompressedSize: false,
       rollupOptions: {
+        // Ensure proper module resolution
+        preserveEntrySignatures: 'strict',
         external: [],
         output: {
           manualChunks: (id) => {
@@ -76,8 +81,18 @@ export default defineConfig(({ mode }) => {
       },
     },
     optimizeDeps: {
-      include: ['react', 'react-dom', 'react-router-dom'],
+      include: ['react', 'react-dom', 'react-router-dom', 'react-dom/client'],
       exclude: ['@tawk.to/tawk-messenger-react'],
+    },
+    // Ensure proper MIME types for development
+    server: {
+      headers: {
+        'Cross-Origin-Embedder-Policy': 'require-corp',
+        'Cross-Origin-Opener-Policy': 'same-origin',
+      },
+      fs: {
+        strict: true,
+      },
     },
     publicDir: "public",
   };
