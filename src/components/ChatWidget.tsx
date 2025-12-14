@@ -17,7 +17,7 @@ const ChatWidget = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim()) {
-      console.log('Message sent:', message);
+      // Message sending logic here
       setMessage('');
       setTimeout(() => setIsOpen(false), 1000);
     }

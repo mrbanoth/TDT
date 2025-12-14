@@ -137,9 +137,8 @@ const Donate = () => {
         phone: formData.phone || '',
         description: 'Donation to Tribal Development Trust'
       };
-
-      console.log('Form submitted:', paymentData);
       
+      // Form submission logic here
       // Reset form
       setFormData({
         name: '',

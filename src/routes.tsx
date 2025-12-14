@@ -49,10 +49,6 @@ export const routes: RouteObject[] = [
     path: '/events',
     element: <LazyComponent component={Events} />
   },
-  // {
-  //   path: '/all-events',
-  //   element: <LazyComponent component={AllEvents} />
-  // },
   {
     path: '/events/:id',
     element: <LazyComponent component={EventDetail} />

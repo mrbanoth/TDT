@@ -31,7 +31,7 @@ const Contact = () => {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log('Form submitted:', formData);
+      // Form submission successful
       setIsSubmitted(true);
       
       // Reset form after 3 seconds

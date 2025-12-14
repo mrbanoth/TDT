@@ -49,11 +49,15 @@ const AllEvents = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Here you would typically send the form data to your backend
-    console.log('Registration submitted:', {
+    // Form data processing here
+    const registrationData = {
       ...formData,
       eventId: selectedEvent?.id,
       eventTitle: selectedEvent?.title
-    });
+    };
+    
+    // In a real app, you would send registrationData to your backend here
+    // For example: await api.registerForEvent(registrationData);
     
     // Show success message and close modal
     alert('Registration successful! We will contact you soon.');
