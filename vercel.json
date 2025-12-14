@@ -8,23 +8,43 @@
         "distDir": "dist",
         "env": {
           "NODE_ENV": "production"
-        },
-        "includeFiles": [
-          "public/**/*",
-          "src/assets/**/*"
-        ]
+        }
       }
     }
   ],
   "routes": [
     {
-      "src": "/(.*)\\.(jpg|jpeg|png|svg|gif|ico|webp|woff|woff2|eot|ttf|otf)$",
-      "headers": { "cache-control": "public, max-age=31536000, immutable" },
-      "dest": "/$1"
+      "src": "/assets/(.*)",
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable",
+        "content-type": "application/javascript"
+      }
+    },
+    {
+      "src": "/(.*\\.js)$",
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable",
+        "content-type": "application/javascript"
+      }
+    },
+    {
+      "src": "/(.*\\.css)$",
+      "headers": {
+        "content-type": "text/css"
+      }
+    },
+    {
+      "src": "/(.*\\.(jpg|jpeg|png|svg|gif|ico|webp))$",
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable"
+      }
     },
     {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "/index.html",
+      "headers": {
+        "content-type": "text/html; charset=UTF-8"
+      }
     }
   ]
 }
