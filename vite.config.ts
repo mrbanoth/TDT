@@ -4,6 +4,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { securityHeaders } from "./src/plugins/security-headers";
+import { visualizer as rollupVisualizer } from 'rollup-plugin-visualizer';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -24,16 +25,15 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react({
         jsxImportSource: '@emotion/react',
-        babel: {
-          plugins: ['@emotion/babel-plugin'],
-        },
+        // Remove babel configuration as it's not needed with SWC
       }),
       isProduction && securityHeaders(),
       mode === 'development' && componentTagger(),
-      isProduction && visualizer({
+      isProduction && rollupVisualizer({
         open: true,
         gzipSize: true,
         brotliSize: true,
+        filename: 'dist/stats.html'
       }),
     ].filter(Boolean),
     resolve: {
@@ -44,21 +44,34 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: "dist",
       sourcemap: isProduction ? 'hidden' : true,
+      commonjsOptions: {
+        include: [/node_modules/],
+        transformMixedEsModules: true,
+      },
       minify: isProduction ? 'esbuild' : false,
       cssCodeSplit: true,
       chunkSizeWarningLimit: 1600,
       reportCompressedSize: false,
       rollupOptions: {
+        external: [],
         output: {
-          manualChunks: {
-            vendor: ['react', 'react-dom', 'react-router-dom', '@tanstack/react-query'],
-            contentful: ['contentful'],
-            tawkto: ['@tawk.to/tawk-messenger-react'],
-            ui: ['@chakra-ui/react', '@emotion/react', 'framer-motion'],
+          manualChunks: (id) => {
+            if (id.includes('node_modules')) {
+              if (id.includes('@tawk.to')) {
+                return 'tawkto';
+              }
+              if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
+                return 'vendor';
+              }
+              if (id.includes('@chakra-ui') || id.includes('@emotion') || id.includes('framer-motion')) {
+                return 'ui';
+              }
+              return 'vendor';
+            }
           },
           entryFileNames: 'assets/[name].[hash].js',
           chunkFileNames: 'assets/[name].[hash].js',
-          assetFileNames: 'assets/[name].[hash].[ext]',
+          assetFileNames: 'assets/[name].[hash][ext]',
         },
       },
     },
