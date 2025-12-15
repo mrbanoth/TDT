@@ -1,97 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Search, X, Image as ImageIcon, Video as VideoIcon, Filter, ChevronDown, MapPin } from 'lucide-react';
+import { ArrowLeft, Search, X, Image as ImageIcon, MapPin, Video as VideoIcon } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/opacity.css';
+import { getGalleryItems, type GalleryItem } from '@/lib/contentful';
 
-type MediaItem = {
-  id: string;
-  type: 'image' | 'video';
-  url: string;
-  title: string;
-  category: string;
-  date: string;
-  location: string;
-};
-
+// Define the categories based on your Contentful badges
 const categories = [
   { id: 'all', name: 'All' },
   { id: 'events', name: 'Events' },
   { id: 'programs', name: 'Programs' },
   { id: 'community', name: 'Community' },
   { id: 'education', name: 'Education' },
-];
-
-const mediaItems: MediaItem[] = [
-  {
-    id: '1',
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?ixlib=rb-4.0.3',
-    title: 'Community Gathering',
-    category: 'community',
-    date: '2023-11-15',
-    location: 'Hyderabad'
-  },
-  {
-    id: '2',
-    type: 'video',
-    url: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&loop=1',
-    title: 'Education Program',
-    category: 'education',
-    date: '2023-11-10',
-    location: 'Warangal'
-  },
-  {
-    id: '3',
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1522071820081-009c01201c72?ixlib=rb-4.0.3',
-    title: 'Annual Event',
-    category: 'events',
-    date: '2023-11-05',
-    location: 'Hyderabad'
-  },
-  {
-    id: '4',
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1529154691717-385c8bd47d84?ixlib=rb-4.0.3',
-    title: 'Workshop Session',
-    category: 'programs',
-    date: '2023-10-28',
-    location: 'Karimnagar'
-  },
-  {
-    id: '5',
-    type: 'video',
-    url: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&loop=1',
-    title: 'Health Camp',
-    category: 'programs',
-    date: '2023-10-20',
-    location: 'Nizamabad'
-  },
-  {
-    id: '6',
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1511632765486-a01980e01a3e?ixlib=rb-4.0.3',
-    title: 'Celebration',
-    category: 'events',
-    date: '2023-10-15',
-    location: 'Hyderabad'
-  },
+  { id: 'others', name: 'Others' },
 ];
 
 const Gallery = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const filteredItems = mediaItems.filter(item => {
-    const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
-    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         item.location.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+  // Fetch gallery items from Contentful
+  useEffect(() => {
+    console.log('Gallery component mounted, fetching items...');
+    
+    const fetchGalleryItems = async () => {
+      try {
+        setIsLoading(true);
+        console.log('Calling getGalleryItems()...');
+        const items = await getGalleryItems();
+        
+        console.log('Received gallery items:', {
+          count: items.length,
+          itemsWithImages: items.filter(item => item.url).length,
+          allItems: items.map(item => ({
+            id: item.id,
+            title: item.title,
+            hasImage: !!item.url,
+            category: item.category
+          }))
+        });
+        
+        setGalleryItems(items);
+        setError(null);
+      } catch (err) {
+        console.error('Failed to load gallery items:', err);
+        setError(`Failed to load gallery: ${err.message || 'Unknown error'}`);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchGalleryItems();
+  }, []);
+
+  // Filter items based on selected category and search query
+  const filteredItems = useMemo(() => {
+    return galleryItems.filter(item => {
+      const matchesCategory = selectedCategory === 'all' || 
+                            (item.category && item.category.toLowerCase() === selectedCategory.toLowerCase());
+      const matchesSearch = searchQuery === '' || 
+                          (item.title && item.title.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                          (item.location && item.location.toLowerCase().includes(searchQuery.toLowerCase()));
+      return matchesCategory && matchesSearch;
+    });
+  }, [galleryItems, selectedCategory, searchQuery]);
+  
+  console.log('Rendering Gallery:', {
+    totalItems: galleryItems.length,
+    filteredItems: filteredItems.length,
+    selectedCategory,
+    searchQuery,
+    isLoading
   });
 
   const formatDate = (dateString: string) => {
@@ -156,51 +141,77 @@ const Gallery = () => {
           </div>
         </div>
 
-        {/* Gallery Grid */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          {filteredItems.length === 0 ? (
+        {/* Bento Grid Gallery */}
+        <div className="container mx-auto px-4 py-12">
+          {isLoading ? (
+            <div className="text-center py-12">
+              <p className="text-gray-600">Loading gallery...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <p className="text-red-500">{error}</p>
+              <button 
+                onClick={() => window.location.reload()}
+                className="mt-4 px-4 py-2 bg-[rgb(234,88,12)] text-white rounded-lg hover:bg-[#d97a0a] transition-colors"
+              >
+                Retry
+              </button>
+            </div>
+          ) : filteredItems.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-500">No items found. Try adjusting your search or filter.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4 max-w-7xl mx-auto">
               {filteredItems.map((item) => (
                 <div
                   key={item.id}
-                  className="group relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 bg-white hover:-translate-y-1"
+                  className="group relative rounded-xl overflow-hidden bg-gray-50 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:z-10 aspect-square"
                 >
-                  <div className="aspect-w-16 aspect-h-9 bg-gray-100 overflow-hidden relative">
-                    {item.type === 'image' ? (
-                      <>
-                        <LazyLoadImage
-                          src={item.url}
-                          alt={item.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          effect="opacity"
-                          placeholderSrc={`data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiB2aWV3Qm94PSIwIDAgNDAwIDMwMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2YzZjRmNSIvPjwvc3ZnPg==`}
-                        />
-                        <div className="absolute bottom-3 right-3 bg-black/70 text-white text-xs px-2 py-1 rounded-full flex items-center">
-                          <ImageIcon className="h-3 w-3 mr-1" />
-                          <span>Photo</span>
-                        </div>
-                      </>
-                    ) : (
-                      <div className="relative w-full h-full">
-                        <iframe
-                          src={item.url}
-                          title={item.title}
-                          className="w-full h-full"
-                          frameBorder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                          loading="lazy"
-                        />
-                        <div className="absolute bottom-3 right-3 bg-black/70 text-white text-xs px-2 py-1 rounded-full flex items-center">
-                          <VideoIcon className="h-3 w-3 mr-1" />
-                          <span>Video</span>
-                        </div>
+                  {item.type === 'image' ? (
+                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                      <LazyLoadImage
+                        src={item.url}
+                        alt={item.title}
+                        className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+                        effect="opacity"
+                        placeholderSrc={`data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiB2aWV3Qm94PSIwIDAgNDAwIDMwMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2YzZjRmNSIvPjwvc3ZnPg==`}
+                      />
+                      <div className="absolute bottom-3 right-3 bg-black/70 text-white text-xs px-2 py-1 rounded-full flex items-center backdrop-blur-sm">
+                        <ImageIcon className="h-3 w-3 mr-1" />
+                        <span>Photo</span>
                       </div>
-                    )}
+                    </div>
+                  ) : (
+                    <div className="w-full h-full">
+                      <iframe
+                        src={item.url}
+                        title={item.title}
+                        className="w-full h-full"
+                        frameBorder="0"
+                        allowFullScreen
+                      />
+                      <div className="absolute bottom-3 right-3 bg-black/70 text-white text-xs px-2 py-1 rounded-full flex items-center backdrop-blur-sm">
+                        <VideoIcon className="h-3 w-3 mr-1" />
+                        <span>Video</span>
+                      </div>
+                    </div>
+                  )}
+                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                    <h3 className="font-medium text-white text-sm md:text-base line-clamp-1">{item.title}</h3>
+                    <div className="flex flex-col gap-1 mt-1">
+                      {item.date && (
+                        <div className="text-xs text-white/80">
+                          {new Date(item.date).toLocaleDateString()}
+                        </div>
+                      )}
+                      {item.location && (
+                        <div className="flex items-center text-xs text-white/80">
+                          <MapPin className="h-3 w-3 mr-1" />
+                          <span className="line-clamp-1">{item.location}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}

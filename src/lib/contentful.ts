@@ -9,7 +9,104 @@ export const contentfulClient = createClient({
   environment: 'master'
 });
 
-// Helper function to get events
+// Interface for Gallery Item
+export interface GalleryItem {
+  id: string;
+  type: 'image' | 'video';
+  url: string;
+  title: string;
+  category: string;
+  date?: string;
+  location: string;
+}
+
+// Helper function to get gallery items
+export async function getGalleryItems(): Promise<GalleryItem[]> {
+  try {
+    console.log('Fetching gallery items from Contentful...');
+    
+    const response = await contentfulClient.getEntries({
+      content_type: 'gallery',
+      include: 2 // Include linked assets
+    });
+    
+    console.log('Contentful response:', {
+      total: response.total,
+      items: response.items?.length || 0,
+      includes: response.includes?.Asset?.length || 0
+    });
+    
+    if (!response.items || response.items.length === 0) {
+      console.warn('No gallery items found in Contentful');
+      return [];
+    }
+    
+    const items = response.items.map((item: any) => {
+      try {
+        const fields = item.fields || {};
+        const imageField = fields.image || {};
+        let imageUrl = '';
+        
+        // Handle different possible image field structures
+        if (imageField.fields?.file?.url) {
+          // Direct image field
+          imageUrl = `https:${imageField.fields.file.url}`;
+        } else if (imageField.sys?.type === 'Link' && response.includes?.Asset) {
+          // Linked asset
+          const assetId = imageField.sys.id;
+          const asset = response.includes.Asset.find((a: any) => a.sys.id === assetId);
+          if (asset?.fields?.file?.url) {
+            imageUrl = `https:${asset.fields.file.url}`;
+          }
+        }
+        
+        const galleryItem: GalleryItem = {
+          id: item.sys.id,
+          type: 'image',
+          url: imageUrl,
+          title: fields.title?.trim() || 'Untitled',
+          category: (fields.badge || 'all').toString().toLowerCase(),
+          date: fields.date,
+          location: (fields.location || '').toString()
+        };
+        
+        console.log('Processed gallery item:', {
+          id: galleryItem.id,
+          title: galleryItem.title,
+          hasImage: !!galleryItem.url,
+          category: galleryItem.category
+        });
+        
+        return galleryItem;
+      } catch (error) {
+        console.error('Error processing gallery item:', error, { item });
+        return null;
+      }
+    }).filter(Boolean);
+    
+    return items;
+  } catch (error) {
+    console.error('Error fetching gallery items from Contentful:', {
+      message: error.message,
+      code: error.code,
+      status: error.status,
+      statusText: error.statusText,
+      details: error.details
+    });
+    
+    // Check for common issues
+    if (error.message.includes('No space ID specified')) {
+      console.error('⚠️ Contentful Space ID is missing. Check your .env file.');
+    }
+    
+    if (error.message.includes('No access token specified')) {
+      console.error('⚠️ Contentful Access Token is missing. Check your .env file.');
+    }
+    
+    return [];
+  }
+}
+
 // Interface for Past Event
 export interface PastEvent {
   id: string;

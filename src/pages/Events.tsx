@@ -371,13 +371,8 @@ const renderPastEventCard = (event: PastEvent, index: number) => {
           {activeTab === 'upcoming' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {isLoading ? (
-                <div className="col-span-3 flex flex-col items-center justify-center py-12">
-                  <div className="relative">
-                    <div className="w-20 h-20 border-4 border-orange-100 rounded-full"></div>
-                    <div className="absolute top-0 left-0 w-20 h-20 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-                  </div>
-                  <p className="mt-6 text-lg font-medium text-gray-700">Loading events...</p>
-                  <p className="text-gray-500 mt-2">Please wait while we fetch the latest events</p>
+                <div className="col-span-3 text-center py-12">
+                  <p className="text-gray-600">Loading events...</p>
                 </div>
               ) : error === 'network_error' ? (
                 <div className="col-span-3 text-center py-12 px-4">
@@ -457,8 +452,7 @@ const renderPastEventCard = (event: PastEvent, index: number) => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {isLoading ? (
                   <div className="col-span-3 text-center py-12">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500 mx-auto"></div>
-                    <p className="mt-4 text-gray-600">Loading past events...</p>
+                    <p className="text-gray-600">Loading past events...</p>
                   </div>
                 ) : pastEvents && pastEvents.length > 0 ? (
                   <>
