@@ -285,10 +285,6 @@ const ProgramDetail = () => {
       try {
         const events = await getEvents();
         
-        // Log the events and program title for debugging
-        console.log('All events from Contentful:', events);
-        console.log('Current program title:', program.title);
-        
         // Find event that matches the current program
         const matchedEvent = events.find(event => {
           const eventCategory = event.programCategory?.toLowerCase() || '';
@@ -306,7 +302,6 @@ const ProgramDetail = () => {
         });
 
         if (matchedEvent) {
-          console.log('Found matching event:', matchedEvent);
           setEventData({
             ...matchedEvent,
             // Ensure we have fallbacks for required fields

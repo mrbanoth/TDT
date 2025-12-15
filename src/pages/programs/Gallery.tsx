@@ -27,29 +27,13 @@ const Gallery = () => {
 
   // Fetch gallery items from Contentful
   useEffect(() => {
-    console.log('Gallery component mounted, fetching items...');
-    
     const fetchGalleryItems = async () => {
       try {
         setIsLoading(true);
-        console.log('Calling getGalleryItems()...');
         const items = await getGalleryItems();
-        
-        console.log('Received gallery items:', {
-          count: items.length,
-          itemsWithImages: items.filter(item => item.url).length,
-          allItems: items.map(item => ({
-            id: item.id,
-            title: item.title,
-            hasImage: !!item.url,
-            category: item.category
-          }))
-        });
-        
         setGalleryItems(items);
         setError(null);
       } catch (err) {
-        console.error('Failed to load gallery items:', err);
         setError(`Failed to load gallery: ${err.message || 'Unknown error'}`);
       } finally {
         setIsLoading(false);
@@ -71,13 +55,6 @@ const Gallery = () => {
     });
   }, [galleryItems, selectedCategory, searchQuery]);
   
-  console.log('Rendering Gallery:', {
-    totalItems: galleryItems.length,
-    filteredItems: filteredItems.length,
-    selectedCategory,
-    searchQuery,
-    isLoading
-  });
 
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };

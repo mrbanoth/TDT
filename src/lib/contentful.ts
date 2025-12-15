@@ -23,21 +23,12 @@ export interface GalleryItem {
 // Helper function to get gallery items
 export async function getGalleryItems(): Promise<GalleryItem[]> {
   try {
-    console.log('Fetching gallery items from Contentful...');
-    
     const response = await contentfulClient.getEntries({
       content_type: 'gallery',
       include: 2 // Include linked assets
     });
     
-    console.log('Contentful response:', {
-      total: response.total,
-      items: response.items?.length || 0,
-      includes: response.includes?.Asset?.length || 0
-    });
-    
     if (!response.items || response.items.length === 0) {
-      console.warn('No gallery items found in Contentful');
       return [];
     }
     
@@ -70,39 +61,14 @@ export async function getGalleryItems(): Promise<GalleryItem[]> {
           location: (fields.location || '').toString()
         };
         
-        console.log('Processed gallery item:', {
-          id: galleryItem.id,
-          title: galleryItem.title,
-          hasImage: !!galleryItem.url,
-          category: galleryItem.category
-        });
-        
         return galleryItem;
       } catch (error) {
-        console.error('Error processing gallery item:', error, { item });
         return null;
       }
     }).filter(Boolean);
     
     return items;
   } catch (error) {
-    console.error('Error fetching gallery items from Contentful:', {
-      message: error.message,
-      code: error.code,
-      status: error.status,
-      statusText: error.statusText,
-      details: error.details
-    });
-    
-    // Check for common issues
-    if (error.message.includes('No space ID specified')) {
-      console.error('⚠️ Contentful Space ID is missing. Check your .env file.');
-    }
-    
-    if (error.message.includes('No access token specified')) {
-      console.error('⚠️ Contentful Access Token is missing. Check your .env file.');
-    }
-    
     return [];
   }
 }

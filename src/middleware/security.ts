@@ -1,36 +1,83 @@
 import { type Request, type Response, type NextFunction } from 'express';
+import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
+import { v4 as uuidv4 } from 'uuid';
 
 // Security middleware function
 export const securityHeaders = (req: Request, res: Response, next: NextFunction) => {
-  // Security headers
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'DENY');
-  res.setHeader('X-XSS-Protection', '1; mode=block');
-  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
-  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
-  res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
-  
-  // CSP Header - Configure based on your needs
-  const csp = [
-    "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.tawk.to",
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-    "img-src 'self' data: https: blob:",
-    "font-src 'self' https://fonts.gstatic.com",
-    "connect-src 'self' https://*.tawk.to https://*.contentful.com",
-    "frame-src 'self' https://*.tawk.to",
-    "media-src 'self' data:",
-  ].join('; ');
-  
-  res.setHeader('Content-Security-Policy', csp);
-  
-  // HSTS Header - Only enable in production with HTTPS
-  if (process.env.NODE_ENV === 'production') {
-    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-  }
-  
-  next();
+  // Generate nonce for CSP
+  const nonce = Buffer.from(uuidv4()).toString('base64');
+  res.locals.cspNonce = nonce;
+
+  // Security headers with Helmet
+  helmet({
+    contentSecurityPolicy: {
+      useDefaults: true,
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: [
+          "'self'",
+          `'nonce-${nonce}'`,
+          'https://*.tawk.to',
+          'https://www.google-analytics.com',
+          'https://www.googletagmanager.com'
+        ],
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          'https://fonts.googleapis.com',
+          'https://cdn.jsdelivr.net'
+        ],
+        imgSrc: [
+          "'self'",
+          'data:',
+          'https:', 'http:', // Allow all image sources (consider restricting in production)
+          'https://*.tawk.to',
+          'https://images.unsplash.com',
+          'https://www.google-analytics.com',
+          'https://www.googletagmanager.com'
+        ],
+        fontSrc: [
+          "'self'",
+          'data:',
+          'https://fonts.gstatic.com',
+          'https://cdn.jsdelivr.net'
+        ],
+        connectSrc: [
+          "'self'",
+          'https://*.tawk.to',
+          'https://*.contentful.com',
+          'https://www.google-analytics.com',
+          'https://region1.google-analytics.com'
+        ],
+        frameSrc: [
+          "'self'",
+          'https://*.tawk.to',
+          'https://www.google.com',
+          'https://www.youtube.com'
+        ],
+        mediaSrc: ["'self'"],
+        objectSrc: ["'none'"],
+        upgradeInsecureRequests: process.env.NODE_ENV === 'production' ? [] : []
+      }
+    },
+    crossOriginEmbedderPolicy: { policy: 'require-corp' },
+    crossOriginOpenerPolicy: { policy: 'same-origin' },
+    crossOriginResourcePolicy: { policy: 'same-site' },
+    dnsPrefetchControl: { allow: true },
+    frameguard: { action: 'deny' },
+    hidePoweredBy: true,
+    hsts: {
+      maxAge: 31536000,
+      includeSubDomains: true,
+      preload: process.env.NODE_ENV === 'production'
+    },
+    ieNoOpen: true,
+    noSniff: true,
+    permittedCrossDomainPolicies: { permittedPolicies: 'none' },
+    referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
+    xssFilter: true
+  })(req, res, next);
 };
 
 // Rate limiting middleware
