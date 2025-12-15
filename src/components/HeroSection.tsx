@@ -89,8 +89,8 @@ const HeroSection = () => {
         {/* Smaller Overlapping Image */}
         <div className="absolute -bottom-8 -left-8 z-20 w-2/3 sm:w-1/2 aspect-square rounded-2xl overflow-hidden shadow-2xl transform -rotate-6 border-4 border-white">
           <img 
-            src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-            alt="Education and community development"
+            src="/1stsection-2ndimage.jpeg" 
+            alt="Tribal community development"
             className="w-full h-full object-cover"
           />
         </div>

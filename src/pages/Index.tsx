@@ -150,7 +150,7 @@ const Index = () => {
       <div className="w-full lg:w-1/2 mt-8 lg:mt-0">
         <div className="relative w-full h-64 sm:h-80 md:h-96 lg:h-[500px] rounded-2xl overflow-hidden">
           <img
-            src="https://images.unsplash.com/photo-1527525443983-6e60c75fff46?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            src="/Homepage-images/srinivas-corona-time-image.jpeg"
             alt="Tribal community development"
             className="w-full h-full object-cover"
           />

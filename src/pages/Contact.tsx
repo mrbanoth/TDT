@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Check, Mail, Phone, MapPin, Clock } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { contactInfo, mapLocation } from '@/data/contact/info';
+import { toast } from 'sonner';
 
 // Icon mapping
 const iconComponents: { [key: string]: React.ElementType } = {
@@ -23,18 +25,105 @@ const Contact = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errors, setErrors] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+
+  const validateForm = () => {
+    const newErrors = {
+      name: !formData.name.trim() ? 'Full Name is required' : '',
+      email: !formData.email.trim() ? 'Email is required' : 
+             !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) ? 'Please enter a valid email' : '',
+      subject: !formData.subject.trim() ? 'Subject is required' : '',
+      message: !formData.message.trim() ? 'Message is required' : ''
+    };
+    setErrors(newErrors);
+    return !Object.values(newErrors).some(error => error !== '');
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
     setIsSubmitting(true);
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      // Form submission successful
+      // Verify required environment variables
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const autoReplyTemplateId = import.meta.env.VITE_EMAILJS_AUTO_REPLY_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+      const adminEmail = import.meta.env.VITE_EMAILJS_TO_EMAIL || 'tribaldevelopmenttrust77@gmail.com';
+
+      if (!serviceId || !templateId || !autoReplyTemplateId || !publicKey) {
+        throw new Error('Missing required EmailJS configuration. Please check your environment variables.');
+      }
+
+      // Prepare email parameters for admin
+      const adminTemplateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        to_email: adminEmail,
+        subject: `New Contact Form Submission: ${formData.subject}`,
+        message: formData.message,
+        date: new Date().toLocaleString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      };
+
+      // Send email to visitor (auto-reply)
+      const visitorTemplateParams = {
+        name: formData.name,
+        email: formData.email,
+        subject: 'Thank you for contacting Tribal Development Trust',
+        message: `We've received your message regarding "${formData.subject}" and will get back to you soon.`,
+        reply_to: adminEmail,
+        date: new Date().toLocaleString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      };
+
+      // Send both emails in parallel
+      await Promise.all([
+        // Email to admin
+        emailjs.send(
+          serviceId,
+          templateId,
+          adminTemplateParams,
+          publicKey
+        ),
+        // Auto-reply to visitor
+        emailjs.send(
+          serviceId,
+          autoReplyTemplateId,
+          visitorTemplateParams,
+          publicKey
+        )
+      ]);
+      
+      // Show success message with auto-dismiss
+      toast.success('Thank you! Your message has been sent. We\'ll get back to you soon!', {
+        duration: 5000,
+        position: 'top-center',
+      });
+      
       setIsSubmitted(true);
       
-      // Reset form after 3 seconds
+      // Reset form after 5 seconds
       setTimeout(() => {
         setFormData({
           name: '',
@@ -44,9 +133,13 @@ const Contact = () => {
         });
         setIsSubmitted(false);
         setIsSubmitting(false);
-      }, 3000);
+      }, 5000);
     } catch (error) {
-      console.error('Error submitting form:', error);
+      
+      toast.error(`Failed to send message: ${error instanceof Error ? error.message : 'Please try again later.'}`, {
+        duration: 10000,
+        position: 'top-center',
+      });
       setIsSubmitting(false);
     }
   };
@@ -114,62 +207,74 @@ const Contact = () => {
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1 font-serif">
                       Full Name <span className="text-red-500">*</span>
                     </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      required
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                      placeholder="John Doe"
-                    />
+                    <div>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        required
+                        value={formData.name}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-3 border ${errors.name ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all`}
+                        placeholder="John Doe"
+                      />
+                      {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
+                    </div>
                   </div>
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1 font-serif">
                       Email Address <span className="text-red-500">*</span>
                     </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                      placeholder="you@example.com"
-                    />
+                    <div>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        value={formData.email}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-3 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all`}
+                        placeholder="you@example.com"
+                      />
+                      {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
+                    </div>
                   </div>
                 </div>
                 <div>
                   <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1 font-serif">
                     Subject <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    required
-                    value={formData.subject}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                    placeholder="How can we help you?"
-                  />
+                  <div>
+                    <input
+                      type="text"
+                      id="subject"
+                      name="subject"
+                      required
+                      value={formData.subject}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-3 border ${errors.subject ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all`}
+                      placeholder="How can we help you?"
+                    />
+                    {errors.subject && <p className="mt-1 text-sm text-red-600">{errors.subject}</p>}
+                  </div>
                 </div>
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1 font-serif">
                     Your Message <span className="text-red-500">*</span>
                   </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows={5}
-                    required
-                    value={formData.message}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[rgb(234,88,12)] focus:border-transparent transition-all"
-                    placeholder="Type your message here..."
-                  ></textarea>
+                  <div>
+                    <textarea
+                      id="message"
+                      name="message"
+                      rows={5}
+                      required
+                      value={formData.message}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-3 border ${errors.message ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-[rgb(234,88,12)] focus:border-transparent transition-all`}
+                      placeholder="Type your message here..."
+                    ></textarea>
+                    {errors.message && <p className="mt-1 text-sm text-red-600">{errors.message}</p>}
+                  </div>
                 </div>
                 <div className="text-center">
                   <Button
