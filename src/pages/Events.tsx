@@ -29,14 +29,7 @@ const Events = () => {
   const [activeTab, setActiveTab] = useState('upcoming');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: ''
-  });
+  // Removed registration modal state
 
   // State for events
   const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
@@ -78,31 +71,7 @@ const Events = () => {
     fetchEvents();
   }, []);
 
-  const handleRegisterClick = (event: Event) => {
-    setSelectedEvent(event);
-    setIsModalOpen(true);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission here
-    // Form data processing here
-    // Reset form and close modal
-    setFormData({ name: '', email: '', phone: '', message: '' });
-    setIsModalOpen(false);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  // Removed registration modal handlers
 
   // Hero Section
   const heroSection = (
@@ -187,12 +156,13 @@ const Events = () => {
           )}
         </ul>
         
-        <Button 
-          onClick={() => handleRegisterClick(event)}
-          className="w-full bg-charity-dark hover:bg-charity-dark/90 text-white rounded-lg py-2 text-sm font-medium transition-all duration-300 h-9"
-        >
-          Register
-        </Button>
+        <Link to="/donate" className="block w-full">
+          <Button 
+            className="w-full bg-[#1F2937] hover:bg-gray-900 text-white rounded-lg py-2 text-sm font-medium transition-all duration-300 h-9"
+          >
+            Participate
+          </Button>
+        </Link>
       </div>
     </div>
   );
@@ -499,89 +469,6 @@ const renderPastEventCard = (event: PastEvent, index: number) => {
       </section>
 
       <Footer />
-
-      {/* Registration Modal */}
-      {isModalOpen && selectedEvent && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-md relative">
-            <button 
-              onClick={handleCloseModal}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            </button>
-            
-            <div className="p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Register for {selectedEvent.title}</h3>
-              <p className="text-gray-600 mb-6">Please fill in your details to register for this event.</p>
-              
-              <form onSubmit={handleSubmit}>
-                <div className="space-y-4">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Message (Optional)</label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      rows={3}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                    ></textarea>
-                  </div>
-                  
-                  <button
-                    type="submit"
-                    className="w-full bg-orange-600 text-white py-2.5 px-4 rounded-lg font-medium hover:bg-orange-700 transition-colors duration-200"
-                  >
-                    Register Now
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
