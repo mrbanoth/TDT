@@ -5,6 +5,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Smooth scrolling for the entire app */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Disable smooth scrolling globally */
 html, body {
   scroll-behavior: auto !important;
@@ -14,6 +23,31 @@ html, body {
 
 * {
   scroll-behavior: auto !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
+
+/* Smooth scrolling for all scrollable elements */
+html, body, [data-scroll] {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem; /* Adjust based on your header height */
 }
 
 /* Remove default focus styles but keep them for keyboard navigation */
@@ -27,6 +61,7 @@ html, body {
   /* Container with responsive padding */
   .container-responsive {
     @apply w-full px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl;
+    scroll-margin-top: 5rem; /* Matches scroll-padding-top */
   }
   
   /* Responsive typography */
@@ -236,6 +271,8 @@ html, body {
 /* Base font styles */
 html, body {
   font-family: 'Open Sans', sans-serif;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
 /* Headings - using Raleway as secondary font */

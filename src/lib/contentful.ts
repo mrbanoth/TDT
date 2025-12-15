@@ -108,7 +108,11 @@ export async function getEvents() {
           participants: fields.participants || '',
           image: imageUrl,
           description: fields.description || '',
-          details: details
+          details: details,
+          // Add the missing fields from Contentful
+          duration: fields.duration || '',
+          beneficiaries: fields.beneficiaries || '',
+          programCategory: fields.programCategory || fields.category || ''
         };
         
         return eventData;

@@ -231,7 +231,7 @@ const Index = () => {
     {/* View All Button */}
     <div className="text-center mt-10 sm:mt-12">
       <NavLink
-        to="/programs"
+        to="/programs/gallery"
         className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors duration-200"
       >
         View All Programs

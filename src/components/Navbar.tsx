@@ -95,7 +95,7 @@ const Navbar = () => {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-1">
+            <div className="hidden lg:flex items-center space-x-4">
               {navItems.map((item) => (
                 <NavLink
                   key={item.name}
@@ -147,13 +147,13 @@ const Navbar = () => {
                 </button>
                 
                 <div 
-                  className={`absolute left-0 mt-2 w-56 rounded-xl bg-white shadow-lg border border-orange-50 z-50 py-2 transition-all duration-300 ease-out ${
+                  className={`absolute left-0 mt-2 w-[360px] bg-white shadow-lg z-50 transition-all duration-300 ease-out ${
                     isProgramsOpen 
                       ? 'opacity-100 visible translate-y-0' 
                       : 'opacity-0 invisible -translate-y-2'
                   }`}
                   style={{
-                    boxShadow: '0 10px 25px -5px rgba(249, 115, 22, 0.1), 0 8px 10px -6px rgba(249, 115, 22, 0.1)'
+                    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)'
                   }}
                   onMouseEnter={() => !isMenuOpen && setIsProgramsOpen(true)}
                   onMouseLeave={() => !isMenuOpen && setIsProgramsOpen(false)}
