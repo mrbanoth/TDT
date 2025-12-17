@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ArrowLeft, MapPin } from 'lucide-react';
+import { StepIndicator } from '@/components/ui/StepIndicator';
 
 const foodItems = [
   { id: 'rice', label: 'Rice, wheat, and grains' },
@@ -18,6 +20,12 @@ interface FoodDonationFormProps {
   onClose: () => void;
 }
 
+const formSteps = [
+  'Food Details',
+  'Contact Info',
+  'Review & Submit'
+];
+
 export const FoodDonationForm = ({ onClose }: FoodDonationFormProps) => {
   const [selectedItems, setSelectedItems] = useState<Record<string, boolean>>({});
   const [otherItem, setOtherItem] = useState('');
@@ -26,13 +34,12 @@ export const FoodDonationForm = ({ onClose }: FoodDonationFormProps) => {
     email: '',
     phone: '',
     address: '',
-    quantity: '',
     expiryDate: '',
-    notes: '',
-    pickupRequired: true,
+    needsPickup: true,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [currentStep, setCurrentStep] = useState(1);
+  const [isLocating, setIsLocating] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target as HTMLInputElement;
@@ -53,21 +60,25 @@ export const FoodDonationForm = ({ onClose }: FoodDonationFormProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (currentStep < 2) {
-      setCurrentStep(2);
+    if (currentStep < formSteps.length - 1) {
+      setCurrentStep(currentStep + 1);
       return;
     }
-    
+
     setIsSubmitting(true);
-    // Handle form submission
-    const donationData = {
+    
+    // Prepare submission data
+    const submissionData = {
       ...formData,
       foodItems: Object.entries(selectedItems)
         .filter(([_, isSelected]) => isSelected)
-        .map(([id]) => id === 'other' ? otherItem : foodItems.find(item => item.id === id)?.label),
+        .map(([id]) => {
+          if (id === 'other') return otherItem;
+          return foodItems.find(item => item.id === id)?.label || id;
+        })
     };
     
-    console.log('Food donation submitted:', donationData);
+    console.log('Food donation form submitted:', submissionData);
     // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
@@ -75,22 +86,86 @@ export const FoodDonationForm = ({ onClose }: FoodDonationFormProps) => {
     }, 2000);
   };
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {currentStep === 1 && (
-        <>
-          <h3 className="text-lg font-medium mb-4">Food Donation Details</h3>
+  const nextStep = () => {
+    if (currentStep < formSteps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const handleGetCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser');
+      return;
+    }
+
+    setIsLocating(true);
+    
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+          );
+          const data = await response.json();
           
-          <div className="space-y-4">
+          if (data.display_name) {
+            setFormData(prev => ({
+              ...prev,
+              address: data.display_name
+            }));
+          }
+        } catch (error) {
+          console.error('Error getting address from coordinates:', error);
+          alert('Could not retrieve address. Please enter it manually.');
+        } finally {
+          setIsLocating(false);
+        }
+      },
+      (error) => {
+        console.error('Error getting location:', error);
+        alert('Could not get your location. Please enter your address manually.');
+        setIsLocating(false);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  };
+
+  const renderStepContent = () => {
+    switch (currentStep) {
+      case 0:
+        return (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+            className="space-y-4"
+          >
             <div>
-              <p className="text-sm font-medium mb-2">Select food items you'd like to donate *</p>
+              <h4 className="text-sm font-medium mb-3">Select food items you'd like to donate:</h4>
               <div className="space-y-2">
                 {foodItems.map((item) => (
                   <div key={item.id} className="flex items-center space-x-2">
-                    <Checkbox
+                    <Checkbox 
                       id={item.id}
                       checked={!!selectedItems[item.id]}
-                      onCheckedChange={() => handleItemToggle(item.id)}
+                      onCheckedChange={() => {
+                        setSelectedItems(prev => ({
+                          ...prev,
+                          [item.id]: !prev[item.id]
+                        }));
+                      }}
                     />
                     <label
                       htmlFor={item.id}
@@ -101,38 +176,22 @@ export const FoodDonationForm = ({ onClose }: FoodDonationFormProps) => {
                   </div>
                 ))}
               </div>
-              
-              {selectedItems['other'] && (
-                <div className="mt-2">
+
+              {selectedItems.other && (
+                <div className="mt-4">
                   <Input
                     type="text"
                     value={otherItem}
                     onChange={(e) => setOtherItem(e.target.value)}
-                    placeholder="Please specify the food items"
+                    placeholder="Please specify other food items"
                     className="mt-2"
                   />
                 </div>
               )}
-            </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1" htmlFor="quantity">
-                  Approximate Quantity *
-                </label>
-                <Input
-                  type="text"
-                  id="quantity"
-                  name="quantity"
-                  value={formData.quantity}
-                  onChange={handleChange}
-                  placeholder="e.g. 5kg, 2 packets"
-                  required
-                />
-              </div>
-              <div>
+              <div className="mt-4">
                 <label className="block text-sm font-medium mb-1" htmlFor="expiryDate">
-                  Pickup service date *
+                  Preferred Pickup Date *
                 </label>
                 <Input
                   type="date"
@@ -145,48 +204,51 @@ export const FoodDonationForm = ({ onClose }: FoodDonationFormProps) => {
                 />
               </div>
             </div>
+          </motion.div>
+        );
 
-            <div className="pt-2">
-              <div className="flex items-center space-x-2">
-                <Checkbox 
-                  id="pickupRequired" 
-                  name="pickupRequired"
-                  checked={formData.pickupRequired}
-                  onCheckedChange={(checked) => 
-                    setFormData(prev => ({ ...prev, pickupRequired: Boolean(checked) }))
-                  }
-                />
-                <label htmlFor="pickupRequired" className="text-sm font-medium">
-                  I need pickup service
-                </label>
-              </div>
+      case 1:
+        return (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+            className="space-y-4"
+          >
+            <div>
+              <label className="block text-sm font-medium mb-1" htmlFor="name">
+                Full Name *
+              </label>
+              <Input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Your full name"
+                required
+              />
             </div>
-          </div>
-        </>
-      )}
 
-      {currentStep === 2 && (
-        <>
-          <h3 className="text-lg font-medium mb-4">Your Contact Information</h3>
-          <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-1" htmlFor="name">
-                  Full Name *
+                <label className="block text-sm font-medium mb-1" htmlFor="email">
+                  Email *
                 </label>
                 <Input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
                   onChange={handleChange}
-                  placeholder="Your full name"
+                  placeholder="your.email@example.com"
                   required
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1" htmlFor="phone">
-                  Phone Number *
+                  Phone *
                 </label>
                 <Input
                   type="tel"
@@ -201,80 +263,147 @@ export const FoodDonationForm = ({ onClose }: FoodDonationFormProps) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1" htmlFor="email">
-                Email Address
-              </label>
-              <Input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="your.email@example.com"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-1" htmlFor="address">
-                {formData.pickupRequired ? 'Pickup Address *' : 'Address (Optional)'}
-              </label>
+              <div className="flex justify-between items-center mb-1">
+                <label className="block text-sm font-medium" htmlFor="address">
+                  {formData.needsPickup ? 'Pickup Address *' : 'Address (Optional)'}
+                </label>
+                <button
+                  type="button"
+                  onClick={handleGetCurrentLocation}
+                  className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                  title="Use my current location"
+                  disabled={isLocating}
+                >
+                  {isLocating ? (
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  ) : (
+                    <MapPin className="h-3 w-3" />
+                  )}
+                  {isLocating ? 'Locating...' : 'Auto-fill location'}
+                </button>
+              </div>
               <Textarea
                 id="address"
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
-                placeholder={formData.pickupRequired 
+                placeholder={formData.needsPickup 
                   ? 'Please provide complete address for pickup' 
                   : 'Your address (optional)'}
                 rows={2}
-                required={formData.pickupRequired}
+                required={formData.needsPickup}
               />
             </div>
+          </motion.div>
+        );
 
-            <div>
-              <label className="block text-sm font-medium mb-1" htmlFor="notes">
-                Additional Notes
-              </label>
-              <Textarea
-                id="notes"
-                name="notes"
-                value={formData.notes}
-                onChange={handleChange}
-                placeholder="Any special instructions or additional information about the food items"
-                rows={2}
-              />
-            </div>
-          </div>
-        </>
-      )}
-
-      <div className="flex justify-between pt-4">
-        {currentStep === 2 ? (
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => setCurrentStep(1)}
-            disabled={isSubmitting}
+      case 2:
+        return (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+            className="space-y-6"
           >
-            Back
-          </Button>
-        ) : (
-          <div></div>
-        )}
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              {currentStep === 1 ? 'Continue' : 'Submit Donation'}
-            </>
-          ) : currentStep === 1 ? (
-            'Continue'
-          ) : (
-            'Submit Donation'
-          )}
-        </Button>
+            <div className="space-y-4">
+              <h4 className="font-medium">Food Items:</h4>
+              <ul className="list-disc pl-5 space-y-1">
+                {Object.entries(selectedItems)
+                  .filter(([_, isSelected]) => isSelected)
+                  .map(([id]) => {
+                    const item = foodItems.find(item => item.id === id);
+                    return (
+                      <li key={id}>
+                        {id === 'other' ? otherItem : item?.label}
+                      </li>
+                    );
+                  })}
+              </ul>
+              <div className="pt-2">
+                <p className="text-sm text-muted-foreground">Quantity: {formData.quantity}</p>
+                <p className="text-sm text-muted-foreground">Pickup Date: {formData.expiryDate}</p>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <h4 className="font-medium">Contact Information:</h4>
+              <p className="text-sm">{formData.name}</p>
+              <p className="text-sm text-muted-foreground">{formData.email}</p>
+              <p className="text-sm text-muted-foreground">{formData.phone}</p>
+              {formData.address && (
+                <div className="mt-2">
+                  <p className="text-sm font-medium">Address:</p>
+                  <p className="text-sm text-muted-foreground whitespace-pre-line">{formData.address}</p>
+                </div>
+              )}
+            </div>
+
+            {formData.notes && (
+              <div>
+                <h4 className="font-medium">Special Instructions:</h4>
+                <p className="text-sm text-muted-foreground whitespace-pre-line">{formData.notes}</p>
+              </div>
+            )}
+          </motion.div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="text-center">
+        <StepIndicator 
+          steps={formSteps} 
+          currentStep={currentStep} 
+          className="max-w-md mx-auto mb-6"
+        />
       </div>
-    </form>
+      
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <AnimatePresence mode="wait">
+          {renderStepContent()}
+        </AnimatePresence>
+
+        <div className="flex justify-between pt-6 border-t border-gray-200">
+          <div className="flex-1">
+            {currentStep > 0 && (
+              <Button 
+                type="button"
+                variant="outline"
+                onClick={prevStep}
+                disabled={isSubmitting}
+                className="flex items-center gap-2 min-w-[100px]"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back
+              </Button>
+            )}
+          </div>
+          
+          <div className="flex-1 flex justify-end">
+            <Button 
+              type={currentStep === formSteps.length - 1 ? 'submit' : 'button'}
+              onClick={currentStep < formSteps.length - 1 ? nextStep : undefined}
+              disabled={isSubmitting}
+              className="bg-[#1F2937] hover:bg-gray-800 min-w-[120px] justify-center"
+            >
+              {isSubmitting ? (
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              ) : null}
+              {isSubmitting 
+                ? 'Processing...' 
+                : currentStep === formSteps.length - 1 
+                  ? 'Submit Donation' 
+                  : 'Continue'}
+            </Button>
+          </div>
+        </div>
+      </form>
+    </div>
   );
 };
 

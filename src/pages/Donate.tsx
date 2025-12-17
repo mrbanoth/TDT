@@ -21,7 +21,6 @@ const Donate = () => {
     phone: '',
     address: '',
     message: '',
-    amount: '',
     donationType: ''
   });
 
@@ -129,64 +128,25 @@ const Donate = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
+    // Form submission logic here
+    // Reset form
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      address: '',
+      message: '',
+      donationType: ''
+    });
+    
+    // Close modal after a short delay
     setTimeout(() => {
-      // For demo purposes, we'll use a test payment gateway
-      const paymentData = {
-        amount: formData.amount || '100', // Default to 100 if no amount selected
-        currency: 'INR',
-        name: formData.name || 'Anonymous Donor',
-        email: formData.email || '',
-        phone: formData.phone || '',
-        description: 'Donation to Tribal Development Trust'
-      };
-      
-      // Form submission logic here
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        address: '',
-        message: '',
-        amount: '',
-        donationType: ''
-      });
-      
-      // Close modal after a short delay
-      setTimeout(() => {
-        setActiveModal(null);
-        setIsSubmitting(false);
-      }, 1000);
-      
-    }, 1000); // Simulate network delay
+      setActiveModal(null);
+      setIsSubmitting(false);
+    }, 1000);
   };
 
   const renderModalHeader = () => {
-    if (activeModal === 'financial') {
-      return (
-        <div className="flex items-center justify-between w-full">
-          <h3 className="text-xl font-bold text-gray-900">
-            Financial Support - Donation Form
-          </h3>
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2 mr-4">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" alt="Visa" className="h-4 object-contain" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" alt="Mastercard" className="h-6 object-contain" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/UPI-Logo-vector.svg/1200px-UPI-Logo-vector.svg.png" alt="UPI" className="h-5 object-contain" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Paytm_Logo_%28standalone%29.svg/2560px-Paytm_Logo_%28standalone%29.svg.png" alt="Paytm" className="h-5 object-contain" />
-            </div>
-            <button
-              onClick={() => setActiveModal(null)}
-              className="text-gray-400 hover:text-gray-500"
-            >
-              <X className="h-6 w-6" />
-            </button>
-          </div>
-        </div>
-      );
-    }
-    
     const title = activeModal === 'material' ? 'Material Donations' : 
                  activeModal === 'food' ? 'Food Donations' : 'Volunteer Support';
     
@@ -207,49 +167,6 @@ const Donate = () => {
 
   const renderModalContent = () => {
     switch(activeModal) {
-      case 'financial':
-        return (
-          <>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Amount (₹)</label>
-                <input
-                  type="number"
-                  name="amount"
-                  value={formData.amount}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
-                  placeholder="Enter amount"
-                  required
-                />
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                {[100, 500, 1000, 2000, 5000, 'Other'].map((amount) => (
-                  <button
-                    key={amount}
-                    type="button"
-                    onClick={() => setFormData(prev => ({ ...prev, amount: amount === 'Other' ? '' : String(amount) }))}
-                    className={`p-2 border rounded-lg text-sm ${formData.amount === String(amount) ? 'bg-[rgb(234,88,12)] text-white' : 'bg-white hover:bg-gray-50'}`}
-                  >
-                    {amount === 'Other' ? 'Other' : `₹${amount}`}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="mt-6 space-y-4">
-              <h4 className="font-medium">Payment Method</h4>
-              <div className="space-y-2">
-                {['Credit/Debit Card', 'UPI', 'Net Banking', 'PayPal'].map(method => (
-                  <label key={method} className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                    <input type="radio" name="paymentMethod" className="h-4 w-4 text-[rgb(234,88,12)]" />
-                    <span className="text-sm">{method}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          </>
-        );
-      
       case 'material':
         return (
           <div className="space-y-4">
@@ -761,13 +678,6 @@ const Donate = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg" 
-              className="bg-charity-dark text-white hover:bg-charity-dark/90 px-8 py-3 text-base font-semibold rounded-full shadow-lg transform hover:scale-105 transition-all duration-300"
-              onClick={() => setActiveModal('financial')}
-            >
-              Donate Now
-            </Button>
-            <Button 
-              size="lg" 
               variant="outline"
               className="border-2 border-charity-dark text-charity-dark hover:bg-charity-dark hover:text-white px-8 py-3 text-base font-semibold rounded-full transition-all duration-300"
             >
@@ -781,95 +691,36 @@ const Donate = () => {
       <Footer />
       
       {/* Donation Modals */}
-      <DonationModal
-        isOpen={activeModal === 'financial'}
-        onClose={() => setActiveModal(null)}
-        title="Financial Donation"
-      >
-        <div className="space-y-6">
-          <p className="text-gray-600">Your monetary donations help us sustain and expand our programs to support tribal communities.</p>
-          
-          <div className="bg-blue-50 p-4 rounded-lg">
-            <h4 className="font-medium text-blue-900 mb-2">What your donation can do:</h4>
-            <ul className="space-y-2 text-blue-700">
-              <li className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
-                <span>₹500 - Provides school supplies for 2 children</span>
-              </li>
-              <li className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
-                <span>₹1,000 - Feeds a family for a week</span>
-              </li>
-              <li className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
-                <span>₹5,000 - Supports medical care for 10 people</span>
-              </li>
-            </ul>
-          </div>
 
-          <form className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Donation Amount (₹) *
-                </label>
-                <input
-                  type="number"
-                  className="w-full p-2 border border-gray-300 rounded-lg"
-                  placeholder="Enter amount"
-                  min="1"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Donation Type *
-                </label>
-                <select
-                  className="w-full p-2 border border-gray-300 rounded-lg bg-white"
-                  required
-                >
-                  <option value="">Select type</option>
-                  <option value="one-time">One-time donation</option>
-                  <option value="monthly">Monthly donation</option>
-                  <option value="quarterly">Quarterly donation</option>
-                  <option value="yearly">Yearly donation</option>
-                </select>
-              </div>
-            </div>
+      {activeModal === 'material' && (
+        <DonationModal
+          isOpen={true}
+          onClose={() => setActiveModal(null)}
+          title="Material Donation"
+        >
+          <MaterialDonationForm onClose={() => setActiveModal(null)} />
+        </DonationModal>
+      )}
 
-            <div className="pt-4">
-              <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
-                Proceed to Payment
-              </Button>
-            </div>
-          </form>
-        </div>
-      </DonationModal>
+      {activeModal === 'food' && (
+        <DonationModal
+          isOpen={true}
+          onClose={() => setActiveModal(null)}
+          title="Food Donation"
+        >
+          <FoodDonationForm onClose={() => setActiveModal(null)} />
+        </DonationModal>
+      )}
 
-      <DonationModal
-        isOpen={activeModal === 'material'}
-        onClose={() => setActiveModal(null)}
-        title="Material Donation"
-      >
-        <MaterialDonationForm onClose={() => setActiveModal(null)} />
-      </DonationModal>
-
-      <DonationModal
-        isOpen={activeModal === 'food'}
-        onClose={() => setActiveModal(null)}
-        title="Food Donation"
-      >
-        <FoodDonationForm onClose={() => setActiveModal(null)} />
-      </DonationModal>
-
-      <DonationModal
-        isOpen={activeModal === 'volunteer'}
-        onClose={() => setActiveModal(null)}
-        title="Volunteer Support"
-      >
-        <VolunteerSupportForm onClose={() => setActiveModal(null)} />
-      </DonationModal>
+      {activeModal === 'volunteer' && (
+        <DonationModal
+          isOpen={true}
+          onClose={() => setActiveModal(null)}
+          title="Volunteer Support"
+        >
+          <VolunteerSupportForm onClose={() => setActiveModal(null)} />
+        </DonationModal>
+      )}
     </div>
   );
 };
