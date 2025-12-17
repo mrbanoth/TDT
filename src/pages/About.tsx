@@ -142,19 +142,19 @@ const About = () => {
       number: animatedStats.students.toLocaleString(), 
       label: "students", 
       description: "children supported",
-      image: "https://images.unsplash.com/photo-1497486751825-1233686d5d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+      image: "/Aboutpage-Images/Students-Images.jpeg"
     },
     { 
       number: `Since 2015`, 
       label: "founded", 
       description: `${animatedStats.years} years of service`,
-      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+      image: "/Aboutpage-Images/FoundedImage.jpeg"
     },
     { 
       number: `${animatedStats.programs} programs`, 
       label: "offering", 
       description: "comprehensive programs",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+      image: "/Aboutpage-Images/6-programsImage.jpeg"
     },
   ];
 
@@ -237,7 +237,8 @@ const About = () => {
                         <img 
                           src={stat.image} 
                           alt={stat.label}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover object-center"
+                          style={{ objectPosition: 'center 30%' }}
                         />
                       </div>
                       <div>

@@ -59,8 +59,8 @@ const HeroSection = () => {
             <div className="relative w-full h-72 overflow-hidden rounded-lg">
               <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/40 z-10"></div>
               <img 
-                src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" 
-                alt="Community support and development"
+                src="/Homepage-images/moblie-herosectionImage.jpeg.jpeg" 
+                alt="Tribal community support and development"
                 className="w-full h-full object-cover"
                 loading="eager"
               />
@@ -78,8 +78,8 @@ const HeroSection = () => {
         {/* Larger Image - Main Fundraising Focus */}
         <div className="relative z-10 w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl transform rotate-2 scale-90 md:scale-100">
           <img 
-            src="https://images.unsplash.com/photo-1527525443983-6e60c75fff46?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
-            alt="Community support and fundraising"
+            src="/Homepage-images/herosection-MainBigImage.jpeg" 
+            alt="Tribal community development and support"
             className="w-full h-full object-cover"
           />
           {/* Decorative element */}
