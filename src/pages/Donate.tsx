@@ -5,7 +5,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { DonationModal } from '@/components/DonationModal';
 import { contactInfo } from '@/data/contact/info';
-import { DollarSign, Package, Utensils, Gift, Heart, Phone, Shield, Users, Clock, Calendar, X } from 'lucide-react';
+import { DollarSign, Package, Utensils, Gift, Heart, Phone, Shield, Users, Clock, Calendar, X, CheckCircle } from 'lucide-react';
+import { MaterialDonationForm } from '@/components/donation/MaterialDonationForm';
+import { FoodDonationForm } from '@/components/donation/FoodDonationForm';
+import { VolunteerSupportForm } from '@/components/donation/VolunteerSupportForm';
 
 const Donate = () => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
@@ -164,7 +167,7 @@ const Donate = () => {
       return (
         <div className="flex items-center justify-between w-full">
           <h3 className="text-xl font-bold text-gray-900">
-            {donationTypes.find(t => t.id === activeModal)?.title} - Donation Form
+            Financial Support - Donation Form
           </h3>
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2 mr-4">
@@ -184,10 +187,13 @@ const Donate = () => {
       );
     }
     
+    const title = activeModal === 'material' ? 'Material Donations' : 
+                 activeModal === 'food' ? 'Food Donations' : 'Volunteer Support';
+    
     return (
       <div className="flex items-center justify-between w-full">
         <h3 className="text-xl font-bold text-gray-900">
-          {donationTypes.find(t => t.id === activeModal)?.title} - Donation Form
+          {title} - Donation Form
         </h3>
         <button
           onClick={() => setActiveModal(null)}
@@ -295,11 +301,11 @@ const Donate = () => {
                     </span>
                   ) : (
                     <span className="flex items-center">
-                      <svg className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="h-3 w-3 mr-1 text-[rgb(234,88,12)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
-                      Use Current Location
+                      Use my location
                     </span>
                   )}
                 </button>
@@ -310,13 +316,11 @@ const Donate = () => {
                 onChange={handleInputChange}
                 rows={3}
                 className="w-full p-2 border border-gray-300 rounded-lg"
-                placeholder="Enter your address for pickup"
+                placeholder="Enter your full address for pickup"
                 required
               />
-              {locationError && formData.address === '' && (
-                <p className="mt-1 text-xs text-red-600">{locationError}</p>
-              )}
             </div>
+            {locationError && <p className="text-red-500 text-sm mt-1">{locationError}</p>}
           </div>
         );
       
@@ -325,7 +329,7 @@ const Donate = () => {
           <div className="space-y-4">
             {renderContactFields()}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Type of Food</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Type of Food Donation</label>
               <select
                 name="donationType"
                 value={formData.donationType}
@@ -334,71 +338,23 @@ const Donate = () => {
                 required
               >
                 <option value="">Select food type</option>
-                <option value="grains">Grains & Pulses</option>
-                <option value="packaged">Packaged Food</option>
-                <option value="fresh">Fresh Produce</option>
-                <option value="cooked">Cooked Meals</option>
+                <option value="grains">Grains (Rice, Wheat, etc.)</option>
+                <option value="pulses">Pulses and Lentils</option>
+                <option value="oils">Cooking Oils</option>
+                <option value="other">Other Food Items</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
-              <input
-                type="text"
-                name="amount"
-                value={formData.amount}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-lg"
-                placeholder="e.g., 5kg rice, 10 packets, etc."
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Expiry Date (if applicable)</label>
-              <input
-                type="date"
-                name="expiryDate"
-                className="w-full p-2 border border-gray-300 rounded-lg"
-              />
-            </div>
-            <div>
-              <div className="flex justify-between items-center mb-1">
-                <label className="block text-sm font-medium text-gray-700">Pickup/Delivery Details</label>
-                <button
-                  type="button"
-                  onClick={() => handleGetCurrentLocation('message')}
-                  disabled={isLocating}
-                  className="text-xs text-[rgb(234,88,12)] hover:text-[rgba(234,88,12,0.8)] flex items-center disabled:opacity-50"
-                >
-                  {isLocating ? (
-                    <span className="flex items-center">
-                      <svg className="animate-spin -ml-1 mr-1 h-3 w-3 text-[rgb(234,88,12)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Locating...
-                    </span>
-                  ) : (
-                    <span className="flex items-center">
-                      <svg className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                      Use Current Location
-                    </span>
-                  )}
-                </button>
-              </div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
               <textarea
                 name="message"
                 value={formData.message}
                 onChange={handleInputChange}
                 rows={3}
                 className="w-full p-2 border border-gray-300 rounded-lg"
-                placeholder="Any special instructions or your current address for pickup"
+                placeholder="Please describe the food items you wish to donate"
+                required
               />
-              {locationError && formData.message === '' && (
-                <p className="mt-1 text-xs text-red-600">{locationError}</p>
-              )}
             </div>
           </div>
         );
@@ -406,81 +362,32 @@ const Donate = () => {
       case 'volunteer':
         return (
           <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number *</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
-                  pattern="[0-9]{10}"
-                  title="Please enter a 10-digit mobile number"
-                  required
-                />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email (Optional)</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">How to help?</label>
-                <select
-                  name="donationType"
-                  value={formData.donationType}
-                  onChange={handleInputChange}
-                  className="w-full p-2 text-sm border border-gray-300 rounded-lg"
-                  required
-                >
-                  <option value="">Select</option>
-                  <option value="teaching">Teaching/Education</option>
-                  <option value="medical">Medical Services</option>
-                  <option value="events">Event Volunteering</option>
-                  <option value="skills">Professional Skills</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-            </div>
-            
+            {renderContactFields()}
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Availability</label>
-              <div className="grid grid-cols-3 gap-1 text-xs">
-                {['Weekdays', 'Weekends', 'Mornings', 'Afternoons', 'Evenings', 'Flexible'].map(option => (
-                  <label key={option} className="flex items-center space-x-1">
-                    <input type="checkbox" className="h-3 w-3 text-[rgb(234,88,12)] rounded" />
-                    <span>{option}</span>
-                  </label>
-                ))}
-              </div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">How would you like to help?</label>
+              <select
+                name="donationType"
+                value={formData.donationType}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded-lg"
+                required
+              >
+                <option value="">Select volunteer role</option>
+                <option value="teaching">Teaching/Education</option>
+                <option value="medical">Medical Services</option>
+                <option value="technical">Technical Skills</option>
+                <option value="other">Other Ways to Help</option>
+              </select>
             </div>
-            
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">About You</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Tell us about yourself</label>
               <textarea
                 name="message"
                 value={formData.message}
                 onChange={handleInputChange}
-                rows={2}
-                className="w-full p-2 text-sm border border-gray-300 rounded-lg"
-                placeholder="Your skills, experience, and why you want to volunteer"
+                rows={4}
+                className="w-full p-2 border border-gray-300 rounded-lg"
+                placeholder="Please share your skills, experience, and availability"
                 required
               />
             </div>
@@ -489,115 +396,6 @@ const Donate = () => {
       
       default:
         return null;
-    }
-  };
-
-  const donationTypes = [
-    {
-      title: "Financial Donations",
-      icon: <DollarSign className="h-8 w-8 text-blue-600" />,
-      description: "Monetary contributions that help fund our various programs and services",
-      gradient: "bg-gradient-to-br from-[rgba(234,88,12,0.05)] to-[rgba(234,88,12,0.1)] border-b-4 border-[rgba(234,88,12,0.2)]",
-      options: [
-        "Monthly recurring donations",
-        "One-time contributions",
-        "Program-specific funding",
-        "Emergency relief fund",
-        "Educational scholarships",
-        "Health camp support"
-      ],
-      impact: "₹1000 can provide medical care for 5 families",
-      action: "Donate Money"
-    },
-    {
-      id: 'material',
-      title: "Material Donations",
-      icon: <Package className="h-8 w-8 text-green-600" />,
-      description: "Physical items and supplies that directly benefit tribal communities",
-      gradient: "bg-gradient-to-br from-[rgba(234,88,12,0.05)] to-[rgba(234,88,12,0.1)] border-b-4 border-[rgba(234,88,12,0.2)]",
-      options: [
-        "Blankets and warm clothing",
-        "Educational materials and books",
-        "Medical supplies and medicines",
-        "School supplies and stationery",
-        "Sports equipment",
-        "Hygiene and sanitation items"
-      ],
-      impact: "Your donated items reach families directly",
-      action: "Donate Materials"
-    },
-    {
-      id: 'food',
-      title: "Food Donations",
-      icon: <Utensils className="h-8 w-8 text-orange-600" />,
-      description: "Nutritious food items and groceries for tribal families and children",
-      gradient: "bg-gradient-to-br from-[rgba(234,88,12,0.05)] to-[rgba(234,88,12,0.1)] border-b-4 border-[rgba(234,88,12,0.2)]",
-      options: [
-        "Rice, wheat, and grains",
-        "Pulses and lentils",
-        "Cooking oil and spices",
-        "Nutritional supplements",
-        "Baby food and formula",
-        "Fresh fruits and vegetables"
-      ],
-      impact: "Feed a family of 5 for a week",
-      action: "Donate Food"
-    },
-    {
-      id: 'volunteer',
-      title: "Volunteer Support",
-      icon: <Heart className="h-8 w-8 text-purple-600" />,
-      description: "Various other ways you can contribute to our mission",
-      gradient: "bg-gradient-to-br from-[rgba(234,88,12,0.05)] to-[rgba(234,88,12,0.1)] border-b-4 border-[rgba(234,88,12,0.2)]",
-      options: [
-        "Volunteer your time and skills",
-        "Professional services (legal, medical)",
-        "Transportation assistance",
-        "Equipment and technology",
-        "Event sponsorship",
-        "Awareness campaigns"
-      ],
-      impact: "Your skills and time are invaluable",
-      action: "Get Involved"
-    }
-  ];
-
-  const features = [
-    {
-      icon: <Shield className="h-8 w-8 text-[rgb(234,88,12)]" />,
-      title: "Secure Payments",
-      description: "Bank-level security for all transactions"
-    },
-    {
-      icon: <Users className="h-8 w-8 text-[rgb(234,88,12)]" />,
-      title: "Direct Impact",
-      description: "100% of donations reach communities"
-    },
-    {
-      icon: <Clock className="h-8 w-8 text-[rgb(234,88,12)]" />,
-      title: "Quick Process",
-      description: "Donation process takes less than 2 minutes"
-    }
-  ];
-
-  const quickAmounts = [500, 1000, 2500, 5000, 10000];
-  const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
-  const [customAmount, setCustomAmount] = useState('');
-
-  const handleAmountClick = (amount: number) => {
-    setSelectedAmount(amount);
-    setCustomAmount(amount.toString());
-  };
-
-  const handleCustomAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setCustomAmount(value);
-    // If the custom amount matches one of the quick amounts, update selectedAmount
-    const numValue = parseInt(value.replace(/\D/g, ''));
-    if (quickAmounts.includes(numValue)) {
-      setSelectedAmount(numValue);
-    } else {
-      setSelectedAmount(null);
     }
   };
 
@@ -629,13 +427,12 @@ const Donate = () => {
               <h3 className="text-2xl font-bold text-charity-dark mb-6">Make an Impact Today</h3>
               
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
-                {quickAmounts.map((amount) => (
+                {[500, 1000, 2500, 5000, 10000].map((amount) => (
                   <Button
                     key={amount}
-                    variant={selectedAmount === amount ? 'default' : 'outline'}
-                    onClick={() => handleAmountClick(amount)}
+                    variant={amount === 1000 ? 'default' : 'outline'}
                     className={`h-14 text-lg font-semibold transition-all duration-200 ${
-                      selectedAmount === amount 
+                      amount === 1000 
                         ? 'bg-[rgb(234,88,12)] text-white hover:bg-[rgba(234,88,12,0.9)] border-[rgb(234,88,12)]' 
                         : 'bg-white text-charity-dark border-2 border-gray-200 hover:border-[rgb(234,88,12)] hover:bg-gray-50 hover:text-charity-dark'
                     }`}
@@ -644,12 +441,8 @@ const Donate = () => {
                   </Button>
                 ))}
                 <Button
-                  variant={!quickAmounts.includes(Number(customAmount)) && customAmount ? 'default' : 'outline'}
-                  className={`h-14 text-lg font-semibold transition-all duration-200 ${
-                    !quickAmounts.includes(Number(customAmount)) && customAmount 
-                      ? 'bg-charity-dark text-white hover:bg-charity-dark/90 border-charity-dark' 
-                      : 'bg-white text-charity-dark border-2 border-gray-200 hover:border-charity-dark hover:bg-gray-50 hover:text-charity-dark'
-                  }`}
+                  variant="outline"
+                  className="h-14 text-lg font-semibold transition-all duration-200 bg-white text-charity-dark border-2 border-gray-200 hover:border-charity-dark hover:bg-gray-50 hover:text-charity-dark"
                 >
                   Other
                 </Button>
@@ -662,8 +455,6 @@ const Donate = () => {
                     type="text"
                     inputMode="numeric"
                     pattern="[0-9]*"
-                    value={customAmount}
-                    onChange={handleCustomAmountChange}
                     placeholder="Enter amount"
                     className="w-full pl-10 pr-4 py-4 border-2 border-gray-200 rounded-lg focus:border-charity-dark focus:ring-2 focus:ring-charity-dark/20 focus:outline-none text-lg font-medium"
                   />
@@ -678,7 +469,23 @@ const Donate = () => {
               </div>
 
               <div className="grid grid-cols-3 gap-4 text-center">
-                {features.map((feature, index) => (
+                {[
+                  {
+                    icon: <Shield className="h-8 w-8 text-[rgb(234,88,12)]" />,
+                    title: "Secure Payments",
+                    description: "Bank-level security for all transactions"
+                  },
+                  {
+                    icon: <Users className="h-8 w-8 text-[rgb(234,88,12)]" />,
+                    title: "Direct Impact",
+                    description: "100% of donations reach communities"
+                  },
+                  {
+                    icon: <Clock className="h-8 w-8 text-[rgb(234,88,12)]" />,
+                    title: "Quick Process",
+                    description: "Donation process takes less than 2 minutes"
+                  }
+                ].map((feature, index) => (
                   <div key={index} className="text-center">
                     <div className="flex justify-center mb-2">
                       {feature.icon}
@@ -703,9 +510,70 @@ const Donate = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {donationTypes.map((type, index) => (
+            {[
+              {
+                id: 'financial',
+                title: "Financial Support",
+                icon: <DollarSign className="h-8 w-8 text-blue-600" />,
+                description: "Your monetary donations help us sustain and expand our programs",
+                gradient: "bg-gradient-to-br from-blue-50 to-blue-100 border-b-4 border-blue-200",
+                options: [
+                  "Monthly recurring donations",
+                  "One-time contributions",
+                  "Program-specific funding",
+                  "Emergency relief fund"
+                ],
+                impact: "₹1000 can provide medical care for 5 families",
+                action: "Donate Now"
+              },
+              {
+                id: 'material',
+                title: "Material Donations",
+                icon: <Package className="h-8 w-8 text-green-600" />,
+                description: "Physical items and supplies that directly benefit tribal communities",
+                gradient: "bg-gradient-to-br from-green-50 to-green-100 border-b-4 border-green-200",
+                options: [
+                  "Blankets and warm clothing",
+                  "Educational materials and books",
+                  "Medical supplies and medicines",
+                  "School supplies and stationery"
+                ],
+                impact: "Your donated items reach families directly",
+                action: "Donate Items"
+              },
+              {
+                id: 'food',
+                title: "Food Donations",
+                icon: <Utensils className="h-8 w-8 text-orange-600" />,
+                description: "Nutritious food items and groceries for tribal families and children",
+                gradient: "bg-gradient-to-br from-orange-50 to-orange-100 border-b-4 border-orange-200",
+                options: [
+                  "Rice, wheat, and grains",
+                  "Pulses and lentils",
+                  "Cooking oil and spices",
+                  "Nutritional supplements"
+                ],
+                impact: "Feed a family of 5 for a week",
+                action: "Donate Food"
+              },
+              {
+                id: 'volunteer',
+                title: "Volunteer Support",
+                icon: <Heart className="h-8 w-8 text-purple-600" />,
+                description: "Various other ways you can contribute to our mission",
+                gradient: "bg-gradient-to-br from-purple-50 to-purple-100 border-b-4 border-purple-200",
+                options: [
+                  "Volunteer your time and skills",
+                  "Professional services (legal, medical)",
+                  "Transportation assistance",
+                  "Equipment and technology"
+                ],
+                impact: "Your skills and time are invaluable",
+                action: "Volunteer Now"
+              }
+            ].map((type, index) => (
               <Card key={index} className="border-0 shadow-sm overflow-hidden h-full flex flex-col transition-all duration-200 hover:shadow-md rounded-2xl min-h-[420px]">
-                <div className={`${type.gradient} p-6 rounded-t-2xl`}>
+                <div className={`${type.gradient || 'bg-gradient-to-br from-gray-50 to-gray-100 border-b-4 border-gray-200'} p-6 rounded-t-2xl`}>
                   <div className="flex items-start space-x-4">
                     <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 bg-white shadow-sm">
                       {type.icon}
@@ -724,27 +592,20 @@ const Donate = () => {
                       {type.options.slice(0, 4).map((option, optionIndex) => (
                         <div key={optionIndex} className="flex items-start space-x-2">
                           <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                          <span className="text-sm text-gray-600 leading-relaxed">{option}</span>
+                          <span className="text-sm text-gray-600">{option}</span>
                         </div>
                       ))}
                     </div>
                   </div>
-                  
-                  <div className="mt-auto pt-2">
-                    <div className="bg-blue-50 p-3 rounded-xl mb-4 border border-blue-100">
-                      <p className="text-blue-700 font-medium text-sm flex items-start">
-                        <span className="mr-2">💡</span>
-                        <span>{type.impact}</span>
-                      </p>
-                    </div>
-                    
-                    <Button 
-                      className="w-full text-sm py-3 h-auto rounded-lg font-medium transition-all duration-200 bg-gray-900 hover:bg-gray-800 text-white"
-                      onClick={() => setActiveModal(type.id)}
-                    >
-                      {type.action}
-                    </Button>
-                  </div>
+                  <p className="text-sm text-gray-500 mb-4">
+                    <span className="font-medium">Impact:</span> {type.impact}
+                  </p>
+                  <Button 
+                    onClick={() => setActiveModal(type.id as 'financial' | 'material' | 'food' | 'volunteer')}
+                    className="mt-auto w-full bg-[#1F2937] hover:bg-gray-800 text-white"
+                  >
+                    {type.action}
+                  </Button>
                 </CardContent>
               </Card>
             ))}
@@ -920,28 +781,95 @@ const Donate = () => {
       <Footer />
       
       {/* Donation Modals */}
-      {donationTypes.map((type) => (
-        <DonationModal
-          key={type.id}
-          isOpen={activeModal === type.id}
-          onClose={() => setActiveModal(null)}
-          title={type.title}
-          customHeader={renderModalHeader()}
-        >
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {renderModalContent()}
-            <div className="mt-6">
-              <Button 
-                type="submit" 
-                className="w-full"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Submitting...' : `Submit ${type.title}`}
+      <DonationModal
+        isOpen={activeModal === 'financial'}
+        onClose={() => setActiveModal(null)}
+        title="Financial Donation"
+      >
+        <div className="space-y-6">
+          <p className="text-gray-600">Your monetary donations help us sustain and expand our programs to support tribal communities.</p>
+          
+          <div className="bg-blue-50 p-4 rounded-lg">
+            <h4 className="font-medium text-blue-900 mb-2">What your donation can do:</h4>
+            <ul className="space-y-2 text-blue-700">
+              <li className="flex items-start">
+                <CheckCircle className="h-5 w-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                <span>₹500 - Provides school supplies for 2 children</span>
+              </li>
+              <li className="flex items-start">
+                <CheckCircle className="h-5 w-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                <span>₹1,000 - Feeds a family for a week</span>
+              </li>
+              <li className="flex items-start">
+                <CheckCircle className="h-5 w-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                <span>₹5,000 - Supports medical care for 10 people</span>
+              </li>
+            </ul>
+          </div>
+
+          <form className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Donation Amount (₹) *
+                </label>
+                <input
+                  type="number"
+                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  placeholder="Enter amount"
+                  min="1"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Donation Type *
+                </label>
+                <select
+                  className="w-full p-2 border border-gray-300 rounded-lg bg-white"
+                  required
+                >
+                  <option value="">Select type</option>
+                  <option value="one-time">One-time donation</option>
+                  <option value="monthly">Monthly donation</option>
+                  <option value="quarterly">Quarterly donation</option>
+                  <option value="yearly">Yearly donation</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="pt-4">
+              <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
+                Proceed to Payment
               </Button>
             </div>
           </form>
-        </DonationModal>
-      ))}
+        </div>
+      </DonationModal>
+
+      <DonationModal
+        isOpen={activeModal === 'material'}
+        onClose={() => setActiveModal(null)}
+        title="Material Donation"
+      >
+        <MaterialDonationForm onClose={() => setActiveModal(null)} />
+      </DonationModal>
+
+      <DonationModal
+        isOpen={activeModal === 'food'}
+        onClose={() => setActiveModal(null)}
+        title="Food Donation"
+      >
+        <FoodDonationForm onClose={() => setActiveModal(null)} />
+      </DonationModal>
+
+      <DonationModal
+        isOpen={activeModal === 'volunteer'}
+        onClose={() => setActiveModal(null)}
+        title="Volunteer Support"
+      >
+        <VolunteerSupportForm onClose={() => setActiveModal(null)} />
+      </DonationModal>
     </div>
   );
 };
