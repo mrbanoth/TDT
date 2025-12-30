@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Counter } from '@/components/ui/Counter';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Card, CardContent } from '@/components/ui/card';
@@ -517,12 +519,18 @@ const Donate = () => {
                   <p className="text-sm text-gray-500 mb-4">
                     <span className="font-medium">Impact:</span> {type.impact}
                   </p>
-                  <Button 
-                    onClick={() => setActiveModal(type.id as 'financial' | 'material' | 'food' | 'volunteer')}
-                    className="mt-auto w-full bg-[#1F2937] hover:bg-gray-800 text-white"
+                  <a 
+                    href={type.id === 'material' ? 'https://forms.gle/voFpWeg3ERbv3p5f8' : type.id === 'food' ? 'https://forms.gle/XPqjosbawZnSem398' : type.id === 'volunteer' ? 'https://forms.gle/BQpVqtQqSq7dT1CW7' : '#'}
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="block w-full"
                   >
-                    {type.action}
-                  </Button>
+                    <Button 
+                      className="w-full bg-[#1F2937] hover:bg-gray-800 text-white"
+                    >
+                      {type.action}
+                    </Button>
+                  </a>
                 </CardContent>
               </Card>
             ))}
@@ -635,7 +643,9 @@ const Donate = () => {
       <section className="py-20 bg-charity-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-charity-dark mb-6">Your <span className="text-[rgb(234,88,12)]">Impact</span></h2>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-charity-dark mb-6">
+              Your <span className="text-[rgb(234,88,12)]">Impact</span>
+            </h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
               See how your donations create real change in tribal communities
             </p>
@@ -643,23 +653,81 @@ const Donate = () => {
 
           <div className="w-full overflow-hidden">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full">
-                {[
-                { amount: "₹500", impact: "Medical care for 1 family for a month" },
-                { amount: "₹1,000", impact: "Supports education for 5 children" },
-                { amount: "₹2,500", impact: "Funds a health checkup camp" },
-                { amount: "₹5,000", impact: "Vocational training for 2 women" }
-              ].map((item, index) => (
-                <Card key={index} className="text-center p-4 sm:p-6 border-0 shadow-sm h-full">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="h-full"
+              >
+                <Card className="text-center p-4 sm:p-6 border-0 shadow-sm h-full hover:shadow-md transition-shadow duration-300">
                   <CardContent className="p-0">
-                    <div className="text-2xl sm:text-3xl font-bold text-[rgb(234,88,12)] mb-2 sm:mb-3">
-                      {item.amount}
+                    <div className="text-2xl sm:text-3xl font-bold text-[rgb(234,88,12)] mb-2 sm:mb-3 min-h-[3rem] flex items-center justify-center">
+                      <Counter value={500} prefix="₹" duration={2} />
                     </div>
                     <p className="text-sm sm:text-base text-gray-600 leading-snug">
-                      {item.impact}
+                      Medical care for <Counter value={1} duration={2} /> family for a month
                     </p>
                   </CardContent>
                 </Card>
-              ))}
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="h-full"
+              >
+                <Card className="text-center p-4 sm:p-6 border-0 shadow-sm h-full hover:shadow-md transition-shadow duration-300">
+                  <CardContent className="p-0">
+                    <div className="text-2xl sm:text-3xl font-bold text-[rgb(234,88,12)] mb-2 sm:mb-3 min-h-[3rem] flex items-center justify-center">
+                      <Counter value={1000} prefix="₹" duration={2} />
+                    </div>
+                    <p className="text-sm sm:text-base text-gray-600 leading-snug">
+                      Supports education for <Counter value={5} duration={2} /> children
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="h-full"
+              >
+                <Card className="text-center p-4 sm:p-6 border-0 shadow-sm h-full hover:shadow-md transition-shadow duration-300">
+                  <CardContent className="p-0">
+                    <div className="text-2xl sm:text-3xl font-bold text-[rgb(234,88,12)] mb-2 sm:mb-3 min-h-[3rem] flex items-center justify-center">
+                      <Counter value={2500} prefix="₹" duration={2} />
+                    </div>
+                    <p className="text-sm sm:text-base text-gray-600 leading-snug">
+                      Funds a health checkup camp
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="h-full"
+              >
+                <Card className="text-center p-4 sm:p-6 border-0 shadow-sm h-full hover:shadow-md transition-shadow duration-300">
+                  <CardContent className="p-0">
+                    <div className="text-2xl sm:text-3xl font-bold text-[rgb(234,88,12)] mb-2 sm:mb-3 min-h-[3rem] flex items-center justify-center">
+                      <Counter value={5000} prefix="₹" duration={2} />
+                    </div>
+                    <p className="text-sm sm:text-base text-gray-600 leading-snug">
+                      Vocational training for <Counter value={2} duration={2} /> women
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
             </div>
           </div>
         </div>

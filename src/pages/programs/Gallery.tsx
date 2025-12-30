@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Search, X, Image as ImageIcon, MapPin, Video as VideoIcon } from 'lucide-react';
+import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
@@ -18,6 +19,9 @@ const categories = [
 ];
 
 const Gallery = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const controls = useAnimation();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
@@ -54,6 +58,45 @@ const Gallery = () => {
       return matchesCategory && matchesSearch;
     });
   }, [galleryItems, selectedCategory, searchQuery]);
+
+  // Only duplicate items for 'All'  // Create looped items for seamless animation - only duplicate for 'All' category when not searching
+  const loopedItems = useMemo(() => {
+    if (selectedCategory === 'all' && !searchQuery) {
+      return [...filteredItems, ...filteredItems];
+    }
+    return filteredItems;
+  }, [filteredItems, selectedCategory, searchQuery]);
+
+  // Animation loop
+  useEffect(() => {
+    if (filteredItems.length === 0) return;
+    
+    const container = containerRef.current;
+    if (!container) return;
+    
+    const scrollWidth = container.scrollWidth / 2; // Because we duplicated items
+    let animationFrame: number;
+    let startTime: number | null = null;
+    const duration = 30000; // 30 seconds for one full loop
+    
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const progress = (elapsed % duration) / duration;
+      
+      if (!isHovered && container) {
+        container.scrollLeft = progress * scrollWidth;
+      }
+      
+      animationFrame = requestAnimationFrame(animate);
+    };
+    
+    animationFrame = requestAnimationFrame(animate);
+    
+    return () => {
+      cancelAnimationFrame(animationFrame);
+    };
+  }, [filteredItems.length, isHovered]);
   
 
   const formatDate = (dateString: string) => {
@@ -64,7 +107,6 @@ const Gallery = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
-
       <main className="flex-1">
         {/* Hero Header */}
         <div className="bg-gradient-to-r from-[#1e293b] to-[#0f172a] py-16 sm:py-20">
@@ -118,8 +160,9 @@ const Gallery = () => {
           </div>
         </div>
 
-        {/* Bento Grid Gallery */}
-        <div className="container mx-auto px-4 py-12">
+        <div className="gallery-container">
+          {/* Bento Grid Gallery */}
+          <div className="container mx-auto px-4 py-12">
           {isLoading ? (
             <div className="text-center py-12">
               <p className="text-gray-600">Loading gallery...</p>
@@ -139,75 +182,125 @@ const Gallery = () => {
               <p className="text-gray-500">No items found. Try adjusting your search or filter.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4 max-w-7xl mx-auto">
-              {filteredItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="group relative rounded-xl overflow-hidden bg-gray-50 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:z-10 aspect-square"
-                >
-                  {item.type === 'image' ? (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                      <LazyLoadImage
-                        src={item.url}
-                        alt={item.title}
-                        className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
-                        effect="opacity"
-                        placeholderSrc={`data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiB2aWV3Qm94PSIwIDAgNDAwIDMwMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2YzZjRmNSIvPjwvc3ZnPg==`}
-                      />
-                      <div className="absolute bottom-3 right-3 bg-black/70 text-white text-xs px-2 py-1 rounded-full flex items-center backdrop-blur-sm">
-                        <ImageIcon className="h-3 w-3 mr-1" />
-                        <span>Photo</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="w-full h-full">
-                      <iframe
-                        src={item.url}
-                        title={item.title}
-                        className="w-full h-full"
-                        frameBorder="0"
-                        allowFullScreen
-                      />
-                      <div className="absolute bottom-3 right-3 bg-black/70 text-white text-xs px-2 py-1 rounded-full flex items-center backdrop-blur-sm">
-                        <VideoIcon className="h-3 w-3 mr-1" />
-                        <span>Video</span>
-                      </div>
-                    </div>
-                  )}
-                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-                    <h3 className="font-medium text-white text-sm md:text-base line-clamp-1">{item.title}</h3>
-                    <div className="flex flex-col gap-1 mt-1">
-                      {item.date && (
-                        <div className="text-xs text-white/80">
-                          {new Date(item.date).toLocaleDateString()}
+            <div 
+              ref={containerRef}
+              className="relative overflow-hidden w-full"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              <div className="flex space-x-6 py-4 px-4">
+                {loopedItems.map((item, index) => {
+                  const isAllCategory = selectedCategory === 'all';
+                  
+                  // Only calculate animation properties for 'all' category
+                  const animationProps = isAllCategory ? {
+                    initial: { 
+                      opacity: 0, 
+                      x: (Math.floor(index / 4) % 2 === 0) ? 50 : -50,
+                      scale: 0.95 
+                    },
+                    animate: { 
+                      opacity: 1, 
+                      x: 0, 
+                      scale: 1,
+                      transition: {
+                        type: 'spring' as const,
+                        stiffness: 100,
+                        damping: 15,
+                        delay: 0.05 * (index % 4) + 0.1 * Math.floor(index / 4)
+                      }
+                    },
+                    exit: { 
+                      opacity: 0, 
+                      x: (Math.floor(index / 4) % 2 === 0) ? -50 : 50,
+                      scale: 0.9,
+                      transition: { 
+                        type: 'tween' as const,
+                        duration: 0.2 
+                      }
+                    }
+                  } : {
+                    initial: { opacity: 1 },
+                    animate: { opacity: 1 },
+                    exit: { opacity: 0 }
+                  };
+                  
+                  return (
+                    <motion.div
+                      key={`${item.id}-${index}`}
+                      className="relative flex-shrink-0 w-80 sm:w-96 h-64 rounded-xl overflow-hidden bg-gray-50 shadow-md"
+                      {...animationProps}
+                      layout
+                    >
+                      {item.type === 'image' ? (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                          <LazyLoadImage
+                            src={item.url}
+                            alt={item.title}
+                            className="w-full h-full object-cover"
+                            effect="opacity"
+                            placeholderSrc={`data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiB2aWV3Qm94PSIwIDAgNDAwIDMwMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2YzZjRmNSIvPjwvc3ZnPg==`}
+                          />
+                          <div className="absolute bottom-3 right-3 bg-black/70 text-white text-xs px-2 py-1 rounded-full flex items-center backdrop-blur-sm">
+                            <ImageIcon className="h-3 w-3 mr-1" />
+                            <span>Photo</span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="w-full h-full">
+                          <iframe
+                            src={item.url}
+                            title={item.title}
+                            className="w-full h-full"
+                            frameBorder="0"
+                            allowFullScreen
+                          />
+                          <div className="absolute bottom-3 right-3 bg-black/70 text-white text-xs px-2 py-1 rounded-full flex items-center backdrop-blur-sm">
+                            <VideoIcon className="h-3 w-3 mr-1" />
+                            <span>Video</span>
+                          </div>
                         </div>
                       )}
-                      {item.location && (
-                        <div className="flex items-center text-xs text-white/80">
-                          <MapPin className="h-3 w-3 mr-1" />
-                          <span className="line-clamp-1">{item.location}</span>
+                      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                        <h3 className="font-medium text-white text-sm md:text-base line-clamp-1">
+                          {item.title?.trim() || 
+                           categories.find(cat => cat.id === selectedCategory)?.name || 
+                           item.category || 
+                           'Gallery Item'}
+                        </h3>
+                        <div className="flex flex-col gap-1 mt-1">
+                          {item.date && (
+                            <div className="text-xs text-white/80">
+                              {new Date(item.date).toLocaleDateString()}
+                            </div>
+                          )}
+                          {item.location && (
+                            <div className="flex items-center text-xs text-white/80">
+                              <MapPin className="h-3 w-3 mr-1" />
+                              {item.location}
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
             </div>
           )}
-          
-          {/* Back Button */}
-          <div className="mt-12 text-center">
+        </div>
+
+        <div className="mt-12 text-center">
             <button
               onClick={() => navigate(-1)}
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-[rgb(234,88,12)] hover:bg-[#d97c10] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#d97c10] transition-colors"
+              className="inline-flex items-center px-6 py-3 mb-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-[rgb(234,88,12)] hover:bg-[#d97c10] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#d97c10] transition-colors"
             >
-              <ArrowLeft className="h-5 w-5 mr-2" />
+              <ArrowLeft className="h-5 w-5 mr-2 " />
               Back to Previous Page
             </button>
           </div>
         </div>
       </main>
-
       <Footer />
     </div>
   );

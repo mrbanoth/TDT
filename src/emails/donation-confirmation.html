@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You for Your Donation - TRIBAL DEVELOPMENT TRUST</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #1e40af;
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .content {
+            padding: 30px;
+        }
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #1e40af;
+            font-weight: 500;
+        }
+        .message {
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+        .donation-details {
+            background-color: #f0f7ff;
+            border-left: 4px solid #1e40af;
+            padding: 15px 20px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .donation-details p {
+            margin: 8px 0;
+        }
+        .donation-amount {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e40af;
+            margin: 15px 0;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #1e40af;
+            color: white !important;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: 500;
+            margin: 15px 0;
+        }
+        .logo {
+            max-width: 200px;
+            margin-bottom: 15px;
+        }
+        .signature {
+            margin-top: 30px;
+            font-style: italic;
+        }
+        @media only screen and (max-width: 600px) {
+            .content {
+                padding: 20px 15px;
+            }
+            .header {
+                padding: 20px 15px;
+            }
+            .header h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Thank You for Your Generous Donation</h1>
+        </div>
+        <div class="content">
+            <div class="greeting">Dear ${name},</div>
+            
+            <div class="message">
+                <p>On behalf of TRIBAL DEVELOPMENT TRUST, we would like to express our deepest gratitude for your generous donation of <strong>₹${amount}</strong> towards our ${type} initiative.</p>
+                
+                <p>Your support is invaluable in helping us continue our mission to support and empower tribal communities. With your contribution, we can make a meaningful difference in the lives of those we serve.</p>
+            </div>
+            
+            <div class="donation-details">
+                <p><strong>Donation Details:</strong></p>
+                <div class="donation-amount">₹${amount}</div>
+                <p><strong>Donation Type:</strong> ${type}</p>
+                <p><strong>Date:</strong> ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                <p><strong>Payment Method:</strong> Online Payment</p>
+            </div>
+            
+            <p>Your donation is eligible for tax exemption under Section 80G of the Income Tax Act, 1961. The receipt for your donation is attached with this email for your records.</p>
+            
+            <p>If you have any questions about your donation or would like to learn more about how your contribution is making an impact, please don't hesitate to contact us at <a href="mailto:info@tribaldevtrust.org">info@tribaldevtrust.org</a> or call us at +91 XXXXXXXXXX.</p>
+            
+            <p>Once again, thank you for your generosity and for being a part of our mission to create positive change in tribal communities.</p>
+            
+            <div class="signature">
+                <p>With gratitude,</p>
+                <p><strong>The TRIBAL DEVELOPMENT TRUST Team</strong></p>
+            </div>
+            
+            <div class="footer">
+                <p>TRIBAL DEVELOPMENT TRUST</p>
+                <p>123 Tribal Welfare Road, Hyderabad, Telangana - 500001</p>
+                <p>Email: info@tribaldevtrust.org | Phone: +91 XXXXXXXXXX</p>
+                <p>Registered under the Societies Registration Act, 1860</p>
+                <p>80G Registration No.: AAATD1234XF | PAN: AAATD1234X</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

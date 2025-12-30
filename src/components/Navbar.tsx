@@ -118,9 +118,10 @@ const Navbar = () => {
                 ref={programsRef}
                 onMouseEnter={() => !isMenuOpen && setIsProgramsOpen(true)}
                 onMouseLeave={(e) => {
-                  if (!isMenuOpen && !e.currentTarget.contains(e.relatedTarget as Node)) {
-                    setIsProgramsOpen(false);
+                  if (!isMenuOpen && e.relatedTarget && e.currentTarget.contains(e.relatedTarget as Node)) {
+                    return;
                   }
+                  setIsProgramsOpen(false);
                 }}
               >
                 <button

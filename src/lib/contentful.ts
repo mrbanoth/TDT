@@ -55,7 +55,7 @@ export async function getGalleryItems(): Promise<GalleryItem[]> {
           id: item.sys.id,
           type: 'image',
           url: imageUrl,
-          title: fields.title?.trim() || 'Untitled',
+          title: fields.title?.trim() || (fields.badge || 'Gallery Item').toString(),
           category: (fields.badge || 'all').toString().toLowerCase(),
           date: fields.date,
           location: (fields.location || '').toString()
