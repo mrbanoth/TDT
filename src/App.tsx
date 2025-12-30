@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, useRoutes } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 import TawkToButton from "./components/chat/TawkToButton";
+import BackToTop from "./components/BackToTop";
 import { routes } from "./routes";
 
 // Create a single QueryClient instance
@@ -37,6 +38,7 @@ const AppRouter = () => {
       <div className="fixed bottom-6 right-6 z-50">
         <TawkToButton />
       </div>
+      <BackToTop />
     </div>
   );
 };
