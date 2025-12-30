@@ -11,7 +11,6 @@ import { getGalleryItems, type GalleryItem } from '@/lib/contentful';
 // Define the categories based on your Contentful badges
 const categories = [
   { id: 'all', name: 'All' },
-  { id: 'events', name: 'Events' },
   { id: 'programs', name: 'Programs' },
   { id: 'community', name: 'Community' },
   { id: 'education', name: 'Education' },

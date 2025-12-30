@@ -1,5 +1,5 @@
 
-import { Heart } from 'lucide-react';
+import { Heart, Facebook, Linkedin } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -25,6 +25,28 @@ const Footer = () => {
             <div className="space-y-2 text-sm text-gray-300">
               <p><strong>Registration:</strong> NGO Tribal Development Trust</p>
               <p><strong>Location:</strong> India</p>
+            </div>
+            
+            {/* Social Media Links */}
+            <div className="mt-4 flex space-x-4">
+              <a 
+                href="https://www.facebook.com/share/17SuuUhSnh/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-gray-300 hover:text-blue-500 transition-colors"
+                aria-label="Facebook"
+              >
+                <Facebook className="h-6 w-6" />
+              </a>
+              <a 
+                href="https://www.linkedin.com/in/tribal-development-trust-34a430340" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-gray-300 hover:text-blue-600 transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="h-6 w-6" />
+              </a>
             </div>
           </div>
 
