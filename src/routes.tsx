@@ -46,11 +46,11 @@ export const routes: RouteObject[] = [
     element: <LazyComponent component={OurApproach} />
   },
   {
-    path: '/events',
+    path: '/get-involved',
     element: <LazyComponent component={Events} />
   },
   {
-    path: '/events/:id',
+    path: '/get-involved/:id',
     element: <LazyComponent component={EventDetail} />
   },
   {

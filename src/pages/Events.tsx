@@ -85,7 +85,7 @@ const Events = () => {
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 className="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-normal mb-4 sm:mb-6 leading-tight font-serif text-charity-dark">
-          Upcoming <span className="text-[rgb(234,88,12)]">Events</span>
+          Upcoming <span className="text-[rgb(234,88,12)]">Programs</span>
         </h1>
         <div className="max-w-3xl mx-auto">
           <div className="relative text-center sm:text-left">
@@ -324,7 +324,7 @@ const renderPastEventCard = (event: PastEvent, index: number) => {
                   : 'text-gray-700 hover:text-orange-600 hover:bg-orange-50/50'
               }`}
             >
-              Upcoming Events
+              Upcoming Programs
             </button>
             <button
               onClick={() => setActiveTab('past')}
@@ -334,7 +334,7 @@ const renderPastEventCard = (event: PastEvent, index: number) => {
                   : 'text-gray-700 hover:text-orange-600 hover:bg-orange-50/50'
               }`}
             >
-              Past Events
+              Pervious  Programs
             </button>
           </div>
 
@@ -342,7 +342,7 @@ const renderPastEventCard = (event: PastEvent, index: number) => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {isLoading ? (
                 <div className="col-span-3 text-center py-12">
-                  <p className="text-gray-600">Loading events...</p>
+                  <p className="text-gray-600">Loading programs...</p>
                 </div>
               ) : error === 'network_error' ? (
                 <div className="col-span-3 text-center py-12 px-4">
@@ -352,8 +352,8 @@ const renderPastEventCard = (event: PastEvent, index: number) => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                       </svg>
                     </div>
-                    <h3 className="text-2xl font-semibold text-gray-900 mb-3">Unable to Load Events</h3>
-                    <p className="text-gray-600 mb-6">We're having trouble loading upcoming events. This could be due to a network issue or server problem.</p>
+                    <h3 className="text-2xl font-semibold text-gray-900 mb-3">Unable to Load Programs</h3>
+                    <p className="text-gray-600 mb-6">We're having trouble loading upcoming Programs. This could be due to a network issue or server problem.</p>
                     <div className="space-y-3">
                       <button 
                         onClick={() => window.location.reload()}
@@ -373,8 +373,8 @@ const renderPastEventCard = (event: PastEvent, index: number) => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                       </svg>
                     </div>
-                    <h3 className="text-2xl font-semibold text-gray-900 mb-3">No Events Posted Yet</h3>
-                    <p className="text-gray-600">We haven't added any upcoming events yet. Please check back later for updates.</p>
+                    <h3 className="text-2xl font-semibold text-gray-900 mb-3">No Programs Posted Yet</h3>
+                    <p className="text-gray-600">We haven't added any upcoming programs yet. Please check back later for updates.</p>
                   </div>
                 </div>
               ) : upcomingEvents.length > 0 ? (
@@ -392,8 +392,8 @@ const renderPastEventCard = (event: PastEvent, index: number) => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                           </svg>
                         </div>
-                        <h4 className="text-lg font-medium text-gray-700 mb-2">More Events Coming Soon</h4>
-                        <p className="text-gray-500 text-sm mb-4">We're working on organizing more amazing events for you.</p>
+                        <h4 className="text-lg font-medium text-gray-700 mb-2">More Programs Coming Soon</h4>
+                        <p className="text-gray-500 text-sm mb-4">We're working on organizing more amazing Programs for you.</p>
                         <div className="w-full bg-gray-100 rounded-full h-2.5 mb-4">
                           <div className="bg-orange-200 h-2.5 rounded-full animate-pulse" style={{width: '70%'}}></div>
                         </div>
@@ -422,7 +422,7 @@ const renderPastEventCard = (event: PastEvent, index: number) => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {isLoading ? (
                   <div className="col-span-3 text-center py-12">
-                    <p className="text-gray-600">Loading past events...</p>
+                    <p className="text-gray-600">Loading past Programs...</p>
                   </div>
                 ) : pastEvents && pastEvents.length > 0 ? (
                   <>
@@ -439,8 +439,8 @@ const renderPastEventCard = (event: PastEvent, index: number) => {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                           </div>
-                          <h4 className="text-lg font-medium text-gray-700 mb-2">More Events Coming Soon</h4>
-                          <p className="text-gray-500 text-sm mb-4">We're working on documenting more of our past events.</p>
+                          <h4 className="text-lg font-medium text-gray-700 mb-2">More Programs Coming Soon</h4>
+                          <p className="text-gray-500 text-sm mb-4">We're working on documenting more of our past Programs.</p>
                           <div className="w-full bg-gray-100 rounded-full h-2.5 mb-4">
                             <div className="bg-orange-200 h-2.5 rounded-full animate-pulse" style={{width: '70%'}}></div>
                           </div>
@@ -457,8 +457,8 @@ const renderPastEventCard = (event: PastEvent, index: number) => {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                       </div>
-                      <h3 className="text-2xl font-semibold text-gray-900 mb-3">No Past Events Yet</h3>
-                      <p className="text-gray-600 mb-6">We haven't added any past events yet. Check back soon to see our event history and impact.</p>
+                      <h3 className="text-2xl font-semibold text-gray-900 mb-3">No Past Programs Yet</h3>
+                      <p className="text-gray-600 mb-6">We haven't added any past Programs yet. Check back soon to see our Programs history and impact.</p>
                     </div>
                   </div>
                 )}

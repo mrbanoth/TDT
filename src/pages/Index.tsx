@@ -148,7 +148,7 @@ const Index = () => {
 
       {/* Image - Appears second on mobile, right on desktop */}
       <div className="w-full lg:w-1/2 mt-8 lg:mt-0">
-        <div className="relative w-full h-64 sm:h-80 md:h-96 lg:h-[500px] rounded-2xl overflow-hidden">
+        <div className="relative w-full h-64 sm:h-80 md:h-96 lg:h-[500px] overflow-hidden rounded-lg">
           <img
             src="/Homepage-images/srinivas-corona-time-image.jpeg"
             alt="Tribal community development"

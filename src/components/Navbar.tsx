@@ -67,7 +67,7 @@ const Navbar = () => {
   const navItems: NavItem[] = [
     { name: 'HOME', path: '/' },
     { name: 'ABOUT US', path: '/about' },
-    { name: 'EVENTS', path: '/events' }
+    { name: 'GET INVOLVED', path: '/get-involved' }
   ];
 
   // Mobile view uses the same nav items
