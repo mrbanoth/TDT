@@ -119,7 +119,7 @@ const Gallery = () => {
             
             {/* Search and Filter */}
             <div className="max-w-2xl mx-auto">
-              <div className="relative">
+              {/* <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Search className="h-5 w-5 text-gray-300" />
                 </div>
@@ -138,7 +138,7 @@ const Gallery = () => {
                     <X className="h-4 w-4" />
                   </button>
                 </div>
-              </div>
+              </div> */}
               
               <div className="mt-4 flex flex-wrap justify-center gap-2">
                 {categories.map((category) => (
