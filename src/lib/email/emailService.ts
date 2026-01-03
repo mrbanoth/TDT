@@ -103,6 +103,8 @@ export const sendAdminNotification = async (
     state?: string;
     pincode?: string;
     country?: string;
+    paymentId?: string;
+    date?: string;
   },
   receiptPath?: string
 ) => {
@@ -120,29 +122,37 @@ export const sendAdminNotification = async (
     });
   }
 
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return new Date().toLocaleDateString('en-IN');
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-IN', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
+  };
+
   const emailContent = `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-      <h2>New Donation Received</h2>
-      <p>A new donation has been received with the following details:</p>
-      <ul>
-        <li><strong>Donation ID:</strong> ${donationData.id}</li>
-        <li><strong>Name:</strong> ${donationData.name}</li>
-        <li><strong>Email:</strong> ${donationData.email}</li>
-        <li><strong>Phone:</strong> ${donationData.phone || 'N/A'}</li>
-        <li><strong>Amount:</strong> ₹${donationData.amount.toLocaleString('en-IN')}</li>
-        <li><strong>Type:</strong> ${donationData.type}</li>
-        ${donationData.pan ? `<li><strong>PAN:</strong> ${donationData.pan}</li>` : ''}
-        ${donationData.address ? `<li><strong>Address:</strong> ${donationData.address}</li>` : ''}
-        ${donationData.city || donationData.state || donationData.pincode || donationData.country ? 
-          `<li><strong>Location:</strong> ${[donationData.city, donationData.state, donationData.pincode, donationData.country].filter(Boolean).join(', ')}</li>` : ''}
-      </ul>
-      <p>Receipt is attached.</p>
-    </div>
+    Donation received from ${donationData.name}
+    
+    Donation Summary
+    - Amount: ₹${donationData.amount.toLocaleString('en-IN')}
+    - Date: ${formatDate(donationData.date)}
+    - Type: ${donationData.type}
+    - Payment ID: ${donationData.paymentId || 'N/A'}
+    - Receipt Number: Available in attached PDF
+    
+    Donor Details
+    - Email: ${donationData.email}
+    - Phone: ${donationData.phone || 'Not provided'}
+    ${donationData.pan ? `- PAN: ${donationData.pan}` : ''}
+    
+    Receipt is attached for your records.
   `;
 
   return sendEmail({
     to: process.env.ADMIN_EMAIL,
-    subject: `New Donation Received - ${donationData.name} (₹${donationData.amount.toLocaleString('en-IN')})`,
+    subject: `New Donation - ${donationData.name} (₹${donationData.amount.toLocaleString('en-IN')}) - ${donationData.type}`,
     html: emailContent,
     attachments,
   });

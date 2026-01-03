@@ -11,16 +11,22 @@ import { DollarSign, Package, Utensils, Gift, Heart, Phone, Shield, Users, Clock
 import { MaterialDonationForm } from '@/components/donation/MaterialDonationForm';
 import { FoodDonationForm } from '@/components/donation/FoodDonationForm';
 import { VolunteerSupportForm } from '@/components/donation/VolunteerSupportForm';
+import { razorpayService } from '@/lib/razorpay';
+import { toast } from 'sonner';
 
 const Donate = () => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
   const [locationError, setLocationError] = useState('');
+  const [selectedAmount, setSelectedAmount] = useState<number>(1000);
+  const [customAmount, setCustomAmount] = useState<string>('');
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
+    pan: '',
     address: '',
     message: '',
     donationType: ''
@@ -38,35 +44,53 @@ const Donate = () => {
             value={formData.name}
             onChange={handleInputChange}
             className="w-full p-2 border border-gray-300 rounded-lg"
-            placeholder="Your full name"
+            placeholder="Enter your name"
             required
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number *</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            className="w-full p-2 border border-gray-300 rounded-md"
+            placeholder="Enter your email"
+            required
+          />
+          <p className="text-xs text-gray-500 mt-1">Donation receipt will be sent to this email</p>
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
           <input
             type="tel"
             name="phone"
             value={formData.phone}
             onChange={handleInputChange}
             className="w-full p-2 border border-gray-300 rounded-lg"
-            placeholder="Your mobile number"
+            placeholder="Enter your phone"
             pattern="[0-9]{10}"
             title="Please enter a 10-digit mobile number"
-            required
           />
         </div>
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Email (Optional)</label>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleInputChange}
-          className="w-full p-2 border border-gray-300 rounded-md"
-          placeholder="Your email address"
-        />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">PAN (for 80G receipt)</label>
+          <input
+            type="text"
+            name="pan"
+            value={formData.pan}
+            onChange={handleInputChange}
+            className="w-full p-2 border border-gray-300 rounded-lg"
+            placeholder="Enter PAN (optional)"
+            pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
+            title="Please enter a valid PAN number (e.g., ABCDE1234F)"
+          />
+          <p className="text-xs text-gray-500 mt-1">Provide PAN for tax exemption certificate</p>
+        </div>
       </div>
     </>
   );
@@ -136,6 +160,7 @@ const Donate = () => {
       name: '',
       email: '',
       phone: '',
+      pan: '',
       address: '',
       message: '',
       donationType: ''
@@ -146,6 +171,181 @@ const Donate = () => {
       setActiveModal(null);
       setIsSubmitting(false);
     }, 1000);
+  };
+
+  const validateForm = () => {
+    // Check required fields
+    if (!formData.name?.trim()) {
+      toast.error('Please enter your name');
+      return false;
+    }
+    
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email?.trim() || !emailRegex.test(formData.email)) {
+      toast.error('Please enter a valid email address');
+      return false;
+    }
+    
+    // Validate phone if provided
+    if (formData.phone && !/^\d{10}$/.test(formData.phone)) {
+      toast.error('Please enter a valid 10-digit phone number');
+      return false;
+    }
+    
+    // Validate PAN if provided
+    if (formData.pan && !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(formData.pan)) {
+      toast.error('Please enter a valid PAN number (e.g., ABCDE1234F)');
+      return false;
+    }
+    
+    return true;
+  };
+
+  const handleRazorpayPayment = async () => {
+    try {
+      // Validate form first
+      if (!validateForm()) {
+        return;
+      }
+      
+      setIsProcessingPayment(true);
+      
+      // Determine the donation amount
+      const amount = customAmount ? parseInt(customAmount) : selectedAmount;
+      
+      // Validate amount
+      if (!amount || amount < 1) {
+        toast.error('Please enter a valid donation amount');
+        setIsProcessingPayment(false);
+        return;
+      }
+      
+      if (amount > 100000) {
+        toast.error('Maximum donation amount is ₹1,00,000');
+        setIsProcessingPayment(false);
+        return;
+      }
+      
+      // Create Razorpay order
+      const orderResponse = await razorpayService.createOrder(amount);
+      
+      if (!orderResponse.success || !orderResponse.order) {
+        toast.error(orderResponse.message || 'Failed to create payment order');
+        setIsProcessingPayment(false);
+        return;
+      }
+      
+      // Initialize Razorpay payment
+      const razorpay = await razorpayService.initializePayment(orderResponse.order, {
+        prefill: {
+          name: formData.name || '',
+          email: formData.email || '',
+          contact: formData.phone || '',
+        },
+        notes: {
+          donor_name: formData.name || '',
+          donor_phone: formData.phone || '',
+          donor_pan: formData.pan || '',
+          purpose: 'Donation for Tribal Development Trust'
+        },
+        theme: {
+          color: '#EA580C'
+        }
+      });
+      
+      // Handle payment success
+      razorpay.on('payment.success', async (response: any) => {
+        try {
+          console.log('Payment success response:', response);
+          
+          // Prepare the verification data with all necessary information
+          const verificationData = {
+            razorpay_order_id: response.razorpay_order_id || orderResponse.order.id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            // Include all donor information for email
+            notes: {
+              donor_name: formData.name.trim(),
+              donor_email: formData.email.trim(),
+              donor_phone: formData.phone?.trim() || 'Not provided',
+              donor_pan: formData.pan?.trim() || 'Not provided',
+              amount: orderResponse.order.amount / 100, // Convert back to rupees
+              currency: 'INR',
+              receipt_number: `TDT-${Date.now()}-${Math.random().toString(36).substr(2, 4).toUpperCase()}`
+            },
+            amount: orderResponse.order.amount,
+            email: formData.email.trim(),
+            contact: formData.phone?.trim() || '',
+            created_at: Math.floor(Date.now() / 1000) // Current timestamp
+          };
+          
+          console.log('Verification data:', verificationData);
+          
+          const verificationResponse = await razorpayService.verifyPayment(verificationData);
+          
+          if (verificationResponse.success && verificationResponse.verified) {
+            // Show success message with email confirmation
+            toast.success(
+              <div className="space-y-2">
+                <p>Payment successful! 🎉</p>
+                <p className="text-sm">A receipt has been sent to {formData.email}</p>
+                <p className="text-xs text-gray-600">Please check your inbox and spam folder</p>
+              </div>,
+              { duration: 10000 }
+            );
+            
+            // Reset form
+            setCustomAmount('');
+            setSelectedAmount(1000);
+            setFormData({
+              name: '',
+              email: '',
+              phone: '',
+              pan: '',
+              address: '',
+              message: '',
+              donationType: ''
+            });
+          } else {
+            console.error('Payment verification failed:', verificationResponse);
+            toast.error(verificationResponse.message || 'Payment verification failed. Please contact support.');
+          }
+        } catch (error: any) {
+          console.error('Payment verification error:', error);
+          toast.error(error.message || 'Payment verification failed. Please contact support.');
+        } finally {
+          setIsProcessingPayment(false);
+        }
+      });
+      
+      // Handle payment failure
+      razorpay.on('payment.error', (response: any) => {
+        console.error('Payment error:', response);
+        toast.error(response.error?.description || 'Payment failed. Please try again.');
+        setIsProcessingPayment(false);
+      });
+      
+      // Handle modal close/dismiss
+      razorpay.on('payment.failed', (response: any) => {
+        console.log('Payment failed or modal dismissed:', response);
+        setIsProcessingPayment(false);
+      });
+      
+      // Handle modal close explicitly
+      razorpay.on('modal.close', () => {
+        console.log('Payment modal closed by user');
+        setIsProcessingPayment(false);
+      });
+      
+      // Open Razorpay checkout
+      razorpay.open();
+      
+    } catch (error: any) {
+      console.error('Razorpay payment error:', error);
+      toast.error(error.message || 'Payment failed. Please try again.');
+      setIsProcessingPayment(false);
+    }
   };
 
   const renderModalHeader = () => {
@@ -349,9 +549,13 @@ const Donate = () => {
                 {[500, 1000, 2500, 5000, 10000].map((amount) => (
                   <Button
                     key={amount}
-                    variant={amount === 1000 ? 'default' : 'outline'}
+                    variant={amount === selectedAmount ? 'default' : 'outline'}
+                    onClick={() => {
+                      setSelectedAmount(amount);
+                      setCustomAmount(amount.toString());
+                    }}
                     className={`h-14 text-lg font-semibold transition-all duration-200 ${
-                      amount === 1000 
+                      amount === selectedAmount 
                         ? 'bg-[rgb(234,88,12)] text-white hover:bg-[rgba(234,88,12,0.9)] border-[rgb(234,88,12)]' 
                         : 'bg-white text-charity-dark border-2 border-gray-200 hover:border-[rgb(234,88,12)] hover:bg-gray-50 hover:text-charity-dark'
                     }`}
@@ -361,7 +565,13 @@ const Donate = () => {
                 ))}
                 <Button
                   variant="outline"
-                  className="h-14 text-lg font-semibold transition-all duration-200 bg-white text-charity-dark border-2 border-gray-200 hover:border-charity-dark hover:bg-gray-50 hover:text-charity-dark"
+                  onClick={() => {
+                    setSelectedAmount(0);
+                    setCustomAmount('');
+                  }}
+                  className={`h-14 text-lg font-semibold transition-all duration-200 bg-white text-charity-dark border-2 border-gray-200 hover:border-charity-dark hover:bg-gray-50 hover:text-charity-dark ${
+                    selectedAmount === 0 ? 'border-[rgb(234,88,12)] bg-gray-50' : ''
+                  }`}
                 >
                   Other
                 </Button>
@@ -375,15 +585,86 @@ const Donate = () => {
                     inputMode="numeric"
                     pattern="[0-9]*"
                     placeholder="Enter amount"
+                    value={customAmount}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^0-9]/g, '');
+                      setCustomAmount(value);
+                      setSelectedAmount(0);
+                    }}
+                    onFocus={() => {
+                      setSelectedAmount(0);
+                      // Keep the current value when focusing on the input
+                    }}
                     className="w-full pl-10 pr-4 py-4 border-2 border-gray-200 rounded-lg focus:border-charity-dark focus:ring-2 focus:ring-charity-dark/20 focus:outline-none text-lg font-medium"
                   />
                 </div>
+                <div className="space-y-4 mb-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border border-gray-300 rounded-lg"
+                        placeholder="Enter your name"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                        placeholder="Enter your email"
+                        required
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Donation receipt will be sent to this email</p>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border border-gray-300 rounded-lg"
+                        placeholder="Enter your phone"
+                        pattern="[0-9]{10}"
+                        title="Please enter a 10-digit mobile number"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">PAN (for 80G receipt)</label>
+                      <input
+                        type="text"
+                        name="pan"
+                        value={formData.pan}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border border-gray-300 rounded-lg"
+                        placeholder="Enter PAN (optional)"
+                        pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
+                        title="Please enter a valid PAN number (e.g., ABCDE1234F)"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Provide PAN for tax exemption certificate</p>
+                    </div>
+                  </div>
+                </div>
+                
                 <Button 
-                  className="w-full bg-[rgb(234,88,12)] hover:bg-[rgba(234,88,12,0.9)] py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                  className="w-full bg-[rgb(234,88,12)] hover:bg-[rgba(234,88,12,0.9)] py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   size="lg"
-                  onClick={() => setActiveModal('financial')}
+                  onClick={handleRazorpayPayment}
+                  disabled={isProcessingPayment}
                 >
-                  Donate Now
+                  {isProcessingPayment ? 'Processing...' : 'Donate Now'}
                 </Button>
               </div>
 
